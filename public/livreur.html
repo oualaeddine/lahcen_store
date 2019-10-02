@@ -122,8 +122,9 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Liste des commandes
+                Liste des livreur
             </h1>
+            
         </section>
 
         <!-- Main content -->
@@ -131,79 +132,28 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#activity" data-toggle="tab">Toutes les commandes</a></li>
-                            <li><a href="#timeline" data-toggle="tab">Commandes en cours</a></li>
-                            <li><a href="#settings" data-toggle="tab">Commandes terminées</a></li>
-                        </ul>
+                    
                         <div class="tab-content">
                             <div class="active tab-pane" id="activity">
-                                <table id="all_table" class="table table-bordered table-striped">
+                                <table id="all_products" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>status</th>
-                                        <th>client</th>
-                                        <th>adresse</th>
-                                        <th>telephone</th>
-                                        <th>sub total</th>
-                                        <th>livraison</th>
-                                        <th>fee</th>
-                                        <th>total</th>
-                                        <th>actions</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>Delivered orders</th>
+                                        <th>Assigned orders</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="all_tb">
+                                    <tbody id="all_livreur">
 
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- /.tab-pane -->
-                            <div class="tab-pane" id="timeline">
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>status</th>
-                                        <th>client</th>
-                                        <th>adresse</th>
-                                        <th>telephone</th>
-                                        <th>sub total</th>
-                                        <th>livraison</th>
-                                        <th>fee</th>
-                                        <th>total</th>
-                                        <th>actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.tab-pane -->
-
-                            <div class="tab-pane" id="settings">
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>status</th>
-                                        <th>client</th>
-                                        <th>adresse</th>
-                                        <th>telephone</th>
-                                        <th>sub total</th>
-                                        <th>livraison</th>
-                                        <th>fee</th>
-                                        <th>total</th>
-                                        <th>actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.tab-pane -->
+                           
                         </div>
                         <!-- /.tab-content -->
                     </div>
@@ -242,7 +192,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="./res/js/demo.js"></script>
 <!-- page script -->
-<script src="./main.js"></script>
+<script src="./livreur.js"></script>
 
 <script>
     $(function () {

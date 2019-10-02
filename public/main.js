@@ -19,19 +19,3 @@ db.collection("orders").get().then((querySnapshot) => {
     });
 });
 
-// Get products List
-db.collection("products").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        console.log(doc.data());
-        var data = doc.data();
-        var mrow = "<tr><td>" + data.name + "</td><td>" + data.price + "</td><td>" + data.buyPrice + "</td><td>" +
-            data.quantity +
-            "</td><td> <button class='btn-info btn'>Modifier</button> <button class='btn-danger btn'>Suprimer</button>"
-              
-            "</td></tr>";
-        console.log(mrow);
-
-        $("#all_prod").append(mrow)
-
-    });
-});
