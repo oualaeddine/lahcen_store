@@ -39,6 +39,7 @@ function upload(id) {
         quantity: new_quantity,
         buyPrice: new_buyPrice
     });
+    $('#exampleModal').modal('hide');
 
 }
 
