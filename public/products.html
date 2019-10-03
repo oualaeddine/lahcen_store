@@ -227,8 +227,8 @@
 <script src="./products.js"></script>
 
 <script>
-    $(function () {
-        $('form').DataTable({
+    
+       var product_table = $('#all_products').DataTable({
             'paging': true,
             'lengthChange': false,
             'searching': false,
@@ -236,7 +236,7 @@
             'info': true,
             'autoWidth': false
         })
-    })
+  
  
 </script>
 </body>

@@ -174,7 +174,7 @@
                     
                         <div class="tab-content">
                             <div class="active tab-pane" id="activity">
-                                <table id="all_products" class="table table-bordered table-striped">
+                                <table id="all_livreur" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
                                         <th>Name</th>
@@ -232,8 +232,8 @@
 <script src="./livreur.js"></script>
 
 <script>
-    $(function () {
-        $('form').DataTable({
+   
+       var livreur_table = $('#all_livreur').DataTable({
             'paging': true,
             'lengthChange': false,
             'searching': false,
@@ -241,7 +241,7 @@
             'info': true,
             'autoWidth': false
         })
-    })
+    
 </script>
 </body>
 </html>

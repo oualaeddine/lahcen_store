@@ -10,7 +10,8 @@ db.collection("delivery_men").get().then((querySnapshot) => {
         var data = doc.data();
         var mrow = "<tr><td>" + data.name + "</td><td>" + data.phone + "</td><td>" + data.email + "</td><td>" +
             data.address + "</td><td>" + data.city +
-            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> <button class='btn-danger btn'>Suprimer</button></td></tr>";
+            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> "+
+            " <button class='btn-danger btn' data-book-id="+doc.id+" onclick='delete_livreur("+doc.id+")'>Suprimer</button></td></tr>";
         console.log(mrow);
 
         $("#all_livreur").append(mrow)
@@ -48,4 +49,7 @@ function upload(id) {
        city : new_city
     });
     $('#exampleModal').modal('hide');
+}
+function delete_livreur(id) {
+    db.collection('delivery_men').doc(""+id).delete();
 }
