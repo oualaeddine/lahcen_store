@@ -27,7 +27,19 @@ $('#exampleModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('input[name="product_price"]').val(data.price);
            $(e.currentTarget).find('input[name="buy_price"]').val(data.buyPrice);
            $(e.currentTarget).find('input[name="quantity"]').val(data.quantity);
-           
+           $('.modal-footer').append("<button class='btn btn-primary'  data-book-id="+id+" onclick='upload("+id+")'>Save</button>");
     
 });
 });
+function upload(id) {
+   
+    var new_quantity = $('#quantity').val();
+    var new_buyPrice = $('#buyPrice').val();
+    let setDoc = db.collection('products').doc(""+id).update({
+        quantity: new_quantity,
+        buyPrice: new_buyPrice
+    });
+
+}
+
+
