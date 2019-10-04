@@ -53,3 +53,44 @@ function upload(id) {
 function delete_livreur(id) {
     db.collection('delivery_men').doc(""+id).delete();
 }
+
+function addLivreur(){
+
+    // Get inputs Values
+    var new_name= $('#livreurName').val();
+    var new_phone= $('#livreurPhone').val();
+    var new_email= $('#livreurEmail').val();
+    var new_address= $('#livreurAddress').val();
+    var new_city= $('#livreurCity').val();
+
+    // Insert new data in database
+    let livreurRef = db.collection('delivery_men');
+    var newLivreur = livreurRef.doc();
+    var setLivreur = newLivreur.set({
+       name: new_name,
+       phone: new_phone,
+       email : new_email,
+       address : new_address,
+       city : new_city
+    });
+   
+  // Close Modal and reset the inputs
+    $('#addModal').modal('hide'); 
+    $('#livreurName').val("");
+    $('#livreurPhone').val("");
+    $('#livreurEmail').val("");
+    $('#livreurAddress').val("");
+    $('#livreurCity').val("");
+
+    // Append the new row
+    var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" +
+    new_address + "</td><td>" + new_city +
+    "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+newLivreur.id+">Modifier</button> "+
+    " <button class='btn-danger btn' data-book-id="+newLivreur.id+" onclick='delete_livreur("+newLivreur.id+")'>Suprimer</button></td></tr>";
+
+    $("#all_livreur").append(mrow)
+}
+function Annuler() {
+    $('#addModal').modal('hide');
+}
+
