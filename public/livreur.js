@@ -11,7 +11,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
         var mrow = "<tr><td>" + data.name + "</td><td>" + data.phone + "</td><td>" + data.email + "</td><td>" +
             data.address + "</td><td>" + data.city +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> "+
-            " <button class='btn-danger btn' data-book-id="+doc.id+" onclick='delete_livreur("+doc.id+")'>Suprimer</button></td></tr>";
+            " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"')>Suprimer</button></td></tr>";
         console.log(mrow);
 
         $("#all_livreur").append(mrow)
@@ -30,10 +30,11 @@ $('#exampleModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('#livreur_address').val(data.address);
            $(e.currentTarget).find('#livreur_city').val(data.city);
 
-           $('.modal-footer').append("<button class='btn btn-primary'  data-book-id="+id+" onclick='upload("+id+")'>Save</button>");
+           $('.modal-footer').append("<button class='btn btn-primary'  data-book-id='"+id+"' onclick=upload('"+id+"')>Save</button>");
     
 });
 });
+
 function upload(id) {
    
     var new_name= $('#livreur_name').val();
@@ -50,8 +51,13 @@ function upload(id) {
     });
     $('#exampleModal').modal('hide');
 }
+
+
 function delete_livreur(id) {
     db.collection('delivery_men').doc(""+id).delete();
+   var pageParamTable = $('#all_livreur').DataTable();
+    var tableRow = pageParamTable.row($(this).parents('tr'));
+    pageParamTable.row( tableRow ).remove().draw();
 }
 
 function addLivreur(){
