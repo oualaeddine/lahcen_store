@@ -224,7 +224,7 @@
                     
                         <div class="tab-content">
                             <div class="active tab-pane" id="activity">
-                                <table id="all_livreur" class="table table-bordered table-striped">
+                                <table id="all_livreur" class="table table-bordered table-striped" >
                                     <thead>
                                     <tr>
                                         <th>Name</th>
@@ -282,12 +282,13 @@
 <script src="./livreur.js"></script>
 
 <script>
-   
-       var livreur_table = $('#all_livreur').DataTable({
+   var livreur_table = $("#all_livreur").on("draw.dt", function () {
+    $(this).find(".dataTables_empty").parents('tbody').empty();
+}).DataTable({
             'paging': true,
             'lengthChange': false,
             'searching': false,
-            'ordering': true,
+            'ordering': false,
             'info': true,
             'autoWidth': false
         })

@@ -8,7 +8,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         console.log(doc.data());
         var data = doc.data();
-        var mrow = "<tr><td>" + data.name + "</td><td>" + data.phone + "</td><td>" + data.email + "</td><td>" +
+        var mrow = "<tr><td> <span class='changeMade'>" + data.name + "</span></td><td>" + data.phone + "</td><td>" + data.email + "</td><td>" +
             data.address + "</td><td>" + data.city +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> "+
             " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"')>Suprimer</button></td></tr>";
@@ -50,6 +50,12 @@ function upload(id) {
        city : new_city
     });
     $('#exampleModal').modal('hide');
+
+    //Update data table Cell
+     $(".changeMade").html(new_name); 
+     var UpdateTD = $(".changemade").parent('td');
+     table.cell( UpdateTD ).data( UpdateTD.html()).draw();
+   
 }
 
 
