@@ -2,19 +2,20 @@ var db = firebase.firestore();
 
 
 // Get products List
+var cpt=0;
 db.collection("products").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         console.log(doc.data());
         var data = doc.data();
-        var mrow = "<tr><td>" + data.name + "</td><td>" + data.price + "</td><td>" + data.buyPrice + "</td><td>" +
+        var mrow = "<tr class='prodname"+cpt+"'><td >" + data.name + "</td><td>" + data.price + "</td><td>" + data.buyPrice + "</td><td>" +
             data.quantity +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+data.id+">Modifier</button>"+
-            " <button data-book-id="+data.id+" onclick='delete_product("+data.id+")' class='btn-danger btn'>Suprimer</button>" 
+            " <button data-book-id="+data.id+" onclick=delete_product('"+data.id+"','prodname"+cpt+"') class='btn-danger btn'>Suprimer</button>" 
  
             "</td></tr>";
-        console.log(mrow);
 
-        $("#all_prod").append(mrow)
+        $("#all_prod").append(mrow);
+        cpt++;
 
     });
 });
@@ -43,8 +44,10 @@ function upload(id) {
     $('#exampleModal').modal('hide');
 
 }
-function delete_product (id) {
+function delete_product (id, rowClass) {
     db.collection('products').doc(""+id).delete();  
-    //product_table.row($(this).parent('tr')).remove().draw();
+
+     //Delete row 
+     $("."+rowClass).remove();
 }
 

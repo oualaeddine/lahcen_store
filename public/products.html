@@ -228,11 +228,13 @@
 
 <script>
     
-       var product_table = $('#all_products').DataTable({
+       var product_table = $('#all_products').on("draw.dt", function () {
+    $(this).find(".dataTables_empty").parents('tbody').empty();
+}).DataTable({
             'paging': true,
             'lengthChange': false,
             'searching': false,
-            'ordering': true,
+            'ordering': false,
             'info': true,
             'autoWidth': false
         })
