@@ -8,7 +8,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         console.log(doc.data());
         var data = doc.data();
-        var mrow = "<tr><td> <span class='changeMade'>" + data.name + "</span></td><td>" + data.phone + "</td><td>" + data.email + "</td><td>" +
+        var mrow = "<tr><td> <span class='changeName'>" + data.name + "</span></td><td><span class='changePhone'>" + data.phone + "</span></td><td>" + data.email + "</td><td>" +
             data.address + "</td><td>" + data.city +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> "+
             " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"')>Suprimer</button></td></tr>";
@@ -51,10 +51,15 @@ function upload(id) {
     });
     $('#exampleModal').modal('hide');
 
-    //Update data table Cell
-     $(".changeMade").html(new_name); 
-     var UpdateTD = $(".changemade").parent('td');
-     table.cell( UpdateTD ).data( UpdateTD.html()).draw();
+    /*Update data table Cell
+     $(".changeName").html(new_name); 
+     var UpdateName = $(".changeName").parent('td');
+    livreur_table.cell( UpdateName ).data( UpdateName.html()).draw();
+*/
+     //Phone
+     $(".changePhone").html(new_phone); 
+     var UpdatePhone = $(".changePhone").parent('td');
+    livreur_table.cell( UpdatePhone ).data( UpdatePhone.html()).draw();
    
 }
 
@@ -74,22 +79,30 @@ function addLivreur(){
     var new_email= $('#livreurEmail').val();
     var new_address= $('#livreurAddress').val();
     var new_city= $('#livreurCity').val();
+    var new_password= $('#livreurPassword').val();
 
+    // Insert new Firebase User
+  firebase.auth().createUserWithEmailAndPassword(new_email, new_password).then(function(data){
+    var userId = data.user.uid;
+  
+
+ 
+   
     // Insert new data in database
     let livreurRef = db.collection('delivery_men');
-    var newLivreur = livreurRef.doc();
-    var setLivreur = newLivreur.set({
-       name: new_name,
-       phone: new_phone,
-       email : new_email,
-       address : new_address,
-       city : new_city
-    });
+    livreurRef.doc(""+userId).set({
+        name: new_name,
+        phone: new_phone,
+        email : new_email,
+        address : new_address,
+        city : new_city
+     });
    
   // Close Modal and reset the inputs
     $('#addModal').modal('hide'); 
     $('#livreurName').val("");
     $('#livreurPhone').val("");
+    $('#livreurPassword').val("");
     $('#livreurEmail').val("");
     $('#livreurAddress').val("");
     $('#livreurCity').val("");
@@ -97,10 +110,12 @@ function addLivreur(){
     // Append the new row
     var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" +
     new_address + "</td><td>" + new_city +
-    "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+newLivreur.id+">Modifier</button> "+
-    " <button class='btn-danger btn' data-book-id="+newLivreur.id+" onclick='delete_livreur("+newLivreur.id+")'>Suprimer</button></td></tr>";
+    "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+">Modifier</button> "+
+    " <button class='btn-danger btn' data-book-id="+userId+" onclick='delete_livreur("+userId+")'>Suprimer</button></td></tr>";
 
     $("#all_livreur").append(mrow)
+   
+});
 }
 function Annuler() {
     $('#addModal').modal('hide');

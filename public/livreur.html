@@ -33,10 +33,12 @@
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-firestore.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
          https://firebase.google.com/docs/web/setup#config-web-app -->
+
 
     <script>
         // Your web app's Firebase configuration
@@ -134,7 +136,7 @@
             
             
         </section>
-        <!-- ADD Modal -->
+        <!-- ADD Livreur Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -159,13 +161,17 @@
                         <input id="livreurEmail"  class="form-control" ></input>
                       </div>
                       <div class="form-group">
+                        <label  class="col-form-label">Mot de passe</label>
+                        <input id="livreurPassword" class="form-control" ></input>
+                      </div>
+                      <div class="form-group">
                         <label  class="col-form-label">Address</label>
                         <input id="livreurAddress" class="form-control" ></input>
                       </div>
                       <div class="form-group">
                         <label  class="col-form-label">City</label>
                         <input id="livreurCity" class="form-control" ></input>
-                      </div>
+                      </div> 
                   </form>
             </div>
             <div class="modal-footer">
@@ -176,7 +182,7 @@
           </div>
         </div>
       </div>
-<!-- Update Modal -->
+<!-- Update Livreur Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
