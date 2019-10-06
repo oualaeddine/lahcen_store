@@ -4,19 +4,21 @@ var db = firebase.firestore();
 //let doc = db.collection('cities').doc('SF');
 
 // Get Commands List
+var cpt=0;
 db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         console.log(doc.data());
         var data = doc.data();
-        var mrow = "<tr><td> <span class='changeName'>" + data.name + "</span></td><td><span class='changePhone'>" + data.phone + "</span></td><td>" + data.email + "</td><td>" +
+        var mrow = "<tr class='name"+cpt+"'><td ><span class='name"+cpt+"'>" + data.name + "</span></td><td><span class='changePhone'>" + data.phone + "</span></td><td>" + data.email + "</td><td>" +
             data.address + "</td><td>" + data.city +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> "+
-            " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"')>Suprimer</button></td></tr>";
+            " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"','name"+cpt+"')>Suprimer</button></td></tr>";
         console.log(mrow);
 
         $("#all_livreur").append(mrow)
-
+        cpt++;
     });
+    
 });
 
 $('#exampleModal').on('show.bs.modal', function(e) {
@@ -37,11 +39,14 @@ $('#exampleModal').on('show.bs.modal', function(e) {
 
 function upload(id) {
    
+    //GET NEW VALUES
     var new_name= $('#livreur_name').val();
     var new_phone= $('#livreur_phone').val();
     var new_email= $('#livreur_email').val();
     var new_address= $('#livreur_address').val();
     var new_city= $('#livreur_city').val();
+
+    // INSERT UPDATED VALUES
     db.collection('delivery_men').doc(""+id).update({
        name: new_name,
        phone: new_phone,
@@ -49,28 +54,31 @@ function upload(id) {
        address : new_address,
        city : new_city
     });
+
     $('#exampleModal').modal('hide');
 
-    /*Update data table Cell
-     $(".changeName").html(new_name); 
-     var UpdateName = $(".changeName").parent('td');
-    livreur_table.cell( UpdateName ).data( UpdateName.html()).draw();
-*/
-     //Phone
+    //Update data table Cell
+    $(".name"+cpt+"").html(new_name); 
+    var UpdateName = $(".name"+cpt+"").parent('td');
+    livreur_table.cell( UpdateName ).data(UpdateName.html()).draw();
+   
+
+    /*Phone
      $(".changePhone").html(new_phone); 
      var UpdatePhone = $(".changePhone").parent('td');
     livreur_table.cell( UpdatePhone ).data( UpdatePhone.html()).draw();
-   
+   */
 }
 
 
-function delete_livreur(id) {
-    db.collection('delivery_men').doc(""+id).delete();
-   var pageParamTable = $('#all_livreur').DataTable();
-    var tableRow = pageParamTable.row($(this).parents('tr'));
-    pageParamTable.row( tableRow ).remove().draw();
+function delete_livreur(id,rowClass) {
+   db.collection('delivery_men').doc(""+id).delete();
+    
+    //Delete row 
+    $("."+rowClass).remove();
 }
 
+/********* ADD DELIVERY MAN  ********/
 function addLivreur(){
 
     // Get inputs Values
@@ -82,12 +90,9 @@ function addLivreur(){
     var new_password= $('#livreurPassword').val();
 
     // Insert new Firebase User
-  firebase.auth().createUserWithEmailAndPassword(new_email, new_password).then(function(data){
+    firebase.auth().createUserWithEmailAndPassword(new_email, new_password).then(function(data){
     var userId = data.user.uid;
   
-
- 
-   
     // Insert new data in database
     let livreurRef = db.collection('delivery_men');
     livreurRef.doc(""+userId).set({
