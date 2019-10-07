@@ -9,7 +9,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
         var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='address"+cpt+"'>" +
             data.address + "</td><td class='city"+cpt+"'>" + data.city +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button> "+
-            " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"','row"+cpt+"')>Suprimer</button></td></tr>";
+            " <button class='btn-danger btn' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' >Suprimer</button></td></tr>";
         console.log(mrow);
 
         $("#all_livreur").append(mrow)
@@ -18,6 +18,11 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     
 });
 
+$('#confirmationModal').on('show.bs.modal', function(e) {
+  var id = $(e.relatedTarget).data('book-id');
+  var rowId = $(e.relatedTarget).data('row-id');
+  $('#deleteButton').attr('onClick', 'delete_livreur("'+id+'","'+rowId+'");');
+});
 $('#exampleModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
     var cellId = $(e.relatedTarget).data('cell-id');
@@ -58,25 +63,20 @@ function upload(id, cellId) {
     $(".email"+cellId).html(""+new_email);
     $(".address"+cellId).html(""+new_address);
     $(".city"+cellId).html(""+new_city);
-    
+
     $('#exampleModal').modal('hide');
 
 }
 
 
-function delete_livreur(id,rowClass) {
-  // db.collection('delivery_men').doc(""+id).delete();
-
-  admin.auth().deleteUser(id)
-  .then(function() {
-    console.log('Successfully deleted user');
-  })
-  .catch(function(error) {
-    console.log('Error deleting user:', error);
-  });
+function delete_livreur(id,rowId) {
+  
+  // Delete from database
+    db.collection('delivery_men').doc(""+id).delete();
 
     //Delete row 
-    $("."+rowClass).remove();
+    $(".row"+rowId).remove();
+    $('#confirmationModal').modal('hide');
 }
 
 /********* ADD DELIVERY MAN  ********/

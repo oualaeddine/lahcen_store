@@ -8,6 +8,9 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="./res/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Material Icon-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="./res/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -19,6 +22,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="./res/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="./res/css/style.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -222,6 +226,27 @@
       </div>
     </div>
   </div>
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>	
+                <h4 class="modal-title">êtes-vous sûr ?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+            <div class="modal-body">
+                <p>Voulez-vous vraiment supprimer un livreur ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="Annuler()" class="btn btn-info" data-dismiss="modal">Annuler</button>
+				        <button id="deleteButton" type="button" class="btn btn-danger">Suprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- Main content -->
         <section class="content">
             <div class="row">
