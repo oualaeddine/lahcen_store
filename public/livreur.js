@@ -1,8 +1,5 @@
 var db = firebase.firestore();
 
-
-//let doc = db.collection('cities').doc('SF');
-
 // Get Commands List
 var cpt=0;
 db.collection("delivery_men").get().then((querySnapshot) => {
@@ -32,8 +29,8 @@ $('#exampleModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('#livreur_address').val(data.address);
            $(e.currentTarget).find('#livreur_city').val(data.city);
 
-           $('.modal-footer').append("<button class='btn btn-primary'  data-book-id='"+id+"' onclick=upload('"+id+"')>Save</button>");
-    
+          $('#saveButton').attr('onClick', 'upload("'+id+'");');
+         
 });
 });
 
@@ -72,8 +69,16 @@ function upload(id) {
 
 
 function delete_livreur(id,rowClass) {
-   db.collection('delivery_men').doc(""+id).delete();
-    
+  // db.collection('delivery_men').doc(""+id).delete();
+
+  admin.auth().deleteUser(id)
+  .then(function() {
+    console.log('Successfully deleted user');
+  })
+  .catch(function(error) {
+    console.log('Error deleting user:', error);
+  });
+
     //Delete row 
     $("."+rowClass).remove();
 }
@@ -116,7 +121,7 @@ function addLivreur(){
     var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" +
     new_address + "</td><td>" + new_city +
     "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+">Modifier</button> "+
-    " <button class='btn-danger btn' data-book-id="+userId+" onclick='delete_livreur("+userId+")'>Suprimer</button></td></tr>";
+    " <button class='btn-danger btn' data-book-id="+userId+" onclick='delete_livreur('"+userId+"')'>Suprimer</button></td></tr>";
 
     $("#all_livreur").append(mrow)
    
