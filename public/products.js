@@ -10,7 +10,7 @@ db.collection("products").get().then((querySnapshot) => {
         var mrow = "<tr class='rowNumber"+cpt+"'><td >" + data.name + "</td><td>" + data.price + "</td><td class='buyPrice"+cpt+"'>" + data.buyPrice + "</td><td class='quantity"+cpt+"'>" +
             data.quantity +
             "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+data.id+" data-cell-id="+cpt+">Modifier</button>"+
-            " <button data-book-id="+data.id+" onclick=delete_product('"+data.id+"','rowNumber"+cpt+"') class='btn-danger btn'>Suprimer</button>" 
+            " <button data-book-id="+data.id+" data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' class='btn-danger btn'>Suprimer</button>" 
  
             "</td></tr>";
 
@@ -20,6 +20,14 @@ db.collection("products").get().then((querySnapshot) => {
     });
 });
 
+// Confirmation delete Modal
+$('#confirmationModal').on('show.bs.modal', function(e) {
+    var id = $(e.relatedTarget).data('book-id');
+    var rowId = $(e.relatedTarget).data('row-id');
+    $('#deleteButton').attr('onClick', 'delete_product("'+id+'","'+rowId+'");');
+  });
+
+// Update Modal
 $('#exampleModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
     var cellId = $(e.relatedTarget).data('cell-id');
@@ -51,13 +59,20 @@ function upload(id, cellId) {
     $(".buyPrice"+cellId).html(""+new_buyPrice);
     $(".quantity"+cellId).html(""+new_quantity);
 
-    $('#exampleModal').modal('hide');
+    Annuler('exampleModal');
 
 }
-function delete_product (id, rowClass) {
+function delete_product (id, rowId) {
     db.collection('products').doc(""+id).delete();  
 
      //Delete row 
-     $("."+rowClass).remove();
+     $(".rowNumber"+rowId).remove();
+
+    Annuler('confirmationModal');
 }
+
+function Annuler(modalId) {
+    $('#'+modalId).modal('hide');
+}
+
 

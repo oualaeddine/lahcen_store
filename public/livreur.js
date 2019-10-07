@@ -17,12 +17,13 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     });
     
 });
-
+// Confirmation Delete Modal
 $('#confirmationModal').on('show.bs.modal', function(e) {
   var id = $(e.relatedTarget).data('book-id');
   var rowId = $(e.relatedTarget).data('row-id');
   $('#deleteButton').attr('onClick', 'delete_livreur("'+id+'","'+rowId+'");');
 });
+// Update Modal
 $('#exampleModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
     var cellId = $(e.relatedTarget).data('cell-id');
@@ -64,19 +65,19 @@ function upload(id, cellId) {
     $(".address"+cellId).html(""+new_address);
     $(".city"+cellId).html(""+new_city);
 
-    $('#exampleModal').modal('hide');
+    Annuler('exampleModal');
 
 }
 
 
 function delete_livreur(id,rowId) {
-  
+
   // Delete from database
     db.collection('delivery_men').doc(""+id).delete();
 
     //Delete row 
     $(".row"+rowId).remove();
-    $('#confirmationModal').modal('hide');
+    Annuler('confirmationModal');
 }
 
 /********* ADD DELIVERY MAN  ********/
@@ -105,7 +106,7 @@ function addLivreur(){
      });
    
   // Close Modal and reset the inputs
-    $('#addModal').modal('hide'); 
+    Annuler('addModal'); 
     $('#livreurName').val("");
     $('#livreurPhone').val("");
     $('#livreurPassword').val("");
@@ -123,7 +124,7 @@ function addLivreur(){
    
 });
 }
-function Annuler() {
-    $('#addModal').modal('hide');
+function Annuler(modalId) {
+    $('#'+modalId).modal('hide');
 }
 
