@@ -81,3 +81,8 @@
     display: inline-block;
     margin: 100px auto;
 }
+.ajout {
+    float: right;
+    line-height: 5;
+    padding-right: 15px;
+    }
