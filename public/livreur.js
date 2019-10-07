@@ -6,10 +6,10 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         console.log(doc.data());
         var data = doc.data();
-        var mrow = "<tr class='name"+cpt+"'><td ><span class='name"+cpt+"'>" + data.name + "</span></td><td><span class='changePhone'>" + data.phone + "</span></td><td>" + data.email + "</td><td>" +
-            data.address + "</td><td>" + data.city +
-            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+">Modifier</button> "+
-            " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"','name"+cpt+"')>Suprimer</button></td></tr>";
+        var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='address"+cpt+"'>" +
+            data.address + "</td><td class='city"+cpt+"'>" + data.city +
+            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button> "+
+            " <button class='btn-danger btn' data-book-id='"+doc.id+"' onclick=delete_livreur('"+doc.id+"','row"+cpt+"')>Suprimer</button></td></tr>";
         console.log(mrow);
 
         $("#all_livreur").append(mrow)
@@ -20,6 +20,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
 
 $('#exampleModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
+    var cellId = $(e.relatedTarget).data('cell-id');
     var docRef = db.collection("delivery_men").doc(""+id+"");
     docRef.get().then(function(doc) {
            var data = doc.data();
@@ -28,13 +29,12 @@ $('#exampleModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('#livreur_email').val(data.email);
            $(e.currentTarget).find('#livreur_address').val(data.address);
            $(e.currentTarget).find('#livreur_city').val(data.city);
-
-          $('#saveButton').attr('onClick', 'upload("'+id+'");');
+          $('#saveButton').attr('onClick', 'upload("'+id+'","'+cellId+'");');
          
 });
 });
 
-function upload(id) {
+function upload(id, cellId) {
    
     //GET NEW VALUES
     var new_name= $('#livreur_name').val();
@@ -52,19 +52,15 @@ function upload(id) {
        city : new_city
     });
 
+    //Update data table Cell
+    $(".name"+cellId).html(""+new_name);
+    $(".phone"+cellId).html(""+new_phone);
+    $(".email"+cellId).html(""+new_email);
+    $(".address"+cellId).html(""+new_address);
+    $(".city"+cellId).html(""+new_city);
+    
     $('#exampleModal').modal('hide');
 
-    //Update data table Cell
-    $(".name"+cpt+"").html(new_name); 
-    var UpdateName = $(".name"+cpt+"").parent('td');
-    livreur_table.cell( UpdateName ).data(UpdateName.html()).draw();
-   
-
-    /*Phone
-     $(".changePhone").html(new_phone); 
-     var UpdatePhone = $(".changePhone").parent('td');
-    livreur_table.cell( UpdatePhone ).data( UpdatePhone.html()).draw();
-   */
 }
 
 
