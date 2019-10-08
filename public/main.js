@@ -50,12 +50,46 @@ $('#statusModal').on('show.bs.modal', function(e) {
 function uploadStatut(id, cellId) {
 
  var new_statut = document.getElementById("statusForm").value;
+ if(new_statut == "Ne repond pas 1 fois") {
+     // INSERT NEW VALUES
+    db.collection('orders').doc(""+id).update({
+        status: new_statut,
+        Date_NRP1: firebase.firestore.Timestamp.now().toDate()
 
-  // INSERT NEW VALUES
-  let setDoc = db.collection('orders').doc(""+id).update({
-    status: new_statut
- 
-});
+        });
+    }
+    if(new_statut == "Ne repond pas 2 fois") {
+        // INSERT NEW VALUES
+       db.collection('orders').doc(""+id).update({
+           status: new_statut,
+           Date_NRP2: firebase.firestore.Timestamp.now().toDate()
+   
+           });
+       }
+      else if(new_statut == "Ne repond pas 3 fois") {
+        // INSERT NEW VALUES
+       db.collection('orders').doc(""+id).update({
+           status: new_statut,
+           Date_NRP3: firebase.firestore.Timestamp.now().toDate()
+   
+           });
+       }
+   else if(new_statut == "No want to buy") {
+         // INSERT NEW VALUES
+        db.collection('orders').doc(""+id).update({
+        status: new_statut,
+        Date_NoToBuy: firebase.firestore.Timestamp.now().toDate()
+
+        });
+    }
+ else {
+    // INSERT NEW VALUES
+    db.collection('orders').doc(""+id).update({
+        status: new_statut,
+        ['Date_'+new_statut ]: firebase.firestore.Timestamp.now().toDate()
+
+        });
+    }
  //Update data table Cell
  $(".statut"+cellId).html(""+new_statut);
  
@@ -63,6 +97,8 @@ function uploadStatut(id, cellId) {
  //Close Modal
  $('#statusModal').modal('hide');
 }
+
+
 function upload(id, cellId) {
    
     // GET INPUT VALUES
