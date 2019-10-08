@@ -90,7 +90,7 @@ function addLivreur(){
     var new_address= $('#livreurAddress').val();
     var new_city= document.getElementById("livreurCity").value;
     var new_password= $('#livreurPassword').val();
-    console.log("selected city is", new_city);
+    
     // Insert new Firebase User
     firebase.auth().createUserWithEmailAndPassword(new_email, new_password).then(function(data){
     var userId = data.user.uid;

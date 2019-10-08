@@ -86,3 +86,13 @@
     line-height: 5;
     padding-right: 15px;
     }
+.successState {
+    background-color: #09d276;
+    border-radius: 45%;
+    border-color: #09d276;
+}
+.successState:hover {
+    background-color: #09d276;
+    cursor: default;
+    border-color: #09d276;
+}
