@@ -87,7 +87,7 @@
     padding-right: 15px;
     }
 
-.btn-Pending {
+.btn-pending {
 background-color: #ff9800;
 border-color:#ff9800;
 cursor: default;
@@ -113,8 +113,8 @@ cursor: default;
 color: #fff;
 }
 .btn-Canceled {
-background-color: #eeff41;
-border-color: #eeff41;
+background-color: #ffc107;
+border-color: #ffc107;
 cursor: default;
 color: #fff;
 }
@@ -129,4 +129,7 @@ background-color: #f44336;
 border-color: #f44336;
 cursor: default;
 color: #fff;
+}
+.btn:hover {
+    color:#fff;
 }
