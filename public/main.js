@@ -8,8 +8,9 @@ db.collection("orders").get().then((querySnapshot) => {
         var mrow = "<tr><td>" + data.name + "</td><td> <button  class='btn btn-success'>" + data.status + "</button></td><td>" + data.client + "</td><td>" +
             data.address + "</td><td>" + data.phone + "</td><td>" + data.total_price  + "</td><td class='delPrice"+cpt+"'>" + data.shipping_price +
             "</td><td class='fee"+cpt+"'>" + data.fee + "</td><td>" + data.total_price +
-            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button></td></tr>";
-        console.log(mrow);
+            "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button></td>"
+            +"<td> <button class='btn btn-warning btn-sm' data-toggle='modal' data-target='#statusModal'>Status</button></td>"+
+            " <td><button class=' btn btn-primary btn-sm'>Details</button></td></tr>";
 
         $("#all_tb").append(mrow)
         cpt++;

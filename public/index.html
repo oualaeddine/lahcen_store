@@ -126,6 +126,35 @@
                 Liste des commandes
             </h1>
         </section>
+
+<!-- Change status Modal -->
+  <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+            
+                <h4 class="modal-title" style="color:#00a65a;">Status</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+            <div class="modal-body">
+                <select class="form-control" id="statusForm">
+                    <option value="pending">Pending</option>
+                    <option value="Assigned">Assigned</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Canceled">Canceled</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="No want to buy">No want to buy</option>
+                    <option value="Ne repond pas 1 fois">Ne repond pas 1 fois</option>
+                    <option value="Ne repond pas 2 fois"> Ne repond pas 2 fois</option>
+                    <option value="Ne repond pas 3 fois">Ne repond pas 3 fois</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteButton" type="button" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Update Modal -->
 <div class="modal fade" id="updateCommandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -301,6 +330,7 @@
             'lengthChange': false,
             'searching': true,
             'ordering': true,
+            'responsive': true,
             'info': true,
             'autoWidth': false
         })
