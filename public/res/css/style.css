@@ -86,13 +86,47 @@
     line-height: 5;
     padding-right: 15px;
     }
-.successState {
-    background-color: #09d276;
-    border-radius: 45%;
-    border-color: #09d276;
+
+.btn-Pending {
+background-color: #ff9800;
+border-color:#ff9800;
+cursor: default;
+color: #fff;
 }
-.successState:hover {
+.btn-Assigned {
+background-color: #009ed6;
+border-color: #009ed6;
+cursor: default;
+color: #fff;
+
+}
+.btn-Delivered {
     background-color: #09d276;
-    cursor: default;
     border-color: #09d276;
+    cursor: default;
+    color: #fff;
+}
+.btn-Confirmed {
+background-color: #b456d2;
+border-color: #b456d2;
+cursor: default;
+color: #fff;
+}
+.btn-Canceled {
+background-color: #eeff41;
+border-color: #eeff41;
+cursor: default;
+color: #fff;
+}
+.btn-Npr {
+background-color: #079fd4;
+border-color: #079fd4;
+cursor: default;
+color: #fff;
+}
+.btn-NoToBuy {
+background-color: #f44336;
+border-color: #f44336;
+cursor: default;
+color: #fff;
 }

@@ -5,13 +5,19 @@ var cpt=0;
 db.collection("orders").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         var data = doc.data();
-        var mrow = "<tr><td>" + data.name + "</td><td > <button  class='btn btn-success statut"+cpt+"'>" + data.status + "</button></td><td>" + data.client + "</td><td>" +
-            data.address + "</td><td>" + data.phone + "</td><td>" + data.total_price  + "</td><td class='delPrice"+cpt+"'>" + data.shipping_price +
-            "</td><td class='fee"+cpt+"'>" + data.fee + "</td><td>" + data.total_price +
-            "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button></td>"
-            +"<td> <button class='btn btn-warning btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'>Status</button></td>"+
-            " <td><button class=' btn btn-primary btn-sm'>Details</button></td></tr>";
-
+        var mrow = "<tr><td>" + data.name + "</td><td > <button id='here"+cpt+"' class='btn  statut"+cpt+"'>" + data.status + "</button></td><td>" + data.client + "</td><td>" +
+        data.address + "</td><td>" + data.phone + "</td><td>" + data.total_price  + "</td><td class='delPrice"+cpt+"'>" + data.shipping_price +
+        "</td><td class='fee"+cpt+"'>" + data.fee + "</td><td>" + data.total_price +
+        "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button></td>"
+        +"<td> <button class='btn btn-warning btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'>Status</button></td>"+
+        " <td><button class=' btn btn-primary btn-sm'>Details</button></td></tr>";
+      
+        //ADD Status classes
+        if(data.status == "pending") {
+        $('#here'+cpt).addClass("btn-Pending");
+       }
+       
+       
         $("#all_tb").append(mrow)
         cpt++;
     });
@@ -92,7 +98,7 @@ function uploadStatut(id, cellId) {
     }
  //Update data table Cell
  $(".statut"+cellId).html(""+new_statut);
- 
+ $(".statut"+cellId).attr('class','btn btn-'+new_statut);
 
  //Close Modal
  $('#statusModal').modal('hide');
