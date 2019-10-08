@@ -54,8 +54,12 @@ $('#updateCommandModal').on('show.bs.modal', function(e) {
 $('#statusModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
     var cellId = $(e.relatedTarget).data('cell-id');
-
+    var docRef = db.collection("orders").doc(""+id);
+    docRef.get().then(function(doc) {
+           var data = doc.data();
+           $(e.currentTarget).find("#statusForm").val(data.status);
     $('#changeStatus').attr('onClick', 'uploadStatut("'+id+'","'+cellId+'");');
+});
 });
 
 function uploadStatut(id, cellId) {
