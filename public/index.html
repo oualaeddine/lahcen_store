@@ -209,8 +209,8 @@
 <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Order details</h5>
+            <div class="modal-header orderDetailHeader">
+              <h4 class="modal-title" >Order details</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -225,10 +225,27 @@
                     </div>
                     
                   </form>
+                  <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Product name</th>
+                            <th>Quantiy</th>
+                            <th>Price</th>
+                          </tr>
+                        </thead>
+                        <tbody id="productList">
+                          
+                        </tbody>
+                      </table>
+                      <div class="form-group">
+                            <label  class="col-form-label">Date </label>
+                        </div>
             </div>
             <div class="modal-footer">
+                    <button class='btn btn-secondary' data-dismiss="modal" >Cancel</button>
                 <button class='btn btn-primary' id="assignButton" >Save</button>
-    
+               
+
             </div>
           </div>
         </div>

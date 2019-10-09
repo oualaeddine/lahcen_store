@@ -66,6 +66,33 @@ $('#statusModal').on('show.bs.modal', function(e) {
 $('#orderDetailsModal').on('show.bs.modal', function(e) {
     var idOrder = $(e.relatedTarget).data('book-id');
 
+    getDeliveryMenList();
+    $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
+    getProductList(idOrder);
+    
+});
+function getProductList(idOrder) {
+    var docRef = db.collection("orders").doc(""+idOrder);
+    docRef.get().then(function(doc) {
+        var data = doc.data();
+        //Get product id
+        var prod = data.products
+        prod.forEach(function(element) {
+            var productId = element.product_id.replace('products/', '');
+            
+            //Get product name/quantity/price by id
+
+            db.collection("products").doc(""+productId+"").get().then(function(doc) {
+                var productData = doc.data();
+
+                var row = "<tr><td>"+productData.name+"</td><td>"+element.quantity+"</td><td>"+productData.price+"</td><tr>";
+                $('#productList').append(row);
+            });
+         });
+    });
+}
+function getDeliveryMenList() {
+      //Get delivery men List
    db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         var delivery_men = doc.data();
@@ -74,9 +101,7 @@ $('#orderDetailsModal').on('show.bs.modal', function(e) {
         $('#assignementBox').append(row);
     });
 });
-    $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
-});
-
+}
 function assignDeliveryMan(idOrder){
     var menAssigned = document.getElementById("assignementBox").value;
 
@@ -86,20 +111,17 @@ function assignDeliveryMan(idOrder){
         Date_Assigned: firebase.firestore.Timestamp.now().toDate()
     
         });
-        var docRef = db.collection("orders").doc(""+idOrder);
-        docRef.get().then(function(doc) {
-               var data = doc.data();
-        
-        //Update Delivery Man Doc
-        db.collection('delivery_men').doc(""+menAssigned).update({
-            Assigned_orders: data.name
-            });
+        db.collection("orders").doc(""+idOrder).get().then(function(doc) {
             
- //Close Modal
- $('#orderDetailsModal').modal('hide');
-});
+            var data = doc.data();
+            //Update Delivery Man Doc
+            db.collection('delivery_men').doc(""+menAssigned).update({
+                Assigned_orders: data.name
+                });
+        });
+    //Close Modal
+    $('#orderDetailsModal').modal('hide');
 }
-
 function uploadStatut(id, cellId) {
 
  var new_statut = document.getElementById("statusForm").value;

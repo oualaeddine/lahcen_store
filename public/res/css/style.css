@@ -133,3 +133,14 @@ color: #fff;
 .btn:hover {
     color:#fff;
 }
+.orderDetailHeader {
+    background-color: #00a65a;
+    color: white;
+}
+.orderDetailHeader h4 {
+    float: left;
+}
+.orderDetailHeader button {
+    color:white;
+    opacity: 1;
+}
