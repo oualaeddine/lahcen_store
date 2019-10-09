@@ -19,7 +19,7 @@ db.collection("orders").get().then((querySnapshot) => {
         "</td><td class='fee"+cpt+"'>" + data.fee + "</td><td>" + data.total_price +
         "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button></td>"
         +"<td> <button class='btn btn-warning btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'>Status</button></td>"+
-        " <td><button class=' btn btn-primary btn-sm'>Details</button></td></tr>";
+        " <td><button class=' btn btn-primary btn-sm' data-toggle='modal' data-target='#orderDetailsModal' data-book-id="+doc.id+">Details</button></td></tr>";
       
     
        
@@ -61,6 +61,44 @@ $('#statusModal').on('show.bs.modal', function(e) {
     $('#changeStatus').attr('onClick', 'uploadStatut("'+id+'","'+cellId+'");');
 });
 });
+
+// order Details Modal
+$('#orderDetailsModal').on('show.bs.modal', function(e) {
+    var idOrder = $(e.relatedTarget).data('book-id');
+
+   db.collection("delivery_men").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        var delivery_men = doc.data();
+
+        var row= "<option value='"+doc.id+"'>"+delivery_men.name+ "  |  " + delivery_men.city + "</option>";
+        $('#assignementBox').append(row);
+    });
+});
+    $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
+});
+
+function assignDeliveryMan(idOrder){
+    var menAssigned = document.getElementById("assignementBox").value;
+
+    // Update Order 
+   document = db.collection('orders').doc(""+idOrder).update({
+        Assigned_to: menAssigned,
+        Date_Assigned: firebase.firestore.Timestamp.now().toDate()
+    
+        });
+        var docRef = db.collection("orders").doc(""+idOrder);
+        docRef.get().then(function(doc) {
+               var data = doc.data();
+        
+        //Update Delivery Man Doc
+        db.collection('delivery_men').doc(""+menAssigned).update({
+            Assigned_orders: data.name
+            });
+            
+ //Close Modal
+ $('#orderDetailsModal').modal('hide');
+});
+}
 
 function uploadStatut(id, cellId) {
 
