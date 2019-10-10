@@ -17,9 +17,9 @@ db.collection("orders").get().then((querySnapshot) => {
         var mrow = "<tr><td>" + data.name + "</td><td > <button  class='btn  statut"+cpt+" btn-"+statusClass+"'>" + data.status + "</button></td><td>" + data.client + "</td><td>" +
         data.address + "</td><td>" + data.phone + "</td><td>" + data.total_price  + "</td><td class='delPrice"+cpt+"'>" + data.shipping_price +
         "</td><td class='fee"+cpt+"'>" + data.fee + "</td><td>" + data.total_price +
-        "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button></td>"
-        +"<td> <button class='btn btn-warning btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'>Status</button></td>"+
-        " <td><button class=' btn btn-primary btn-sm' data-toggle='modal' data-target='#orderDetailsModal' data-book-id="+doc.id+">Details</button></td></tr>";
+        "</td><td> <button class='btn-primary btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button>"
+        +" <button class='btn btn-primary btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'><i class='fa fa-shopping-cart'></i></button>"+
+        " <button onclick='loadOrderPage("+doc.id+")'  id='orderLink"+cpt+"' class=' btn btn-primary btn-sm orderLink'  data-rowid="+cpt+" data-id="+doc.id+"><i class='fa fa-info'></i></button></td></tr>";
       
     
        
@@ -27,7 +27,25 @@ db.collection("orders").get().then((querySnapshot) => {
         cpt++;
     });
 });
+/*
 
+    var first = db.collection("orders")
+    .orderBy("date_ordered")
+    .limit(10);
+
+    return first.get().then(function (documentSnapshots) {
+        // Get the last visible document
+        var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+        console.log("last", lastVisible);
+    
+        // Construct a new query starting at this document,
+        // get the next 25 cities.
+            var next = db.collection("orders")
+            .orderBy("date_ordered")
+            .startAfter(lastVisible)
+            .limit(10);
+        });
+*/
 // Update Modal
 $('#updateCommandModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
@@ -62,66 +80,12 @@ $('#statusModal').on('show.bs.modal', function(e) {
 });
 });
 
-// order Details Modal
-$('#orderDetailsModal').on('show.bs.modal', function(e) {
-    var idOrder = $(e.relatedTarget).data('book-id');
-
-    getDeliveryMenList();
-    $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
-    getProductList(idOrder);
-    
-});
-function getProductList(idOrder) {
-    var docRef = db.collection("orders").doc(""+idOrder);
-    docRef.get().then(function(doc) {
-        var data = doc.data();
-        //Get product id
-        var prod = data.products
-        prod.forEach(function(element) {
-            var productId = element.product_id.replace('products/', '');
-            
-            //Get product name/quantity/price by id
-
-            db.collection("products").doc(""+productId+"").get().then(function(doc) {
-                var productData = doc.data();
-
-                var row = "<tr><td>"+productData.name+"</td><td>"+element.quantity+"</td><td>"+productData.price+"</td><tr>";
-                $('#productList').append(row);
-            });
-         });
-    });
+// Send Data to orderDetails page
+function loadOrderPage(idOrder) {
+    localStorage.setItem("orderId",idOrder);
+    window.location.href = 'orderDetails.html';
 }
-function getDeliveryMenList() {
-      //Get delivery men List
-   db.collection("delivery_men").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        var delivery_men = doc.data();
 
-        var row= "<option value='"+doc.id+"'>"+delivery_men.name+ "  |  " + delivery_men.city + "</option>";
-        $('#assignementBox').append(row);
-    });
-});
-}
-function assignDeliveryMan(idOrder){
-    var menAssigned = document.getElementById("assignementBox").value;
-
-    // Update Order 
-   document = db.collection('orders').doc(""+idOrder).update({
-        Assigned_to: menAssigned,
-        Date_Assigned: firebase.firestore.Timestamp.now().toDate()
-    
-        });
-        db.collection("orders").doc(""+idOrder).get().then(function(doc) {
-            
-            var data = doc.data();
-            //Update Delivery Man Doc
-            db.collection('delivery_men').doc(""+menAssigned).update({
-                Assigned_orders: data.name
-                });
-        });
-    //Close Modal
-    $('#orderDetailsModal').modal('hide');
-}
 function uploadStatut(id, cellId) {
 
  var new_statut = document.getElementById("statusForm").value;
@@ -129,7 +93,7 @@ function uploadStatut(id, cellId) {
      // INSERT NEW VALUES
     db.collection('orders').doc(""+id).update({
         status: new_statut,
-        Date_NRP1: firebase.firestore.Timestamp.now().toDate()
+        date_NRP1: firebase.firestore.Timestamp.now().toDate()
 
         });
     }
@@ -137,7 +101,7 @@ function uploadStatut(id, cellId) {
         // INSERT NEW VALUES
        db.collection('orders').doc(""+id).update({
            status: new_statut,
-           Date_NRP2: firebase.firestore.Timestamp.now().toDate()
+           date_NRP2: firebase.firestore.Timestamp.now().toDate()
    
            });
        }
@@ -145,7 +109,7 @@ function uploadStatut(id, cellId) {
         // INSERT NEW VALUES
        db.collection('orders').doc(""+id).update({
            status: new_statut,
-           Date_NRP3: firebase.firestore.Timestamp.now().toDate()
+           date_NRP3: firebase.firestore.Timestamp.now().toDate()
    
            });
        }
@@ -153,7 +117,7 @@ function uploadStatut(id, cellId) {
          // INSERT NEW VALUES
         db.collection('orders').doc(""+id).update({
         status: new_statut,
-        Date_NoToBuy: firebase.firestore.Timestamp.now().toDate()
+        date_NoToBuy: firebase.firestore.Timestamp.now().toDate()
 
         });
     }
@@ -161,7 +125,7 @@ function uploadStatut(id, cellId) {
     // INSERT NEW VALUES
     db.collection('orders').doc(""+id).update({
         status: new_statut,
-        ['Date_'+new_statut ]: firebase.firestore.Timestamp.now().toDate()
+        ['date_'+new_statut ]: firebase.firestore.Timestamp.now().toDate()
 
         });
     }

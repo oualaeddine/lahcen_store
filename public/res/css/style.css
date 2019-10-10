@@ -92,43 +92,56 @@ background-color: #ff9800;
 border-color:#ff9800;
 cursor: default;
 color: #fff;
+border-radius: .25em;
+padding: .2em .6em .3em;
 }
 .btn-Assigned {
 background-color: #009ed6;
 border-color: #009ed6;
 cursor: default;
 color: #fff;
-
+border-radius: .25em;
+padding: .2em .6em .3em;
 }
 .btn-Delivered {
     background-color: #09d276;
     border-color: #09d276;
     cursor: default;
     color: #fff;
+    border-radius: .25em;
+    padding: .2em .6em .3em;
 }
 .btn-Confirmed {
 background-color: #b456d2;
 border-color: #b456d2;
 cursor: default;
 color: #fff;
+border-radius: .25em;
+padding: .2em .6em .3em;
 }
 .btn-Canceled {
 background-color: #ffc107;
 border-color: #ffc107;
 cursor: default;
 color: #fff;
+border-radius: .25em;
+padding: .2em .6em .3em;
 }
 .btn-Npr {
 background-color: #079fd4;
 border-color: #079fd4;
 cursor: default;
 color: #fff;
+border-radius: .25em;
+padding: .2em .6em .3em;
 }
 .btn-NoToBuy {
 background-color: #f44336;
 border-color: #f44336;
 cursor: default;
 color: #fff;
+border-radius: .25em;
+padding: .2em .6em .3em;
 }
 .btn:hover {
     color:#fff;
@@ -143,4 +156,10 @@ color: #fff;
 .orderDetailHeader button {
     color:white;
     opacity: 1;
+}
+.assignButton {
+    line-height: 7.9;
+}
+.infoContainer {
+    width: 98%;
 }
