@@ -6,7 +6,14 @@ getDeliveryMenList();
 $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
 $('#productList').attr('class', "productList"+idOrder);
 getProductList(idOrder);
+getTotalPrice(idOrder);
 
+function getTotalPrice(idOrder){
+    db.collection("orders").doc(""+idOrder).get().then(function(doc) {
+        var data = doc.data();
+        $('.total').append(data.total_price);
+    });
+}
 function getProductList(idOrder) {
     var docRef = db.collection("orders").doc(""+idOrder);
     docRef.get().then(function(doc) {
@@ -69,6 +76,9 @@ function getOrderStatu(idOrder) {
 
         $('.orderStatut').append(rowS);
         $('.orderDate').append(row);
+        $('.orderName').append(data.name);
+        $('.clientName').append(data.client);
+        $('.clientAddress').append(data.address);
         
     });
 }
