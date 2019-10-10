@@ -14,9 +14,13 @@ db.collection("orders").get().then((querySnapshot) => {
         if( (statusClass == "Ne repond pas 1 fois") || (statusClass == "Ne repond pas 2 fois") || (statusClass == "Ne repond pas 3 fois")) {
             statusClass = "Npr";
         }
+        var feeValue=data.fee;
+        if (feeValue == null) {
+            feeValue=0;
+        }
         var mrow = "<tr><td>" + data.name + "</td><td > <button  class='btn  statut"+cpt+" btn-"+statusClass+"'>" + data.status + "</button></td><td>" + data.client + "</td><td>" +
         data.address + "</td><td>" + data.phone + "</td><td>" + data.total_price  + "</td><td class='delPrice"+cpt+"'>" + data.shipping_price +
-        "</td><td class='fee"+cpt+"'>" + data.fee + "</td><td>" + data.total_price +
+        "</td><td class='fee"+cpt+"'>" + feeValue + "</td><td>" + data.total_price +
         "</td><td> <button class='btn-primary btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button>"
         +" <button class='btn btn-primary btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'><i class='fa fa-shopping-cart'></i></button>"+
         " <button onclick='loadOrderPage("+doc.id+")'  id='orderLink"+cpt+"' class=' btn btn-primary btn-sm orderLink'  data-rowid="+cpt+" data-id="+doc.id+"><i class='fa fa-info'></i></button></td></tr>";
