@@ -1,8 +1,8 @@
 var db = firebase.firestore();
 
 var idOrder = localStorage.getItem("orderId");
-
-getDeliveryMenList(idOrder);
+getOrderStatu(idOrder);
+getDeliveryMenList();
 $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
 $('#productList').attr('class', "productList"+idOrder);
 getProductList(idOrder);
@@ -30,20 +30,47 @@ function getProductList(idOrder) {
 function enableBox() {
     $('#assignementBox').attr("disabled",false);
 }
-function getDeliveryMenList(idOrder) {
-
-    //Test if order already assigned
-   var ref = db.collection("orders").doc(""+idOrder).get().then(function(doc) {
+function getOrderStatu(idOrder) {
+    db.collection("orders").doc(""+idOrder).get().then(function(doc) {
         var data = doc.data();
-        if(doc.get('Assigned_to') != null){
-              //Man exists || Get delivery men List
-              //document.getElementById("assignementBox").val();
-              var editButton = "<button class='btn' onclick='enableBox()' type='button'><i class='fa fa-edit'></i></button>";
-              $('.assignButton').append(editButton);
-              $('#assignementBox').attr("disabled",'true');
+        //Test status classes
+        var statusClass = data.status;
+        if(statusClass == "No want to buy") {
+            statusClass = "NoToBuy";
         }
+        if( (statusClass == "Ne repond pas 1 fois") || (statusClass == "Ne repond pas 2 fois") || (statusClass == "Ne repond pas 3 fois")) {
+            statusClass = "Npr";
+        }
+        var rowS =  "<button  class='btn  btn-"+statusClass+"'>"+data.status+"</button>";
+        if(data.status == "No want to buy"){
+            var row = "No want to buy on : <br> "+data.date_NoToBuy.toDate();
+        }
+        if(data.status == "Confirmed") {
+            var row = " Confirmed on : <br>"+data.date_Confirmed.toDate();
+        }
+        if(data.status == "Canceled") {
+            var row = "Canceled on : <br>"+data.date_Canceled.toDate();
+        }
+       if(data.status == "assigned") {
+           var row = "Assigned on : <br>"+data.date_Assigned.toDate();
+           var manId= data.Assigned_to;
+        db.collection("delivery_men").doc(""+manId).get().then(function(doc) {
+            var manData = doc.data();
+             name = manData.name;
+             city = manData.city;
+             var rowText = "Assigned to : "+manData.name+" | "+manData.city;
+             $('.orderMan').append(rowText);
+        });
+           
+       }
+        $('.orderStatut').append(rowS);
+        $('.orderDate').append(row);
         
     });
+}
+
+function getDeliveryMenList() {
+
       //Get delivery men List
    db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
