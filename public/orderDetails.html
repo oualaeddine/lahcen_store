@@ -130,72 +130,104 @@
         </section>
         <div class="row">
             <section class="content infoContainer ">
-                    <div class="row">
-                            <div class="col-md-8">
+                <!-- CLIENT INFO -->                  
+                  <div class="row">
+                            <div class="col-md-7">
                                     <div class="box info-box">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Order status</h3>
+                                            <h3 class="box-title">Order information </h3>
                                          </div>
                                         <div class="box-body">
-                                            <div class="info-box-icon orderStatut"></div>
-                                            <div class="info-box-content ">
-                                                <span class="info-box-number orderDate">
-
-                                                </span>
-                                                <span class="info-box-text orderMan">
-
-                                                </span>
+                                                <div class="info-box-icon orderStatut"></div>
+                                                <div class="info-box-content ">
+                                                    <span class="info-box-number orderDate">
+    
+                                                    </span>
+                                                    <span class="info-box-text orderMan">
+    
+                                                    </span>
                                             </div>
                                         </div>       
                                     </div>
-                                            
-                                        
-                                    </div>
                                 </div>
-                    <div class="row">
-                            <div class="col-md-8">
-                                    <div class="box info-box">
-                                            <div class="form-group col-md-6">
-                                                    <div class="box-header with-border">
-                                                            <h3 class="box-title">New Assignement </h3>
+                                              <div class="col-md-5">
+                                                    <div class="box info-box">
+                                                            <div class="box-header with-border">
+                                                                    <h3 class="box-title">New Assignement </h3>
+                                                            </div>
+                                                        <div class="box-body">
+                                                            <div class="form-group ">
+                                                                    
+                                                                <select class="form-control" id="assignementBox">
+                
+                                                                </select>
+                                                            </div>
+                                                            <div class="assignButton">
+                                                                <button class='btn btn-primary' id="assignButton" >Assign</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <select class="form-control" id="assignementBox">
-
-                                                </select>
+                                                </div>    
+                                               </div>
+            <!-- PRODUCT LIST -->
+                                <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="box box-info">
+                                                    <div class="box-header with-border">
+                                                            <h3 class="box-title">Product list</h3>
+                                                    </div>
+                                                    <div class="box-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table no-margin">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Quantiy</th>
+                                                                        <th>Price</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody id="productList">
+                                                                    
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-2 assignButton">
-                                                <button class='btn btn-primary' id="assignButton" >Assign</button>
-                                            </div>
-                                        
-                                    </div>
-                                </div>
-            </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="box box-info">
-                                <div class="box-header with-border">
-                                        <h3 class="box-title">Product list</h3>
-                                </div>
-                                <div class="box-body">
-                                    <div class="table-responsive">
-                                        <table class="table no-margin">
-                                                <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Quantiy</th>
-                                                    <th>Price</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="productList">
-                                                
-                                                </tbody>
-                                            </table>
                                         </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                  
+                                        <div class="col-md-5">
+                                                <div class="box info-box">
+                                                    
+                                                                <div class="box-header with-border">
+                                                                        <h3 class="box-title">Log</h3>
+                                                                </div>
+                                                                <div class="box-body">
+                                                                </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>             
+                      
+                                   
+                                    <div class="row">
+                                            <div class="col-md-7">
+                                                    <div class="box info-box">
+                                                        
+                                                                    <div class="box-header with-border">
+                                                                            <h3 class="box-title">Total</h3>
+                                                                    </div>
+                                                                    <div class="box-body">
+                                                                    </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>        
+                                    </div>
+                   
+                    
+                          
+        
+               
+                
             </section>
             <!-- /.content -->
         </div>

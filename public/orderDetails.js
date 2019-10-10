@@ -41,7 +41,7 @@ function getOrderStatu(idOrder) {
         if( (statusClass == "Ne repond pas 1 fois") || (statusClass == "Ne repond pas 2 fois") || (statusClass == "Ne repond pas 3 fois")) {
             statusClass = "Npr";
         }
-        var rowS =  "<button  class='btn  btn-"+statusClass+"'>"+data.status+"</button>";
+        var rowS =  "<button  class='btn orderStateButton btn-"+statusClass+"'>"+data.status+"</button>";
         if(data.status == "No want to buy"){
             var row = "No want to buy on : <br> "+data.date_NoToBuy.toDate();
         }
@@ -51,7 +51,7 @@ function getOrderStatu(idOrder) {
         if(data.status == "Canceled") {
             var row = "Canceled on : <br>"+data.date_Canceled.toDate();
         }
-       if(data.status == "assigned") {
+       if(data.status == "assigned" || data.status == "Assigned") {
            var row = "Assigned on : <br>"+data.date_Assigned.toDate();
            var manId= data.Assigned_to;
         db.collection("delivery_men").doc(""+manId).get().then(function(doc) {
@@ -63,6 +63,10 @@ function getOrderStatu(idOrder) {
         });
            
        }
+       if(data.status == "Delivered") {
+           var row ="Delivered on : <br>"+data.date_Delivered.toDate();
+       }
+
         $('.orderStatut').append(rowS);
         $('.orderDate').append(row);
         
@@ -87,8 +91,8 @@ function assignDeliveryMan(idOrder){
     // Update Order 
    document = db.collection('orders').doc(""+idOrder).update({
         Assigned_to: menAssigned,
-        date_Assigned: firebase.firestore.Timestamp.now().toDate()
-    
+        date_Assigned: firebase.firestore.Timestamp.now().toDate(),
+        status: "Assigned"
         });
         db.collection("orders").doc(""+idOrder).get().then(function(doc) {
             
@@ -98,5 +102,11 @@ function assignDeliveryMan(idOrder){
                 Assigned_orders: data.name
                 });
         });
-   
+        $('.orderStateButton').attr('class','btn orderStateButton btn-Assigned');
+        $('.orderStateButton').html('Assigned');
+        $('.orderDate').html(firebase.firestore.Timestamp.now().toDate());
+        db.collection("delivery_men").doc(""+menAssigned).get().then(function(doc) {
+            var data = doc.data();
+            $('.orderMan').html(data.name+" | "+data.city);
+        });
 }
