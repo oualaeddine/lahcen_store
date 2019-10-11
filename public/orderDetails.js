@@ -97,7 +97,7 @@ function getDeliveryMenList() {
 }
 function assignDeliveryMan(idOrder){
     var menAssigned = document.getElementById("assignementBox").value;
-
+    
     // Update Order 
    document = db.collection('orders').doc(""+idOrder).update({
         Assigned_to: menAssigned,
@@ -107,11 +107,21 @@ function assignDeliveryMan(idOrder){
         db.collection("orders").doc(""+idOrder).get().then(function(doc) {
             
             var data = doc.data();
+            var assigned_orders = new Array();
+            //test if Man has already assigned orders
+            db.collection("delivery_men").doc(""+menAssigned).get().then(function(doc) {
+                var manData = doc.data();
+            if(manData.Assigned_orders != null) {
+                assigned_orders= manData.Assigned_orders;
+                assigned_orders.push(data.name);
+            } else assigned_orders.push(data.name);
+            
             //Update Delivery Man Doc
             db.collection('delivery_men').doc(""+menAssigned).update({
-                Assigned_orders: data.name
+                Assigned_orders: assigned_orders
                 });
         });
+    });
         $('.orderStateButton').attr('class','btn orderStateButton btn-Assigned');
         $('.orderStateButton').html('Assigned');
         $('.orderDate').html(firebase.firestore.Timestamp.now().toDate());
