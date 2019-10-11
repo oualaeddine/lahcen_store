@@ -121,9 +121,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Liste des commandes
-            </h1>
+       
         </section>
 
 <!-- Change status Modal -->
@@ -203,82 +201,40 @@
         </div>
       </div>
 
-      <!-- order Details Modal -->
-<div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header orderDetailHeader">
-              <h4 class="modal-title" >Order details</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label  class="col-form-label">Assigned to</label>
-                            <select class="form-control" id="assignementBox">
-
-                            </select>
-                        </div>
-                        <div class="col-md-4 assignButton">
-                            <button class='btn btn-primary' id="assignButton" >Assign</button>
-                        </div>
-                </div>
-                    
-                  </form>
-                  <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th>Product name</th>
-                            <th>Quantiy</th>
-                            <th>Price</th>
-                          </tr>
-                        </thead>
-                        <tbody id="productList">
-                          
-                        </tbody>
-                      </table>
-                      <div class="form-group">
-                            <label  class="col-form-label">Date </label>
-                        </div>
-            </div>
-            <div class="modal-footer">
-                    <button class='btn btn-secondary' data-dismiss="modal" >Cancel</button>
-                <button class='btn btn-primary'  >Save</button>
-               
-
-            </div>
-          </div>
-        </div>
-      </div>
+     
         <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                            <div class="active  table-responsive" id="activity">
-                                    
-                                <table id="all_table" class="table table-bordered table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>status</th>
-                                        <th>client</th>
-                                        <th>adresse</th>
-                                        <th>telephone</th>
-                                        <th>sub total</th>
-                                        <th>livraison</th>
-                                        <th>fee</th>
-                                        <th>total</th>
-                                        <th>actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="all_tb">
+                  <div class="box box-info">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Orders List</h3>
+                                 </div>  
+                            <div class="box-body">
+                              <div class="table-responsive">
+                                  <table id="all_table" class="table table-bordered table-striped">
+                                      <thead>
+                                      <tr>
+                                          <th>#</th>
+                                          <th>status</th>
+                                          <th>client</th>
+                                          <th>adresse</th>
+                                          <th>telephone</th>
+                                          <th>sub total</th>
+                                          <th>livraison</th>
+                                          <th>fee</th>
+                                          <th>total</th>
+                                          <th>actions</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody id="all_tb">
 
-                                    </tbody>
-                                </table>
+                                      </tbody>
+                                  </table>
+                                </div>
                             </div>
+                            </div>
+                          
                  </div>
 
             </div>

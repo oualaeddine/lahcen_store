@@ -24,7 +24,7 @@ function getProductList(idOrder) {
             var productId = element.product_id.replace('products/', '');
             
             //Get product name/quantity/price by id
-
+            
             db.collection("products").doc(""+productId+"").get().then(function(doc) {
                 var productData = doc.data();
 
@@ -52,10 +52,10 @@ function getOrderStatu(idOrder) {
         if(data.status == "No want to buy"){
             var row = "No want to buy on : <br> "+data.date_NoToBuy.toDate();
         }
-        if(data.status == "Confirmed") {
+        if(data.status == "Confirmed" || data.status == "confirmed") {
             var row = " Confirmed on : <br>"+data.date_Confirmed.toDate();
         }
-        if(data.status == "Canceled") {
+        if(data.status == "Canceled" || data.status == "canceled") {
             var row = "Canceled on : <br>"+data.date_Canceled.toDate();
         }
        if(data.status == "assigned" || data.status == "Assigned") {
