@@ -114,10 +114,9 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header">MAIN NAVIGATION</li>
-                <li><a href="#"> <i class="fa fa-th"></i> <span>Dashboard</span> </a></li>
-                <li><a href="products.html"><i class="fa fa-book"></i> <span>Produits</span></a></li>
-                <li><a href="index.html"><i class="fa fa-book"></i> <span>Commandes</span></a></li>
-                <li><a href="livreur.html"><i class="fa fa-user"></i> <span>Livreurs</span></a></li>
+                <li><a href="index.html"> <i class='fa fa-shopping-cart'></i> <span>Dashboard</span> </a></li>
+                <li><a href="products.html"><i class="fa fa-book"></i> <span>Products</span></a></li>
+                <li><a href="livreur.html"><i class="fa fa-user"></i> <span>Delivery men</span></a></li>
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -130,7 +129,7 @@
             <div class="row">
                 <div class="col-md-6">
                    <h1>
-                     Liste des livreurs
+                     Delivery men list
                     </h1>
                     
                 </div>
@@ -155,28 +154,28 @@
                 <form>
                     <div class="form-group">
                       <label  class="col-form-label">Name</label>
-                      <input type="text" id="livreurName"  class="form-control">
+                      <input type="text" id="livreurName"  class="form-control"required>
                     </div>
                     <div class="form-group">
                       <label  class="col-form-label">Phone</label>
-                      <input   id="livreurPhone" class="form-control" ></input>
+                      <input   id="livreurPhone" class="form-control" required></input>
                     </div>
                     <div class="form-group">
                         <label  class="col-form-label">Email</label>
-                        <input id="livreurEmail"  class="form-control" ></input>
+                        <input id="livreurEmail"  class="form-control" required></input>
                       </div>
                       <div class="form-group">
                         <label  class="col-form-label">Mot de passe</label>
-                        <input id="livreurPassword" class="form-control" ></input>
+                        <input id="livreurPassword" class="form-control" required></input>
                       </div>
                       <div class="row">
                           <div class="col-md-6">
                             <label  class="col-form-label">Address</label>
-                            <input id="livreurAddress" class="form-control" ></input>
+                            <input id="livreurAddress" class="form-control" required></input>
                           </div>
                           <div class="col-md-6">
                               <label  class="col-form-label">City</label>
-                              <select class="form-control" id="livreurCity">
+                              <select class="form-control" id="livreurCity" required>
                                                                     
                                         <option value="Adrar">Adrar </option>
                                         <option value="Chlef">Chlef </option>
@@ -356,10 +355,10 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="nav-tabs-custom">
-                    
-                        <div class="tab-content">
-                            <div class="active tab-pane" id="activity">
+                        <div class="box box-info">
+                               
+                            <div class="box-body">
+                              <div class="table-responsive">
                                 <table id="all_livreur" class="table table-bordered table-striped" >
                                     <thead>
                                     <tr>
@@ -421,12 +420,7 @@
    var livreur_table = $("#all_livreur").on("draw.dt", function () {
     $(this).find(".dataTables_empty").parents('tbody').empty();
 }).DataTable({
-            'paging': true,
-            'lengthChange': false,
-            'searching': true,
-            'ordering': true,
-            'info': true,
-            'autoWidth': false
+            
         })
     
 </script>

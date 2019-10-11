@@ -4,13 +4,13 @@ var db = firebase.firestore();
 var cpt=0;
 db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-        console.log(doc.data());
+        
         var data = doc.data();
         var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='address"+cpt+"'>" +
             data.address + "</td><td class='city"+cpt+"'>" + data.city +
-            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+">Modifier</button> "+
-            " <button class='btn-danger btn' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' >Suprimer</button></td></tr>";
-        console.log(mrow);
+            "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
+            " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button></td></tr>";
+       
 
         $("#all_livreur").append(mrow)
         cpt++;

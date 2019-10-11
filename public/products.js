@@ -5,7 +5,7 @@ var db = firebase.firestore();
 var cpt=0;
 db.collection("products").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-        console.log(doc.data());
+       
         var data = doc.data();
         var mrow = "<tr class='rowNumber"+cpt+"'><td >" + data.name + "</td><td>" + data.price + "</td><td class='buyPrice"+cpt+"'>" + data.buyPrice + "</td><td class='quantity"+cpt+"'>" +
             data.quantity +

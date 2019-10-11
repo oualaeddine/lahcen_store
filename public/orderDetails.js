@@ -58,6 +58,7 @@ function getOrderStatu(idOrder) {
         if(data.status == "Canceled" || data.status == "canceled") {
             var row = "Canceled on : <br>"+data.date_Canceled.toDate();
         }
+        
        if(data.status == "assigned" || data.status == "Assigned") {
            var row = "Assigned on : <br>"+data.date_Assigned.toDate();
            var manId= data.Assigned_to;
@@ -115,7 +116,7 @@ function assignDeliveryMan(idOrder){
                 assigned_orders= manData.Assigned_orders;
                 assigned_orders.push(data.name);
             } else assigned_orders.push(data.name);
-            
+
             //Update Delivery Man Doc
             db.collection('delivery_men').doc(""+menAssigned).update({
                 Assigned_orders: assigned_orders
