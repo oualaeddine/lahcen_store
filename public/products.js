@@ -9,8 +9,8 @@ db.collection("products").get().then((querySnapshot) => {
         var data = doc.data();
         var mrow = "<tr class='rowNumber"+cpt+"'><td >" + data.name + "</td><td>" + data.price + "</td><td class='buyPrice"+cpt+"'>" + data.buyPrice + "</td><td class='quantity"+cpt+"'>" +
             data.quantity +
-            "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+data.id+" data-cell-id="+cpt+">Modifier</button>"+
-            " <button data-book-id="+data.id+" data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' class='btn-danger btn'>Suprimer</button>" 
+            "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+data.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button>"+
+            " <button data-book-id="+data.id+" data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' class='btn-danger btn btn-sm'><i class='fa fa-trash'></i></button>" 
  
             "</td></tr>";
 

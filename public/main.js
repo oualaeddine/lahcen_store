@@ -2,8 +2,14 @@ var db = firebase.firestore();
 
 var cpt=0;
 // Get Commands List
-db.collection("orders").get().then((querySnapshot) => {
+var first = db.collection("orders")
+    .orderBy("date_ordered","desc")
+    .limit(10);
+first.get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
+        var lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
+    
+       
         var data = doc.data();
 
         //Test status classes
@@ -31,25 +37,8 @@ db.collection("orders").get().then((querySnapshot) => {
         cpt++;
     });
 });
-/*
-
-    var first = db.collection("orders")
-    .orderBy("date_ordered")
-    .limit(10);
-
-    return first.get().then(function (documentSnapshots) {
-        // Get the last visible document
-        var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-        console.log("last", lastVisible);
-    
-        // Construct a new query starting at this document,
-        // get the next 25 cities.
-            var next = db.collection("orders")
-            .orderBy("date_ordered")
-            .startAfter(lastVisible)
-            .limit(10);
-        });
-*/
+  
+ 
 // Update Modal
 $('#updateCommandModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
