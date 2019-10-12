@@ -9,7 +9,9 @@ db.collection("delivery_men").get().then((querySnapshot) => {
         var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='address"+cpt+"'>" +
             data.address + "</td><td class='city"+cpt+"'>" + data.city +
             "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
-            " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button></td></tr>";
+            " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
+            "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
+            "<button class='btn btn-primary btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-info'></i></button></td></tr>";
        
 
         $("#all_livreur").append(mrow)
@@ -40,6 +42,18 @@ $('#exampleModal').on('show.bs.modal', function(e) {
 });
 });
 
+// ADD PAYMENT Modal
+$('#addPaymentModal').on('show.bs.modal', function(e) {
+    var id = $(e.relatedTarget).data('book-id');
+    var docRef = db.collection("delivery_men").doc(""+id+"");
+    docRef.get().then(function(doc) {
+           var data = doc.data();
+           $(e.currentTarget).find('input[name="livreurName"]').val(data.name);
+    });
+    $('#addPaymentButton').attr('onClick', 'addPayment("'+id+'");');
+});
+
+/******** FUNCTIONS *********/
 function upload(id, cellId) {
    
     //GET NEW VALUES
@@ -128,3 +142,25 @@ function Annuler(modalId) {
     $('#'+modalId).modal('hide');
 }
 
+/********* ADD Payment for a DELIVERY MAN  ********/
+function addPayment(livreurId) {
+
+    // Get inputs Values
+    var montant =  $('#montant').val();
+    var date = $('#datePayment').val();
+    /* Insert new data in database
+    let livreurRef = db.collection('paiements');
+    livreurRef.doc(""+livreurId).set({
+       [paiements]: {
+            montant: montant,
+            date : date
+        }
+    
+    });
+*/
+
+    // Close Modal and reset the inputs
+     Annuler('addPaymentModal'); 
+     $('#montant').val("");
+     $('#datePayment').val("");
+}
