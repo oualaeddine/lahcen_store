@@ -11,7 +11,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
             "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
             " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
             "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
-            "<button class='btn btn-primary btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-info'></i></button></td></tr>";
+            "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button></td></tr>";
        
 
         $("#all_livreur").append(mrow)
@@ -148,19 +148,24 @@ function addPayment(livreurId) {
     // Get inputs Values
     var montant =  $('#montant').val();
     var date = $('#datePayment').val();
-    /* Insert new data in database
+
+    // Insert new data in database
     let livreurRef = db.collection('paiements');
-    livreurRef.doc(""+livreurId).set({
-       [paiements]: {
+    livreurRef.doc(""+livreurId).collection('paiementId').add({
             montant: montant,
             date : date
-        }
+        
     
     });
-*/
+
 
     // Close Modal and reset the inputs
      Annuler('addPaymentModal'); 
      $('#montant').val("");
      $('#datePayment').val("");
+}
+// Send Data to orderDetails page
+function loadDetailsPage(manId) {
+    localStorage.setItem("manId",manId);
+    window.location.href = 'deliveryManDetails.html';
 }
