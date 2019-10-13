@@ -1,4 +1,5 @@
 var db = firebase.firestore();
+var statut=["date_pending","date_Annuled","date_Delivred","date_Confirmed","date_Assigned","date_NoToBuy","date_NRP1","date_NRP2","date_NRP3"];
 
 var idOrder = localStorage.getItem("orderId");
 getOrderStatu(idOrder);
@@ -7,6 +8,10 @@ $('#assignButton').attr('onClick', 'assignDeliveryMan("'+idOrder+'");');
 $('#productList').attr('class', "productList"+idOrder);
 getProductList(idOrder);
 getTotalPrice(idOrder);
+getOrderDates(idOrder);
+
+
+
 
 function getTotalPrice(idOrder){
     db.collection("orders").doc(""+idOrder).get().then(function(doc) {
@@ -130,4 +135,21 @@ function assignDeliveryMan(idOrder){
             var data = doc.data();
             $('.orderMan').html(data.name+" | "+data.city);
         });
+}
+
+function getOrderDates(idOrder){
+    db.collection("orders").doc(""+idOrder).get().then(function(doc) {
+        var data = doc.data();
+        statut.forEach(function(e){
+            if(data[e] != null){
+                
+                var row = "<tr><td>"+e+": </td><td>"+data[e].toDate()+"</td></tr>";
+                 
+            $('#orderDatesList').append(row);
+                
+            }
+          
+    });
+    });
+
 }
