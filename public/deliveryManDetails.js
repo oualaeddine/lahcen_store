@@ -2,7 +2,24 @@ var db = firebase.firestore();
 
 var manId = localStorage.getItem("manId");
 var statut=["date_pending","date_Annuled","date_Delivred","date_Confirmed","date_Assigned","date_NoToBuy","date_NRP1","date_NRP2","date_NRP3"];
-var docRef = db.collection("delivery_men").doc(""+manId);
+getHistoPaiement(manId);
+getHistoCommand(manId);
+//GET COMMAND HISTO
+
+
+function getHistoPaiement(livreurId) {
+    db.collection("paiements").doc(""+livreurId).collection("paiementId").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          var data = doc.data();
+          var row = "<tr><td>"+data.montant+"</td><td>"+data.date+"</td></tr>";
+          $('#paiementList').append(row);
+        });});
+         
+}
+
+
+function getHistoCommand(livreurId) {
+    var docRef = db.collection("delivery_men").doc(""+livreurId);
 docRef.get().then(function(doc) {
     var data = doc.data();
     if(data.Assigned_orders != null){
@@ -33,16 +50,7 @@ docRef.get().then(function(doc) {
            }
         });
     });
-    //$('#orderDatesList').append("<tr><td>"+element+"</td>"+td2+"</tr>");
         });
 }
 });
-
-function getHistoPaiement(livreurId) {
-    db.collection("paiements").doc(""+livreurId).collection("paiementId").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-           var data = doc.data();
-        console.log(data.date);
-        });});
-         
 }
