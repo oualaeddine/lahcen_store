@@ -129,7 +129,33 @@
         </section>
         <div class="row">
             <section class="content infoContainer ">
-                <!-- CLIENT INFO -->                  
+                <!-- CLIENT INFO -->  
+                <div class="row">
+                        <div class="col-md-12 ">
+                                <div class="box info-box">
+                                       
+                                    <div class="box-body">
+                                          <div class="row">
+                                            <div class="col-lg-5 col-xs-6">
+                                                <h3 id="manInfo"></h3>
+                                                    <div class="manActions">
+                                                  
+                                                    </div>
+                                             </div>
+                                           
+                                            <div class="col-lg-3 col-xs-6">
+                                                    <h3>Total Orders</h3>
+                                                    <p>Number</p>
+                                                </div>
+                                                <div class="col-lg-3 col-xs-6">
+                                                        <h3>Total Payment</h3>
+                                                        <p>Number</p>
+                                                    </div>
+                                          </div>
+                                        </div>
+                                </div>  
+                            </div>
+                </div>                
                   <div class="row">
                             <div class="col-md-6 ">
                                     <div class="box info-box">
@@ -138,7 +164,7 @@
                                             </div>
                                         <div class="box-body">
                                                 <div class="table-responsive">
-                                                    <table class="table no-margin">
+                                                    <table class="table no-margin" id="orderHisto">
                                                         <thead>
                                                         <tr>
                                                             <th>Name</th>
@@ -162,7 +188,7 @@
                                                             </div>
                                                         <div class="box-body">
                                                                 <div class="table-responsive">
-                                                                    <table class="table no-margin">
+                                                                    <table class="table no-margin" id="histoPayment">
                                                                         <thead>
                                                                         <tr>
                                                                             <th>Montant</th>
@@ -179,38 +205,148 @@
                                                     </div>
                                                 </div>    
                                                </div>
-                                               <div class="row">
-                                                    <div class="col-md-6">
-                                                            <div class="box info-box">
-                                                                
-                                                                            <div class="box-header with-border">
-                                                                                    <h3 class="box-title">Total Orders</h3>
-                                                                            </div>
-                                                                            <div class="box-body total">
-                                                                            </div>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                             
-                                                        <div class="col-md-6">
-                                                            <div class="box info-box">
-                                                                
-                                                                            <div class="box-header with-border">
-                                                                                    <h3 class="box-title">Total Payment</h3>
-                                                                            </div>
-                                                                            <div class="box-body total">
-                                                                            </div>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                        </div>        
-                                            </div>
+                                          
                            
               
             </section>
             <!-- /.content -->
         </div>
     </div>
+
+    <!-- Update Livreur Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="box info-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Delivery man details</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                         </div>
+                        <div class="box-body">
+            
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                <label  class="col-form-label">Name</label>
+                                <input type="text" id="livreur_name"  class="form-control">
+                                </div>
+                                <div class="form-group">
+                                <label  class="col-form-label">Phone</label>
+                                <input   id="livreur_phone" class="form-control" ></input>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Email</label>
+                                    <input id="livreur_email"  class="form-control" ></input>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">Address</label>
+                                    <input id="livreur_address" class="form-control" ></input>
+                                </div>
+                                <div class="form-group">
+                                    <label  class="col-form-label">City</label>
+                                    <select class="form-control" id="livreur_city">
+                                                                                    
+                                            <option value="Adrar">Adrar </option>
+                                            <option value="Chlef">Chlef </option>
+                                            <option value="Laghouat">Laghouat </option>
+                                            <option value="Oum el Bouaghi">Oum El Bouaghi </option>
+                                            <option value="Batna">Batna </option>
+                                            <option value="Béjaïa">Béjaïa </option>
+                                            <option value="Biskra">Biskra </option>
+                                        <option value="Béchar"> Béchar </option>
+                                        <option value="Blida"> Blida </option>
+                                        <option value="Bouira"> Bouira </option>
+                                        <option value="Tamanrasset">Tamanrasset </option>
+                                        <option value="Tébessa"> Tébessa </option>
+                                        <option value="Tlemcen"> Tlemcen </option>
+                                        <option value="Tiaret">  Tiaret </option>
+                                        <option value="Tizi Ouzou">  Tizi Ouzou </option>
+                                        <option value="Alger"> Alger </option>
+                                            <option value="Djelfa"> Djelfa </option>
+                                        <option value="Jijel">  Jijel </option>
+                                        <option value="Sétif"> Sétif </option>
+                                        <option value="Saïda">   Saïda </option>
+                                        <option value="Skikda">  Skikda </option>
+                                        <option value="Sidi Bel Abbès">  Sidi Bel Abbès </option>
+                                        <option value="Annaba">  Annaba </option>
+                                        <option value="Guelma">  Guelma </option>
+                                        <option value="Constantine">  Constantine </option>
+                                        <option value="Médéa">  Médéa </option>
+                                        <option value="Mostaganem">  Mostaganem </option>
+                                        <option value="M'Sila">  M'Sila </option>
+                                        <option value="Mascara"> Mascara </option>
+                                        <option value="Ouargla">  Ouargla </option>
+                                        <option value="Oran">  Oran </option>
+                                        <option value="El Bayadh">  El Bayadh </option>
+                                        <option value=" Illizi">  Illizi </option>
+                                        <option value="Bordj Bou Arreridj">  Bordj Bou Arreridj </option>
+                                        <option value="Boumerdès">  Boumerdès </option>
+                                        <option value="El Tarf">  El Tarf </option>
+                                        <option value="Tindouf">  Tindouf </option>
+                                        <option value="Tissemsilt">  Tissemsilt </option>
+                                        <option value="El Oued">   El Oued </option>
+                                        <option value="Khenchela">  Khenchela </option>
+                                        <option value="Souk Ahras">   Souk Ahras </option>
+                                        <option value="Tipaza">   Tipaza </option>
+                                        <option value="Mila">  Mila </option>
+                                        <option value="Aïn Defla">  Aïn Defla </option>
+                                        <option value="Naâma">  Naâma </option>
+                                        <option value="Aïn Témouchent">  Aïn Témouchent </option>
+                                        <option value="Ghardaïa">  Ghardaïa </option>
+                                        <option value="Relizane">  Relizane  </option>
+    
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            <div class="modal-footer">
+              <button class='btn btn-primary' id="saveButton" >Save</button>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- ADD PAYMENT-->
+<div class="modal fade" id="addPaymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+                <div class="box info-box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Add payment</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                         </div>
+                        <div class="box-body">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                    <label  class="col-form-label">Name</label>
+                                    <input type="text" name ="livreurName"  class="form-control" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                    <label  class="col-form-label">Montant</label>
+                                    <input   id="montant" class="form-control" required></input>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-form-label">Date</label>
+                                        <input type="date" id="datePayment"  class="form-control" required></input>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                    </div>
+            <div class="modal-footer">
+                    <button id="addPaymentButton" class='btn btn-primary'>Save</button>
+                    <button class='btn btn-default' data-dismiss="modal" >Annuler</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
@@ -226,14 +362,25 @@
 <script src="./res/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="./res/bootstrap/dist/js/bootstrap.min.js"></script>
-
+<!-- DataTables -->
+<script src="./res/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="./res/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="./res/js/adminlte.min.js"></script>
 
 <!-- page script -->
 <script src="./deliveryManDetails.js"></script>
+<script src="./livreur.js"></script>
+<script>
+    
+$('#orderHisto').on("draw.dt", function () {
+    $(this).find(".dataTables_empty").parents('tbody').empty();
+}).DataTable({});
+$('#histoPayment').on("draw.dt", function () {
+    $(this).find(".dataTables_empty").parents('tbody').empty();
+}).DataTable({});  
 
-
+</script>
     
    
 </body>

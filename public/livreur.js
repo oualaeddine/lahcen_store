@@ -79,6 +79,8 @@ function upload(id, cellId) {
     $(".address"+cellId).html(""+new_address);
     $(".city"+cellId).html(""+new_city);
 
+    //Update delivery man details
+    $('#manInfo').html(new_name+" | "+new_city);
     Annuler('exampleModal');
 
 }
@@ -157,7 +159,8 @@ function addPayment(livreurId) {
         
     
     });
-
+    //Add row in payment table
+    $('#paiementList').append("<tr><td>"+montant+"</td><td>"+date+"</td></tr>");
 
     // Close Modal and reset the inputs
      Annuler('addPaymentModal'); 
