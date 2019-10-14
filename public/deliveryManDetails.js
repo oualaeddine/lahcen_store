@@ -16,17 +16,21 @@ function getManInfo(manId){
         }); 
 }
 function getHistoPaiement(livreurId) {
+    var somme = 0;
     db.collection("paiements").doc(""+livreurId).collection("paiementId").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           var data = doc.data();
+          somme += parseFloat(data.montant);
           var row = "<tr><td>"+data.montant+"</td><td>"+data.date+"</td></tr>";
           $('#paiementList').append(row);
+          $('#totalPayment').html(somme+" DZD");
         });});
          
 }
 
 
 function getHistoCommand(livreurId) {
+    var somme = 0;
     var docRef = db.collection("delivery_men").doc(""+livreurId);
 docRef.get().then(function(doc) {
     var data = doc.data();
@@ -39,12 +43,17 @@ docRef.get().then(function(doc) {
                 if(orderData.name == element){
                     var date = new Date(Date.parse(orderData.date_ordered.toDate()));
                    var row = "<tr><td>"+element+"</td><td>"+orderData.total_price+"</td><td>"+date.toUTCString()+"</td></tr>";
+                  somme += parseFloat(orderData.total_price);
                    $('#orderList').append(row);
+                   
+                 
                 
            }
+           $('#totalOrders').html(somme+" DZD");
         });
     });
         });
 }
 });
+
 }

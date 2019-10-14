@@ -161,7 +161,9 @@ function addPayment(livreurId) {
     });
     //Add row in payment table
     $('#paiementList').append("<tr><td>"+montant+"</td><td>"+date+"</td></tr>");
-
+   var oldMontant = $('#totalPayment').html();
+   console.log(oldMontant);
+    $('#totalPayment').html(parseFloat(montant)+parseFloat(oldMontant)+" DZD");
     // Close Modal and reset the inputs
      Annuler('addPaymentModal'); 
      $('#montant').val("");
