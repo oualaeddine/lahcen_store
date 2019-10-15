@@ -4,7 +4,7 @@ var manId = localStorage.getItem("manId");
 getHistoPaiement(manId);
 getHistoCommand(manId);
 getManInfo(manId);
-
+//$('#totalDiff').html(parseFloat($('#totalOrders').html())-parseFloat($('#totalPayment').html()));
 function getManInfo(manId){
     db.collection("delivery_men").doc(""+manId).get().then(function(doc){
     

@@ -57,14 +57,14 @@ function getOrderStatu(idOrder) {
         if(data.status == "No want to buy"){
             var row = "No want to buy on : <br> "+data.date_NoToBuy.toDate();
         }
-        if(data.status == "Confirmed" || data.status == "confirmed") {
+        if(data.status == "Confirmed"  ) {
             var row = " Confirmed on : <br>"+data.date_Confirmed.toDate();
         }
-        if(data.status == "Canceled" || data.status == "canceled") {
+        if(data.status == "Canceled"  ) {
             var row = "Canceled on : <br>"+data.date_Canceled.toDate();
         }
         
-       if(data.status == "assigned" || data.status == "Assigned") {
+       if(data.status == "Assigned") {
            var row = "Assigned on : <br>"+data.date_Assigned.toDate();
            var manId= data.Assigned_to;
         db.collection("delivery_men").doc(""+manId).get().then(function(doc) {
