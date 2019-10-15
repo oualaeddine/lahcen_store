@@ -83,6 +83,18 @@ function upload(id, cellId) {
     $('#manInfo').html(new_name+" | "+new_city);
     Annuler('exampleModal');
 
+    $.ajax({
+        url: 'https://us-central1-lahcen-gestion.cloudfunctions.net/updateDeliveryManEmail',
+        method: 'POST',
+        data: {
+            id: id,
+            email: new_email
+        },
+        success: function(data){
+          console.log('succes: '+data);
+        }
+      });
+
 }
 
 
@@ -94,6 +106,17 @@ function delete_livreur(id,rowId) {
     //Delete row 
     $(".row"+rowId).remove();
     Annuler('confirmationModal');
+
+    $.ajax({
+        url: 'https://us-central1-lahcen-gestion.cloudfunctions.net/deleteDeliveryMan ',
+        method: 'POST',
+        data: {
+            id: id
+        },
+        success: function(data){
+          console.log('succes: '+data);
+        }
+      });
 }
 
 /********* ADD DELIVERY MAN  ********/
@@ -133,8 +156,10 @@ function addLivreur(){
     // Append the new row
     var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" +
     new_address + "</td><td>" + new_city +
-    "</td><td> <button class='btn-info btn' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+">Modifier</button> "+
-    " <button class='btn-danger btn' data-book-id="+userId+" onclick='delete_livreur('"+userId+"')'>Suprimer</button></td></tr>";
+    "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
+    " <button class='btn btn-danger btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
+    "<button class='btn btn-success btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
+    "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+userId+"') ><i class='fa fa-info'></i></button></td></tr>";
 
     $("#all_livreur").append(mrow)
    

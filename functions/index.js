@@ -2,6 +2,24 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 let db = admin.firestore();
+
+exports.deleteDeliveryMan = functions.https.onRequest((request) => {
+   let data = request.body;
+    admin.auth().deleteUser(data.id)
+  .then(function() {
+    console.log('Successfully deleted user');
+  })
+  .catch(function(error) {
+    console.log('Error deleting user:', error);
+  });
+
+});
+exports.updateDeliveryManEmail = functions.https.onRequest((request) => {
+    let data = request.body;
+    admin.auth().updateUser(data.id, {
+        email: data.email,
+    });      
+});
 exports.newOrder = functions.https.onRequest((request, response) => {
     let data = request.body;
     let address = data.shipping_address.address1 + " " +
