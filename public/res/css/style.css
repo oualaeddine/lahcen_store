@@ -1,3 +1,4 @@
+
 .modal-confirm {		
     color: #636363;
     width: 400px;
@@ -168,4 +169,7 @@ padding: .2em .6em .3em;
 }
 #datePayment {
     line-height: 20px;
+}
+.loginBottom {
+    margin-top: 17px;
 }

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="./res/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./res/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="./res/css/style.css">
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
@@ -29,52 +30,74 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <script>
-      // Your web app's Firebase configuration
-      var firebaseConfig = {
-          apiKey: "AIzaSyBWUymqULmOohXFXbma0tzlBjWe1aAVxAs",
-          authDomain: "lahcen-gestion.firebaseapp.com",
-          databaseURL: "https://lahcen-gestion.firebaseio.com",
-          projectId: "lahcen-gestion",
-          storageBucket: "lahcen-gestion.appspot.com",
-          messagingSenderId: "30608930503",
-          appId: "1:30608930503:web:ccca3ea6244e0a659df0e2"
-      };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-  </script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBWUymqULmOohXFXbma0tzlBjWe1aAVxAs",
+            authDomain: "lahcen-gestion.firebaseapp.com",
+            databaseURL: "https://lahcen-gestion.firebaseio.com",
+            projectId: "lahcen-gestion",
+            storageBucket: "lahcen-gestion.appspot.com",
+            messagingSenderId: "30608930503",
+            appId: "1:30608930503:web:ccca3ea6244e0a659df0e2"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
 
 </head>
 <body class="hold-transition login-page">
+    <!-- sign up success Modal -->
+    <div id="successModal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Successfuly created an account!</h4>	
+                    </div>
+                   
+                    <div class="modal-footer ">
+                        <button onclick="window.location.href = 'login.html';" class="btn btn-success btn-block" >Sign in</button>
+                    </div>
+                </div>
+            </div>
+        </div>     
+<!---->
 <div class="login-box">
   <div class="login-logo">
     <a href="../../index2.html"><b>Lahcen</b>Store</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Sign in to start your session</p>
+    <p class="login-box-msg">Create a new account</p>
 
     <div>
+     <div class="form-group has-feedback">
+        <input id="userName" type="text" class="form-control" placeholder="Full Name">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+    </div>
       <div class="form-group has-feedback">
         <input id="userEmail" type="email" class="form-control" placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input id="userPassword" type="password" class="form-control" placeholder="Password">
+        <input id="userPassword1" type="password" class="form-control" placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
+      <div class="form-group has-feedback">
+            <input id="userPassword2" type="password" class="form-control" placeholder="Confirm Password">
+            <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+          </div>
       <div class="row">
 
         <!-- /.col -->
         <div class="col-xs-4">
-          <button onclick='signIn()' class="btn btn-primary btn-block btn-flat">Sign In</button>
+          <button onclick="addUser()" class="btn btn-primary btn-block btn-flat">Register</button>
         </div>
         <!-- /.col -->
       </div>
     </div>
 
 <div class="loginBottom">
-    <a href="#">I forgot my password</a><br>
-    <a href="register.html" class="text-center">Create a new account</a>
+    <a href="login.html" class="text-center">Already have an account</a>
   </div>
 
   </div>

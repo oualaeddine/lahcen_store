@@ -34,6 +34,7 @@
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-firestore.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -82,7 +83,7 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="./res/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Lahcen Boukacem</span>
+                            <span id="userName" class="hidden-xs"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- Menu Footer-->
@@ -91,7 +92,7 @@
                                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    <button onclick='signOut()' class="btn btn-default btn-flat">Sign out</button>
                                 </div>
                             </li>
                         </ul>
@@ -271,6 +272,7 @@
 <script src="./res/js/demo.js"></script>
 <!-- page script -->
 <script src="./main.js"></script>
+
 
 <script>
   var all_commands_table = $('#all_table').on("draw.dt", function () {

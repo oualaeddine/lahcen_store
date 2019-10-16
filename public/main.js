@@ -1,4 +1,12 @@
 var db = firebase.firestore();
+//Handle Account Status
+firebase.auth().onAuthStateChanged(user => {
+    if(user) {
+        $('#userName').html(user.displayName);
+    }
+     else window.location = 'login.html'; 
+  });
+
 
 var cpt=0;
 // Get Commands List
@@ -37,7 +45,9 @@ first.get().then((querySnapshot) => {
         cpt++;
     });
 });
-  
+function signOut() {
+    firebase.auth().signOut();
+} 
  
 // Update Modal
 $('#updateCommandModal').on('show.bs.modal', function(e) {

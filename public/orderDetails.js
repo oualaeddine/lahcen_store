@@ -1,4 +1,11 @@
 var db = firebase.firestore();
+//Handle Account Status
+firebase.auth().onAuthStateChanged(user => {
+    if(user) {
+        $('#userName').html(user.displayName);
+    }
+     else window.location = 'login.html'; 
+  });
 var statut=["date_pending","date_Annuled","date_Delivred","date_Confirmed","date_Assigned","date_NoToBuy","date_NRP1","date_NRP2","date_NRP3"];
 
 var idOrder = localStorage.getItem("orderId");
@@ -19,6 +26,9 @@ function getTotalPrice(idOrder){
         $('.total').append(data.total_price);
     });
 }
+function signOut() {
+    firebase.auth().signOut();
+} 
 function getProductList(idOrder) {
     var docRef = db.collection("orders").doc(""+idOrder);
     docRef.get().then(function(doc) {

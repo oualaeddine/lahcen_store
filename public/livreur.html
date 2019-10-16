@@ -88,7 +88,7 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="./res/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Lahcen Boukacem</span>
+                            <span id="userName" class="hidden-xs"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- Menu Footer-->
@@ -97,7 +97,7 @@
                                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    <button onclick="signOut()" class="btn btn-default btn-flat">Sign out</button>
                                 </div>
                             </li>
                         </ul>
@@ -154,24 +154,25 @@
                 <form>
                     <div class="form-group">
                       <label  class="col-form-label">Name</label>
-                      <input type="text" id="livreurName"  class="form-control"required>
+                      <input placeholder="Full Name" type="text" id="livreurName"  class="form-control"required>
                     </div>
                     <div class="form-group">
                       <label  class="col-form-label">Phone</label>
-                      <input   id="livreurPhone" class="form-control" required></input>
+                      <input type="text" placeholder="Phone"  id="livreurPhone" class="form-control" required></input>
                     </div>
                     <div class="form-group">
                         <label  class="col-form-label">Email</label>
-                        <input id="livreurEmail"  class="form-control" required></input>
-                      </div>
+                        <input type="email" placeholder="Email" id="livreurEmail"  class="form-control" required></input>
+                      
+                    </div>
                       <div class="form-group">
                         <label  class="col-form-label">Mot de passe</label>
-                        <input id="livreurPassword" class="form-control" required></input>
+                        <input type="password" placeholder="Password" id="livreurPassword" class="form-control" required></input>
                       </div>
                       <div class="row">
                           <div class="col-md-6">
                             <label  class="col-form-label">Address</label>
-                            <input id="livreurAddress" class="form-control" required></input>
+                            <input placeholder="Address" id="livreurAddress" class="form-control" required></input>
                           </div>
                           <div class="col-md-6">
                               <label  class="col-form-label">City</label>

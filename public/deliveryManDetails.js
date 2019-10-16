@@ -1,5 +1,11 @@
 var db = firebase.firestore();
-
+//Handle Account Status
+firebase.auth().onAuthStateChanged(user => {
+    if(user) {
+        $('#userName').html(user.displayName);
+    }
+     else window.location = 'login.html'; 
+  });
 var manId = localStorage.getItem("manId");
 getHistoPaiement(manId);
 getHistoCommand(manId);
@@ -15,6 +21,9 @@ function getManInfo(manId){
             $('.manActions').append(buttons);
         }); 
 }
+function signOut() {
+    firebase.auth().signOut();
+} 
 function getHistoPaiement(livreurId) {
     var somme = 0;
     db.collection("paiements").doc(""+livreurId).collection("paiementId").get().then((querySnapshot) => {

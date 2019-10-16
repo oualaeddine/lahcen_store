@@ -1,5 +1,11 @@
 var db = firebase.firestore();
-
+//Handle Account Status
+firebase.auth().onAuthStateChanged(user => {
+    if(user) {
+        $('#userName').html(user.displayName);
+    }
+     else window.location = 'login.html'; 
+  });
 // Get Commands List
 var cpt=0;
 db.collection("delivery_men").get().then((querySnapshot) => {
@@ -19,6 +25,9 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     });
     
 });
+function signOut() {
+    firebase.auth().signOut();
+} 
 // Confirmation Delete Modal
 $('#confirmationModal').on('show.bs.modal', function(e) {
   var id = $(e.relatedTarget).data('book-id');
