@@ -135,8 +135,7 @@ exports.onOrderStatusUpdated = functions.firestore
             notification: {
                 title: "Statu update", 
                 body: status, 
-                icon: "default",
-                sound: "default"},
+            },
             data: {
                 order_name: name,
                 order_id: "" + orderId,
