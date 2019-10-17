@@ -3,6 +3,8 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 let db = admin.firestore();
 
+/*______ start Section Hiba Work ____________________________________________________________________________ */
+
 exports.deleteDeliveryMan = functions.https.onRequest((request) => {
     let data = request.body;
     admin.auth().deleteUser(data.id)
@@ -16,37 +18,6 @@ exports.deleteDeliveryMan = functions.https.onRequest((request) => {
 
 });
 
-
-/* Listens for new messages added to /messages/:pushId and sends a notification to subscribed users */
-exports.pushNotification = functions.database.ref('/messages/{pushId}').onWrite( event => {
-    console.log('Push notification event triggered');
-    /* Grab the current value of what was written to the Realtime Database */
-        var valueObject = event.data.val();
-    /* Create a notification and data payload. They contain the notification information, and message to be sent respectively */ 
-        const payload = {
-            notification: {
-                title: 'App Name',
-                body: "New message",
-                sound: "default"
-            },
-            data: {
-                title: valueObject.title,
-                message: valueObject.message
-            }
-        };
-    /* Create an options object that contains the time to live for the notification and the priority. */
-        const options = {
-            priority: "high",
-            timeToLive: 60 * 60 * 24 //24 hours
-        };
-    return admin.messaging().sendToTopic("notifications", payload, options);
-    });
-exports.updateDeliveryManEmail = functions.https.onRequest((request) => {
-    let data = request.body;
-    admin.auth().updateUser(data.id, {
-        email: data.email,
-    });
-});
 exports.newOrder = functions.https.onRequest((request, response) => {
     let data = request.body;
     let address = data.shipping_address.address1 + " " +
@@ -90,9 +61,7 @@ exports.newOrder = functions.https.onRequest((request, response) => {
         products: products,
         status: 'pending'
     };
-
     let docRef = db.collection('orders').doc(data.number + "");
-
     let setAda = docRef.set(order).then(
         function () {
             response.send("Hello from Firebase!");
@@ -100,6 +69,28 @@ exports.newOrder = functions.https.onRequest((request, response) => {
     );
 });
 
+exports.getOrders = functions.https.onRequest((request, response) => {
+    var data = new Array();
+    
+    db.collection("orders")
+    .orderBy("date_ordered","desc").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        var donner = doc.data();
+        data.push(Array(donner.name,
+            donner.status,
+            donner.client,
+            donner.address,
+            donner.phone,
+            donner.total_price,
+            donner.shipping_price,
+            donner.fee,
+            donner.total_price));
+    });
+    });
+   response.send(json(data));
+});
+
+/*______ start Section Djamila Work ___________________________________________________________________________ */
 
 exports.onNewOrder = functions.firestore
     .document('orders/{orderId}')
@@ -202,25 +193,4 @@ function sendMessageToTopic(message) {
             console.log('Error sending message:', error);
         });
 }
-
-
-exports.getOrders = functions.https.onRequest((request, response) => {
-    var data = new Array();
-    
-    db.collection("orders")
-    .orderBy("date_ordered","desc").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        var donner = doc.data();
-        data.push(Array(donner.name,
-            donner.status,
-            donner.client,
-            donner.address,
-            donner.phone,
-            donner.total_price,
-            donner.shipping_price,
-            donner.fee,
-            donner.total_price));
-    });
-    });
-   response.send(json(data));
-});
+/*______ end  Section Djamila Work __________________________________________________________________________ */
