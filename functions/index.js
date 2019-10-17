@@ -132,7 +132,11 @@ exports.onOrderStatusUpdated = functions.firestore
         const status = newValue.status;
         const orderId = newValue.id;
         let message = {
-            notification: {title: "Statu update", body: status},
+            notification: {
+                title: "Statu update", 
+                body: status, 
+                icon: "default",
+                sound: "default"},
             data: {
                 order_name: name,
                 order_id: "" + orderId,
@@ -142,7 +146,7 @@ exports.onOrderStatusUpdated = functions.firestore
         };
         let topic = 'status_change';
         // noinspection EqualityComparisonWithCoercionJS
-        if (status != "assigned" || status != "canceled") {
+        if (status != "Assigned" || status != "Canceled") {
             //sending notif to admins
             message.topic = topic;
             sendMessageToTopic(message, topic)
@@ -150,7 +154,7 @@ exports.onOrderStatusUpdated = functions.firestore
             //sending notif to delivery_mans
             //in case an order is canceled delivery mans must be notified
             // noinspection EqualityComparisonWithCoercionJS
-            if (status == "canceled") {
+            if (status == "Canceled") {
                 message.data.notif_type = "order_canceled";
                 topic = "order_canceled";
                 sendMessageToTopic(message, topic)
