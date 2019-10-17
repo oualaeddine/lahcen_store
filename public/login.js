@@ -4,17 +4,17 @@ firebase.auth().onAuthStateChanged(user => {
     if(user) {
       window.location = 'index.html'; //After successful login, user will be redirected to home.html
     }
-  //  else window.location = 'login.html';
+
   });
   
 function addUser(){
 
     // Get inputs Values
-    var UserName= $('#userName').val();
+    var UserName= $('#username').val();
     var email= $('#userEmail').val();
     var password1= $('#userPassword1').val();
     var password2= $('#userPassword2').val();
-  
+  console.log(UserName);
     if(password2 == password1){
         // Insert new Firebase User
        firebase.auth().createUserWithEmailAndPassword(email, password1).then(function(user)
@@ -40,12 +40,12 @@ function addUser(){
            
           });
         
-        $('#successModal').modal('show');
+        //$('#successModal').modal('show');
         }
     
     else alert("Re tapez le mot de passe svp");
 
-    name= $('#userName').val("");
+    name= $('#username').val("");
     email= $('#userEmail').val("");
     password1= $('#userPassword1').val("");
     password2= $('#userPassword2').val("");

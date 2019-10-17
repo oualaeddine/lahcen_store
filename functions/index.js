@@ -14,6 +14,32 @@ exports.deleteDeliveryMan = functions.https.onRequest((request) => {
   });
 
 });
+
+
+/* Listens for new messages added to /messages/:pushId and sends a notification to subscribed users */
+exports.pushNotification = functions.database.ref('/messages/{pushId}').onWrite( event => {
+    console.log('Push notification event triggered');
+    /* Grab the current value of what was written to the Realtime Database */
+        var valueObject = event.data.val();
+    /* Create a notification and data payload. They contain the notification information, and message to be sent respectively */ 
+        const payload = {
+            notification: {
+                title: 'App Name',
+                body: "New message",
+                sound: "default"
+            },
+            data: {
+                title: valueObject.title,
+                message: valueObject.message
+            }
+        };
+    /* Create an options object that contains the time to live for the notification and the priority. */
+        const options = {
+            priority: "high",
+            timeToLive: 60 * 60 * 24 //24 hours
+        };
+    return admin.messaging().sendToTopic("notifications", payload, options);
+    });
 exports.updateDeliveryManEmail = functions.https.onRequest((request) => {
     let data = request.body;
     admin.auth().updateUser(data.id, {
@@ -74,3 +100,25 @@ exports.newOrder = functions.https.onRequest((request, response) => {
 });
 
 
+
+
+exports.getOrders = functions.https.onRequest((request, response) => {
+    var data = new Array();
+    
+    db.collection("orders")
+    .orderBy("date_ordered","desc").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        var donner = doc.data();
+        data.push(Array(donner.name,
+            donner.status,
+            donner.client,
+            donner.address,
+            donner.phone,
+            donner.total_price,
+            donner.shipping_price,
+            donner.fee,
+            donner.total_price));
+    });
+    });
+   response.send(json(data));
+});
