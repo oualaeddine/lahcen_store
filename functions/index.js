@@ -161,6 +161,19 @@ exports.newOrder = functions.https.onRequest((request, response) => {
             response.send("Hello from Firebase!");
         }
     );
+    // adding log on new order came
+    let log = {
+        order_id: data.id,
+        order_name: data.name,
+        date: admin.firestore.FieldValue.serverTimestamp(),
+        status: 'pending'
+    };
+    let docRef = db.collection('Logs').doc();
+    let setAda = docRef.set(log).then(
+        function () {
+            response.send("log added Successfully");
+        }
+    );
 });
 
 
