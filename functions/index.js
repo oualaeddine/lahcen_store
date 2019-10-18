@@ -225,7 +225,20 @@ exports.onOrderStatusUpdated = functions.firestore
                 const assigned_to = newValue.Assigned_to;
                 sendMessageToDeliveryMan(assigned_to);
             }
-        }
+        };
+        let log = {
+            order_id: orderId,
+            order_name: name,
+            date: admin.firestore.FieldValue.serverTimestamp(),
+            status: status
+        };
+        let docRef = db.collection('Logs').doc();
+        let setAda = docRef.set(log).then(
+            function () {
+                response.send("log added Successfully");
+            }
+        );
+        
     });
 
 function sendMessageToDeliveryMan(assigned_to, message) {
