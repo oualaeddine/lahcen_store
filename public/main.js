@@ -46,6 +46,7 @@ first.get().then((querySnapshot) => {
     });
 });
 */
+
 function signOut() {
     firebase.auth().signOut();
 } 
