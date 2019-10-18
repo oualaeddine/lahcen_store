@@ -161,6 +161,7 @@ exports.onOrderStatusUpdated = functions.firestore
                 order_id: " "+orderId,
                 status: status,
                 notif_type: "status_change",
+                
             },
         };
         let topic = 'status_change';
