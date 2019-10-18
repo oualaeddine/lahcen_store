@@ -226,6 +226,7 @@ exports.onOrderStatusUpdated = functions.firestore
                 sendMessageToDeliveryMan(assigned_to);
             }
         };
+        // adding logs on update order
         let log = {
             order_id: orderId,
             order_name: name,
