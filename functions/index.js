@@ -153,7 +153,7 @@ exports.onOrderStatusUpdated = functions.firestore
         const orderId = newValue.id;
         let message = {
             notification: {
-                title: "statu updat ",
+                title: "Order",
                 body: status,
             },
             data: {
