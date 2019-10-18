@@ -153,12 +153,12 @@ exports.onOrderStatusUpdated = functions.firestore
         const orderId = newValue.id;
         let message = {
             notification: {
-                title: "Statu update",
-                body: status,
+                title: "Order "+status,
+                body: name+" is "+status,
             },
             data: {
                 order_name: name,
-                order_id: "" + orderId,
+                order_id: orderId,
                 status: status,
                 notif_type: "status_change"
             },
