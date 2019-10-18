@@ -53,8 +53,8 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                     mOrder.shipping_price,
                     mOrder.fee,
                     mOrder.total_price,
-                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id='+doc.id+' ><i class=\'fa fa-edit\'></i></button>' +
-                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id='+doc.id+' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button>' +
+                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id='+doc.id+' ><i class=\'fa fa-edit\'></i></button> ' +
+                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id='+doc.id+' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
                     '<button onclick=\'loadOrderPage('+doc.id+')\'  class=\' btn btn-primary btn-sm orderLink\' data-id='+doc.id+'><i class=\'fa fa-info\'></i></button>'
                 ]
             );

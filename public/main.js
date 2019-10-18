@@ -53,8 +53,6 @@ function signOut() {
 // Update Modal
 $('#updateCommandModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
-    var cellId = $(e.relatedTarget).data('cell-id');
-
     var docRef = db.collection("orders").doc(""+id);
     docRef.get().then(function(doc) {
            var data = doc.data();
@@ -68,19 +66,18 @@ $('#updateCommandModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('input[name="fee"]').val(data.fee);
 
 
-         $('#saveButtonProduct').attr('onClick', 'upload("'+id+'","'+cellId+'");');
+         $('#saveButtonProduct').attr('onClick', 'upload("'+id+'");');
 });
 });
 
 // Change status Modal
 $('#statusModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
-    var cellId = $(e.relatedTarget).data('cell-id');
     var docRef = db.collection("orders").doc(""+id);
     docRef.get().then(function(doc) {
            var data = doc.data();
            $(e.currentTarget).find("#statusForm").val(data.status);
-    $('#changeStatus').attr('onClick', 'uploadStatut("'+id+'","'+cellId+'");');
+    $('#changeStatus').attr('onClick', 'uploadStatut("'+id+'");');
 });
 });
 
@@ -90,7 +87,7 @@ function loadOrderPage(idOrder) {
     window.location.href = 'orderDetails.html';
 }
 
-function uploadStatut(id, cellId) {
+function uploadStatut(id) {
 
  var new_statut = document.getElementById("statusForm").value;
  if(new_statut == "Ne repond pas 1 fois") {
@@ -133,23 +130,13 @@ function uploadStatut(id, cellId) {
 
         });
     }
- //Update data table Cell
- $(".statut"+cellId).html(""+new_statut);
- var statutClass = new_statut;
-        if(statutClass == "No want to buy") {
-            statutClass = "NoToBuy";
-        }
-        if( (statutClass == "Ne repond pas 1 fois") || (statutClass == "Ne repond pas 2 fois") || (statutClass == "Ne repond pas 3 fois")) {
-            statutClass = "Npr";
-        }
- $(".statut"+cellId).attr('class','btn btn-'+statutClass);
 
  //Close Modal
  $('#statusModal').modal('hide');
 }
 
 
-function upload(id, cellId) {
+function upload(id) {
    
     // GET INPUT VALUES
     var new_delPrice = $('#delPrice').val();
@@ -161,9 +148,6 @@ function upload(id, cellId) {
         fee: new_fee
     });
 
-    //Update data table Cell
-    $(".delPrice"+cellId).html(""+new_delPrice);
-    $(".fee"+cellId).html(""+new_fee);
 
     //Close Modal
     $('#updateCommandModal').modal('hide');
