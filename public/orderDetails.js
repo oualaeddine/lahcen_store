@@ -105,9 +105,10 @@ function getDeliveryMenList() {
    db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         var delivery_men = doc.data();
-
+        if(delivery_men.isDeleted != 1){
         var row= "<option value='"+doc.id+"'>"+delivery_men.name+ "  |  " + delivery_men.city + "</option>";
         $('#assignementBox').append(row);
+        }
     });
 });
 }

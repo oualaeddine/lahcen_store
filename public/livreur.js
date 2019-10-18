@@ -12,6 +12,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         
         var data = doc.data();
+        if(data.isDeleted != 1){
         var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='address"+cpt+"'>" +
             data.address + "</td><td class='city"+cpt+"'>" + data.city +
             "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
@@ -22,6 +23,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
 
         $("#all_livreur").append(mrow)
         cpt++;
+        }
     });
     
 });
@@ -110,7 +112,9 @@ function upload(id, cellId) {
 function delete_livreur(id,rowId) {
 
   // Delete from database
-    db.collection('delivery_men').doc(""+id).delete();
+    db.collection('delivery_men').doc(""+id).update({
+        isDeleted:1
+    });
 
     //Delete row 
     $(".row"+rowId).remove();
