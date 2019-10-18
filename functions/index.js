@@ -103,7 +103,7 @@ exports.onNewOrder = functions.firestore
         let message = {
             data: {
                 order_name: name,
-                order_id: "" + orderId,
+                order_id: orderId,
                 total: total,
                 notif_type: "new_order"
             },
