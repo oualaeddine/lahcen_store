@@ -18,6 +18,57 @@ exports.deleteDeliveryMan = functions.https.onRequest((request) => {
 
 });
 
+const cors = require('cors')({
+    origin: true,
+});
+exports.getOrders = functions.https.onRequest((request, response) => {
+    let mreq = request.body;
+    const cors = require('cors')({origin: true});
+
+    let draw = mreq.draw;
+    let start = mreq.start;
+    let length = mreq.length;
+    let search = mreq.search;
+    let order = mreq.order;
+
+    db.collection("orders")
+        .orderBy("date_ordered", "desc").get().then((querySnapshot) => {
+        let resp = {
+            draw: draw,
+            recordsTotal:100,// ordersCount,
+            recordsFiltered:80,// tailleDeQuerySnapshot,
+            data: []
+        };
+
+        querySnapshot.forEach((doc) => {
+            let mOrder = doc.data();
+            resp.data.push(
+                [
+                    mOrder.name,
+                    mOrder.status,
+                    mOrder.client,
+                    mOrder.address,
+                    mOrder.phone,
+                    mOrder.total_price,
+                    mOrder.shipping_price,
+                    mOrder.fee,
+                    mOrder.total_price,
+                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id='+doc.id+' ><i class=\'fa fa-edit\'></i></button>' +
+                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id='+doc.id+' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button>' +
+                    '<button onclick=\'loadOrderPage('+doc.id+')\'  class=\' btn btn-primary btn-sm orderLink\' data-id='+doc.id+'><i class=\'fa fa-info\'></i></button>'
+                ]
+            );
+        });
+        return cors(request, response, () => {
+            response.status(200).send(resp);
+        });
+
+    }).catch(err => {
+        console.log('Error getting documents', err);
+    });
+});
+
+/*______ start Section Djamila Work ___________________________________________________________________________ */
 exports.newOrder = functions.https.onRequest((request, response) => {
     let data = request.body;
     let address = data.shipping_address.address1 + " " +
@@ -69,28 +120,6 @@ exports.newOrder = functions.https.onRequest((request, response) => {
     );
 });
 
-exports.getOrders = functions.https.onRequest((request, response) => {
-    var data = new Array();
-    
-    db.collection("orders")
-    .orderBy("date_ordered","desc").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        var donner = doc.data();
-        data.push(Array(donner.name,
-            donner.status,
-            donner.client,
-            donner.address,
-            donner.phone,
-            donner.total_price,
-            donner.shipping_price,
-            donner.fee,
-            donner.total_price));
-    });
-    });
-   response.send(json(data));
-});
-
-/*______ start Section Djamila Work ___________________________________________________________________________ */
 
 exports.onNewOrder = functions.firestore
     .document('orders/{orderId}')
@@ -124,8 +153,8 @@ exports.onOrderStatusUpdated = functions.firestore
         const orderId = newValue.id;
         let message = {
             notification: {
-                title: "Statu update", 
-                body: status, 
+                title: "Statu update",
+                body: status,
             },
             data: {
                 order_name: name,
@@ -193,4 +222,5 @@ function sendMessageToTopic(message) {
             console.log('Error sending message:', error);
         });
 }
+
 /*______ end  Section Djamila Work __________________________________________________________________________ */
