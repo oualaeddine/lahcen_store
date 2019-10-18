@@ -229,7 +229,6 @@ exports.onOrderStatusUpdated = functions.firestore
         let log = {
             order_id: orderId,
             order_name: name,
-            livreur_id:newValue.Assigned_to,
             date: admin.firestore.FieldValue.serverTimestamp(),
             status: status
         };
