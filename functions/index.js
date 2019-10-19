@@ -240,19 +240,27 @@ exports.onOrderStatusUpdated = functions.firestore
                 sendMessageToDeliveryMan(assigned_to);
             }
         };
-        // saving notification on update order
+        // saving notification on update order        
         let notf = {
-            title: "Order " + newValue.status,
-            body: newValue.name + " is " + newValue.status,
-            time: admin.firestore.FieldValue.serverTimestamp(),
-            to: newValue.Assigned_to
-        };
-        let docRefnotf = db.collection('Notifications').doc();
-        let setAdanotf = docRefnotf.set(notf).then(
+                title: "Order " + newValue.status,
+                body: newValue.name + " is " + newValue.status,
+                time:admin.firestore.FieldValue.serverTimestamp(),
+            };
+        // adding notif to livreur notification
+        let docRefnotf_Liv = db.collection('Notifications').doc(newValue.Assigned_to)
+            .collection('LivNotif').doc();
+            let setAdanotf_liv = docRefnotf_Liv.set(notf).then(
             function () {
-                response.send("notif added Successfully");
-            }
-        );
+                response.send("notif liv added Successfully");
+            });
+        // adding notif to admin notification
+        let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
+            .collection('AdminNotif').doc();
+            let setAdanotf_admin = docRefnotf_admin.set(notf).then(
+            function () {
+                response.send("notif admin added Successfully");
+            });
+        
         // adding logs on update order
         let log = {
             order_id: orderId,
