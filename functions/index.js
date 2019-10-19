@@ -244,6 +244,8 @@ exports.onOrderStatusUpdated = functions.firestore
         let notf = {
                 title: "Order " + newValue.status,
                 body: newValue.name + " is " + newValue.status,
+                status: newValue.status,
+                ordername:newValue.name,
                 time:admin.firestore.FieldValue.serverTimestamp(),
             };
         // adding notif to livreur notification
