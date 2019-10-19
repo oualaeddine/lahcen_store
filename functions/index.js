@@ -242,8 +242,8 @@ exports.onOrderStatusUpdated = functions.firestore
         };
         // saving notification on update order
         let notf = {
-            title: "Order " + item.status,
-            body: item.name + " is " + item.status,
+            title: "Order " + newValue.status,
+            body: newValue.name + " is " + newValue.status,
             time: admin.firestore.FieldValue.serverTimestamp(),
             to: newValue.Assigned_to
         };
