@@ -238,7 +238,7 @@ exports.onOrderStatusUpdated = functions.firestore
         };
         let topic = 'status_change';
         // noinspection EqualityComparisonWithCoercionJS
-        if (status == "Assigned" || status != "Canceled" || status != "Confirmed") {
+        if (status == "Assigned" || status == "Canceled" || status == "Confirmed") {
             //sending notif to Livreur
             const assigned_to = newValue.Assigned_to;
             sendMessageToDeliveryMan(assigned_to);
