@@ -238,14 +238,22 @@ exports.onOrderStatusUpdated = functions.firestore
         };
         let topic = 'status_change';
         // noinspection EqualityComparisonWithCoercionJS
-        if (status == "Assigned" || status == "Canceled" || status == "Confirmed") {
-            //sending notif to Livreur
-            const assigned_to = newValue.Assigned_to;
-            sendMessageToDeliveryMan(assigned_to);
-        } else {
-            //sending notif to admin
+        if (status != "Assigned" || status != "Canceled") {
+            //sending notif to admins
             message.topic = topic;
             sendMessageToTopic(message, topic)
+        } else {
+            //sending notif to delivery_mans
+            //in case an order is canceled delivery mans must be notified
+            // noinspection EqualityComparisonWithCoercionJS
+            if (status == "Canceled") {
+                message.data.notif_type = "order_canceled";
+                topic = "order_canceled";
+                sendMessageToTopic(message, topic)
+            } else {
+                const assigned_to = newValue.Assigned_to;
+                sendMessageToDeliveryMan(assigned_to);
+            }
         };
         // saving notification on update order        
         let notf = {
@@ -263,20 +271,22 @@ exports.onOrderStatusUpdated = functions.firestore
                 response.send("notif liv added Successfully");
             });
         // adding notif to admin notification
-        if (newValue.status != "Assigned" && newValue.status != "Canceled" && newValue.status != "Confirmed") {
-            let notfadmin = {
-                title: "Order " + newValue.status,
-                body: newValue.name + " is " + newValue.status,
-                status: newValue.status,
-                ordername: newValue.name,
-                time: admin.firestore.FieldValue.serverTimestamp(),
-            };
-            let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
-                .collection('AdminNotif').doc();
-            let setAdanotf_admin = docRefnotf_admin.set(notfadmin).then(
-                function () {
-                    response.send("notif admin added Successfully");
-                });
+        if (status != "Assigned" && status != "Canceled") {
+            if (status != "Confirmed") {
+                let notfadmin = {
+                    title: "Order " + newValue.status,
+                    body: newValue.name + " is " + newValue.status,
+                    status: newValue.status,
+                    ordername: newValue.name,
+                    time: admin.firestore.FieldValue.serverTimestamp(),
+                };
+                let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
+                    .collection('AdminNotif').doc();
+                let setAdanotf_admin = docRefnotf_admin.set(notfadmin).then(
+                    function () {
+                        response.send("notif admin added Successfully");
+                    });
+            }
         }
 
         // adding logs on update order
