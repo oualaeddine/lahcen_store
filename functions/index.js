@@ -195,6 +195,20 @@ exports.onNewOrder = functions.firestore
             topic: topic
         };
         sendMessageToTopic(message)
+        // save notification to admin
+        let notfadmin = {
+            title: "Order " + newValue.status,
+            body: newValue.name + " is " + newValue.status,
+            status: newValue.status,
+            ordername:newValue.name,
+            time:admin.firestore.FieldValue.serverTimestamp(),
+        };
+        let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
+        .collection('AdminNotif').doc();
+        let setAdanotf_admin = docRefnotf_admin.set(notfadmin).then(
+        function () {
+            response.send("notif admin added Successfully");
+        });
     });
 
 
@@ -206,6 +220,7 @@ exports.onOrderStatusUpdated = functions.firestore
         if (newValue.status === previousValue.status) return;
         const name = newValue.name;
         const status = newValue.status;
+
         const orderId = newValue.id;
         let message = {
             notification: {
@@ -256,13 +271,22 @@ exports.onOrderStatusUpdated = functions.firestore
                 response.send("notif liv added Successfully");
             });
         // adding notif to admin notification
-        let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
+        if (newValue.status != "Assigned" && newValue.status != "Canceled") {
+            let notfadmin = {
+                title: "Order " + newValue.status,
+                body: newValue.name + " is " + newValue.status,
+                status: newValue.status,
+                ordername:newValue.name,
+                time:admin.firestore.FieldValue.serverTimestamp(),
+            };
+            let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
             .collection('AdminNotif').doc();
-            let setAdanotf_admin = docRefnotf_admin.set(notf).then(
+            let setAdanotf_admin = docRefnotf_admin.set(notfadmin).then(
             function () {
                 response.send("notif admin added Successfully");
             });
-        
+        }
+            
         // adding logs on update order
         let log = {
             order_id: orderId,
