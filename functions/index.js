@@ -238,7 +238,7 @@ exports.onOrderStatusUpdated = functions.firestore
         };
         let topic = 'status_change';
         // noinspection EqualityComparisonWithCoercionJS
-        if (status != "Assigned" || status != "Canceled") {
+        if (status != "Assigned" && status != "Canceled") {
             //sending notif to admins
             message.topic = topic;
             sendMessageToTopic(message, topic)
