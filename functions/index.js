@@ -23,7 +23,7 @@ const cors = require('cors')({
 });
 exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
-    const cors = require('cors')({origin: true});
+    const cors = require('cors')({ origin: true });
 
     let draw = mreq.draw;
     let start = mreq.start;
@@ -33,14 +33,54 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
     db.collection("orders")
         .orderBy("date_ordered", "desc").get().then((querySnapshot) => {
+            let resp = {
+                draw: draw,
+                recordsTotal: 100,// ordersCount,
+                recordsFiltered: 80,// tailleDeQuerySnapshot,
+                data: []
+            };
+
+            querySnapshot.forEach((doc) => {
+                let mOrder = doc.data();
+                resp.data.push(
+                    [
+                        mOrder.name,
+                        mOrder.status,
+                        mOrder.client,
+                        mOrder.address,
+                        mOrder.phone,
+                        mOrder.total_price,
+                        mOrder.shipping_price,
+                        mOrder.fee,
+                        mOrder.total_price,
+                        '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
+                        '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
+                        '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
+                    ]
+                );
+
+            });
+            return cors(request, response, () => {
+                response.status(200).send(resp);
+            });
+
+        }).catch(err => {
+            console.log('Error getting documents', err);
+        });
+
+    // Pagination Query
+    var first = db.collection("orders")
+        .orderBy("date_ordered", "desc").limit(length);
+
+    return first.get().then((querySnapshot) => {
         let resp = {
             draw: draw,
-            recordsTotal:100,// ordersCount,
-            recordsFiltered:80,// tailleDeQuerySnapshot,
+            recordsTotal: 100,// ordersCount,
+            recordsFiltered: 80,// tailleDeQuerySnapshot,
             data: []
         };
-
         querySnapshot.forEach((doc) => {
+            var lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
             let mOrder = doc.data();
             resp.data.push(
                 [
@@ -53,61 +93,21 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                     mOrder.shipping_price,
                     mOrder.fee,
                     mOrder.total_price,
-                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id='+doc.id+' ><i class=\'fa fa-edit\'></i></button> ' +
-                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id='+doc.id+' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
-                    '<button onclick=\'loadOrderPage('+doc.id+')\'  class=\' btn btn-primary btn-sm orderLink\' data-id='+doc.id+'><i class=\'fa fa-info\'></i></button>'
+                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
+                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
+                    '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
                 ]
             );
-            
-        });
-        return cors(request, response, () => {
-            response.status(200).send(resp);
+            var next = db.collection("orders")
+                .orderBy("date_ordered", "desc")
+                .startAfter(lastVisible)
+                .limit(10);
+
         });
 
     }).catch(err => {
         console.log('Error getting documents', err);
     });
-    
-    // Pagination Query
-    var first = db.collection("orders")
-    .orderBy("date_ordered", "desc").limit(length);
-
-   return first.get().then((querySnapshot) => {
-        let resp = {
-            draw: draw,
-            recordsTotal:100,// ordersCount,
-            recordsFiltered:80,// tailleDeQuerySnapshot,
-            data: []
-        };
-    querySnapshot.forEach((doc) => {
-        var lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
-        let mOrder = doc.data();
-        resp.data.push(
-            [
-                mOrder.name,
-                mOrder.status,
-                mOrder.client,
-                mOrder.address,
-                mOrder.phone,
-                mOrder.total_price,
-                mOrder.shipping_price,
-                mOrder.fee,
-                mOrder.total_price,
-                '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id='+doc.id+' ><i class=\'fa fa-edit\'></i></button> ' +
-                '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id='+doc.id+' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
-                '<button onclick=\'loadOrderPage('+doc.id+')\'  class=\' btn btn-primary btn-sm orderLink\' data-id='+doc.id+'><i class=\'fa fa-info\'></i></button>'
-            ]
-        );
-        var next = db.collection("orders")
-        .orderBy("date_ordered", "desc")
-        .startAfter(lastVisible)
-        .limit(10);
-
-    });
-
-}).catch(err => {
-    console.log('Error getting documents', err);
-});
 
 });
 
@@ -168,8 +168,8 @@ exports.newOrder = functions.https.onRequest((request, response) => {
         date: admin.firestore.FieldValue.serverTimestamp(),
         status: 'pending'
     };
-    let docRef = db.collection('Logs').doc();
-    let setAda = docRef.set(log).then(
+    let docReff = db.collection('Logs').doc();
+    let setAdaa = docReff.set(log).then(
         function () {
             response.send("log added Successfully");
         }
@@ -209,15 +209,16 @@ exports.onOrderStatusUpdated = functions.firestore
         const orderId = newValue.id;
         let message = {
             notification: {
-                title: "Order "+status,
-                body: name+" is "+status
+                title: "Order " + status,
+                body: name + " is " + status
             },
             data: {
                 order_name: name,
-                order_id: " "+orderId,
+                order_id: " " + orderId,
                 status: status,
                 notif_type: "status_change",
-                
+                "click_action": "FLUTTER_NOTIFICATION_CLICK"
+
             },
         };
         let topic = 'status_change';
@@ -239,6 +240,19 @@ exports.onOrderStatusUpdated = functions.firestore
                 sendMessageToDeliveryMan(assigned_to);
             }
         };
+        // saving notification on update order
+        let notf = {
+            title: "Order " + item.status,
+            body: item.name + " is " + item.status,
+            time: admin.firestore.FieldValue.serverTimestamp(),
+            to: newValue.Assigned_to
+        };
+        let docRefnotf = db.collection('Notifications').doc();
+        let setAdanotf = docRefnotf.set(notf).then(
+            function () {
+                response.send("notif added Successfully");
+            }
+        );
         // adding logs on update order
         let log = {
             order_id: orderId,
@@ -252,7 +266,7 @@ exports.onOrderStatusUpdated = functions.firestore
                 response.send("log added Successfully");
             }
         );
-        
+
     });
 
 function sendMessageToDeliveryMan(assigned_to, message) {
@@ -284,7 +298,7 @@ function sendMessageToDevices(message) {
 }
 
 function sendMessageToTopic(message) {
-// Send a message to devices subscribed to the provided topic.
+    // Send a message to devices subscribed to the provided topic.
     admin.messaging().send(message)
         .then((response) => {
             console.log('Successfully sent message:', response);
