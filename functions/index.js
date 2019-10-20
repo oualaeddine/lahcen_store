@@ -25,52 +25,68 @@ exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
     const cors = require('cors')({origin: true});
 
-    let draw = mreq.draw;//heda mayhemnach n3awdo nraj3oh bark
+    let draw = mreq.draw;
     let start = mreq.start;//heda la position ta3 last element f la page li 9bel li rana 7abin n'affichiw
     let length = 20;//hada nkhaliwh tjr 20 elements nesta3mloh f limit()
     let search = mreq.search;//heda query text li ncherchiw bih f all fields
     let order = mreq.order;//hedi la colonne li 7ab data ykoun ordered biha
     let query = null;
-    if (kda_mena_menhih) {
+    let query2 = null;
+    /*if (kda_mena_menhih) {
         query = db.collection("orders").orderBy("date_ordered", "desc").limit(length);
     } else {
         query = db.collection("orders").orderBy("date_ordered", "desc");
+    }*/
+    if(start != null) {
+        query = db.collection('orders').limit(length);
+            
+          
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null)
-        query.get().then((querySnapshot) => {
+            query.get().then(function (documentSnapshots) {
+                // Get the last visible document
+                var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+                console.log("last", lastVisible);
+                query2 = db.collection("orders")
+                    .startAfter(lastVisible)
+                    .limit(length);
+                 query2.get().then((querySnapshot) => {
 
-            let resp = {
-                draw: draw,
-                recordsTotal: 100,// ordersCount,
-                recordsFiltered: 80,// tailleDeQuerySnapshot,
-                data: []
-            };
-            querySnapshot.forEach((doc) => {
-                let mOrder = doc.data();
-                resp.data.push(
-                    [
-                        mOrder.name,
-                        mOrder.status,
-                        mOrder.client,
-                        mOrder.address,
-                        mOrder.phone,
-                        mOrder.total_price,
-                        mOrder.shipping_price,
-                        mOrder.fee,
-                        mOrder.total_price,
-                        '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
-                        '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
-                        '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
-                    ]
-                );
-
-            });
-            return cors(request, response, () => {
-                response.status(200).send(resp);
-            });
-
-        }).catch(err => {
+                    let resp = {
+                        draw: draw,
+                        recordsTotal: 100,// ordersCount,
+                        recordsFiltered: 80,// tailleDeQuerySnapshot,
+                        data: []
+                    };
+                    querySnapshot.forEach((doc) => {
+                        let mOrder = doc.data();
+                        resp.data.push(
+                            [
+                                mOrder.name,
+                                mOrder.status,
+                                mOrder.client,
+                                mOrder.address,
+                                mOrder.phone,
+                                mOrder.total_price,
+                                mOrder.shipping_price,
+                                mOrder.fee,
+                                mOrder.total_price,
+                                '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
+                                '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
+                                '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
+                            ]
+                        );
+        
+                    });
+                    return cors(request, response, () => {
+                        response.status(200).send(resp);
+                    });
+                     });
+                   
+        })
+    
+       .catch(err => {
             console.log('Error getting documents', err);
             return cors(request, response, () => {
                 response.status(500).send(err);
