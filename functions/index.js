@@ -44,8 +44,10 @@ exports.getOrders = functions.https.onRequest((request, response) => {
         query = db.collection('orders').limit(length);
         console.log("start is ", parseInt(start));
         }
-       else 
+       else {
        query = db.collection('orders').limit(parseInt(start));
+       console.log("start is ", parseInt(start));
+       }
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null) {
@@ -61,7 +63,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
                     let resp = {
                         draw: draw,
-                        recordsTotal: 100,// ordersCount,
+                        recordsTotal: 173,// ordersCount,
                         recordsFiltered: 80,// tailleDeQuerySnapshot,
                         data: []
                     };
