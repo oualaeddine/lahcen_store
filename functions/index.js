@@ -32,22 +32,28 @@ exports.getOrders = functions.https.onRequest((request, response) => {
     let order = mreq.order;//hedi la colonne li 7ab data ykoun ordered biha
     let query = null;
     let query2 = null;
-    /*if (kda_mena_menhih) {
+   /* if (order != null) {
         query = db.collection("orders").orderBy("date_ordered", "desc").limit(length);
     } else {
         query = db.collection("orders").orderBy("date_ordered", "desc");
-    }*/
+    }
+    */
     if(start != null) {
+
+        if(parseInt(start) == 0)  { 
         query = db.collection('orders').limit(length);
-            
-          
+        console.log("start is ", parseInt(start));
+        }
+       else 
+       query = db.collection('orders').limit(parseInt(start));
     }
     // noinspection EqualityComparisonWithCoercionJS
-    if (query != null)
+    if (query != null) {
             query.get().then(function (documentSnapshots) {
                 // Get the last visible document
                 var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
                 console.log("last", lastVisible);
+                
                 query2 = db.collection("orders")
                     .startAfter(lastVisible)
                     .limit(length);
@@ -92,7 +98,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                 response.status(500).send(err);
             });
         });
-    else {
+     } else {
         return cors(request, response, () => {
             response.status(500).send();
         });

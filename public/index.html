@@ -275,19 +275,20 @@
 
 
 <script>
-  var all_commands_table = $('#all_table').on("draw.dt", function () {
-    $(this).find(".dataTables_empty").parents('tbody').empty();
-}).DataTable({
+  var all_commands_table = $('#all_table').DataTable({
     "processing": true,
       "responsive":true,
     "serverSide": true,
+    "pageLength": 20,
+    "lengthChange": false,
     "ajax": {
             "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getOrders",
-            "method": 'GET',
+            "method": 'POST',
             "dataSrc": "data"
         }
-        })
        
+        });
+// $.fn.dataTable.ext.errMode = 'throw';      
 </script>
 
 </body>
