@@ -25,11 +25,11 @@ exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
     const cors = require('cors')({origin: true});
 
-    let draw = mreq.draw;
-    let start = mreq.start;
-    let length = mreq.length;
-    let search = mreq.search;
-    let order = mreq.order;
+    let draw = mreq.draw;//heda mayhemnach n3awdo nraj3oh bark
+    let start = mreq.start;//heda la position ta3 last element f la page li 9bel li rana 7abin n'affichiw
+    let length = 20;//hada nkhaliwh tjr 20 elements nesta3mloh f limit()
+    let search = mreq.search;//heda query text li ncherchiw bih f all fields
+    let order = mreq.order;//hedi la colonne li 7ab data ykoun ordered biha
     let query = null;
     if (kda_mena_menhih) {
         query = db.collection("orders").orderBy("date_ordered", "desc").limit(length);
