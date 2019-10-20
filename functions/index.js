@@ -23,23 +23,29 @@ const cors = require('cors')({
 });
 exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
-    const cors = require('cors')({ origin: true });
+    const cors = require('cors')({origin: true});
 
     let draw = mreq.draw;
     let start = mreq.start;
     let length = mreq.length;
     let search = mreq.search;
     let order = mreq.order;
+    let query = null;
+    if (kda_mena_menhih) {
+        query = db.collection("orders").orderBy("date_ordered", "desc").limit(length);
+    } else {
+        query = db.collection("orders").orderBy("date_ordered", "desc");
+    }
+    // noinspection EqualityComparisonWithCoercionJS
+    if (query != null)
+        query.get().then((querySnapshot) => {
 
-    db.collection("orders")
-        .orderBy("date_ordered", "desc").get().then((querySnapshot) => {
             let resp = {
                 draw: draw,
                 recordsTotal: 100,// ordersCount,
                 recordsFiltered: 80,// tailleDeQuerySnapshot,
                 data: []
             };
-
             querySnapshot.forEach((doc) => {
                 let mOrder = doc.data();
                 resp.data.push(
@@ -66,48 +72,15 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
         }).catch(err => {
             console.log('Error getting documents', err);
+            return cors(request, response, () => {
+                response.status(500).send(err);
+            });
         });
-
-    // Pagination Query
-    var first = db.collection("orders")
-        .orderBy("date_ordered", "desc").limit(length);
-
-    return first.get().then((querySnapshot) => {
-        let resp = {
-            draw: draw,
-            recordsTotal: 100,// ordersCount,
-            recordsFiltered: 80,// tailleDeQuerySnapshot,
-            data: []
-        };
-        querySnapshot.forEach((doc) => {
-            var lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-            let mOrder = doc.data();
-            resp.data.push(
-                [
-                    mOrder.name,
-                    mOrder.status,
-                    mOrder.client,
-                    mOrder.address,
-                    mOrder.phone,
-                    mOrder.total_price,
-                    mOrder.shipping_price,
-                    mOrder.fee,
-                    mOrder.total_price,
-                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
-                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
-                    '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
-                ]
-            );
-            var next = db.collection("orders")
-                .orderBy("date_ordered", "desc")
-                .startAfter(lastVisible)
-                .limit(10);
-
+    else {
+        return cors(request, response, () => {
+            response.status(500).send();
         });
-
-    }).catch(err => {
-        console.log('Error getting documents', err);
-    });
+    }
 
 });
 
@@ -254,7 +227,8 @@ exports.onOrderStatusUpdated = functions.firestore
                 const assigned_to = newValue.Assigned_to;
                 sendMessageToDeliveryMan(assigned_to);
             }
-        };
+        }
+        ;
         // saving notification on update order        
         let notf = {
             title: "Order " + newValue.status,
