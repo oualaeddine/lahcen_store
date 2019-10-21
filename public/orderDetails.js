@@ -154,34 +154,47 @@ function assignDeliveryMan(idOrder){
 }
 
 function getOrderDates(idOrder){
+   
     db.collection("orders").doc(""+idOrder).get().then(function(doc) {
         var data = doc.data();
         var row=null;
+        var dates = [];
         statut.forEach(function(e){
             if(data[e] != null){
-                switch (e) {
+                dates.push({"status":e,"date":data[e].toDate()});
+              //console.log(dates);
+             datesSorted = dates.sort(function(a,b){
+                var c = new Date(a.date);
+                var d = new Date(b.date);
+                return d-c;
+                });
+            }
+        });
+        datesSorted.forEach(function(e){
+        
+               switch (e.status) {
                     case "date_Delivered":
-                    row = "<li><i class='fa fa-shopping-cart bg-green'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été délivrée </h3>"+                                                         
+                    row = "<li><i class='fa fa-shopping-cart bg-green'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été délivrée </h3>"+                                                         
                     "</div</li>";
                     break;
                     case "date_Confirmed":
-                        row = "<li><i class='fa fa-shopping-cart bg-purple'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été confirmée </h3>"+                                                         
+                        row = "<li><i class='fa fa-shopping-cart bg-purple'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été confirmée </h3>"+                                                         
                         "</div</li>";
                         break;
                         case "date_Canceled":
-                            row = "<li><i class='fa fa-shopping-cart bg-yellow'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été annulée</h3>"+                                                         
+                            row = "<li><i class='fa fa-shopping-cart bg-yellow'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été annulée</h3>"+                                                         
                             "</div</li>";
                             break;
                             case "date_NRP1":
-                                row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span>  <h3 class='timeline-header'>Le client n\'as pas repondu 1 fois </h3>"+                                                         
+                                row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span>  <h3 class='timeline-header'>Le client n\'as pas repondu 1 fois </h3>"+                                                         
                                 "</div</li>";
                                 break;
                                 case "date_NRP2":
-                                    row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>Le client n\'as pas repondu 2 fois </h3>"+                                                         
+                                    row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>Le client n\'as pas repondu 2 fois </h3>"+                                                         
                                     "</div</li>";
                                     break;
                                     case "date_NRP3":
-                                        row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>Le client n\'as pas repondu 3 fois </h3>"+                                                         
+                                        row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>Le client n\'as pas repondu 3 fois </h3>"+                                                         
                                         "</div</li>";
                                         break;
                                         case "date_Assigned":
@@ -191,22 +204,21 @@ function getOrderDates(idOrder){
                                                     var manData = doc.data();
                                                      name = manData.name;
                                                 });
-                                            row = "<li><i class='fa fa-shopping-cart bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été assignée à <span style='font-weight:bold;'>"+name+"</span></h3>"+                                                         
+                                            row = "<li><i class='fa fa-shopping-cart bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été assignée à <span style='font-weight:bold;'>"+name+"</span></h3>"+                                                         
                                             "</div></li>";
                                                
                                             break;
                                             case "date_NoToBuy":
-                                                row =  "<li><i class='fa fa-user bg-red'></i><div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span>  <h3 class='timeline-header'>Le client ne veut plus acheter </h3>"+                                                         
+                                                row =  "<li><i class='fa fa-user bg-red'></i><div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i> "+e.date.toLocaleString().split(',')[0]+" "+e.date.toLocaleTimeString('en-US')+ "</span>  <h3 class='timeline-header'>Le client ne veut plus acheter </h3>"+                                                         
                                                 "</div></li>";
                                                 break;
                 }
-               
+              
                  
             $('#orderTimeLine').append(row);
-                
-            }
-          
-    });
+            });     
+        
+   
     });
 
 }
