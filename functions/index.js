@@ -251,35 +251,25 @@ exports.onOrderStatusUpdated = functions.firestore
                 const assigned_to = newValue.Assigned_to;
                 sendMessageToDeliveryMan(assigned_to);
             }
-        }
-        ;
-
+        };
 
         // adding notif to admin notification
+        let notf = {
+            title: "Order " + newValue.status,
+            body: newValue.name + " is " + newValue.status,
+            status: newValue.status,
+            ordername: newValue.name,
+            time: admin.firestore.FieldValue.serverTimestamp(),
+        };
         if (status != "Assigned" && status != "Canceled") {
             if (status != "Confirmed") {
-                let notfadmin = {
-                    title: "Order " + newValue.status,
-                    body: newValue.name + " is " + newValue.status,
-                    status: newValue.status,
-                    ordername: newValue.name,
-                    time: admin.firestore.FieldValue.serverTimestamp(),
-                };
                 let docRefnotf_admin = db.collection('Notifications').doc('admindoc')
                     .collection('AdminNotif').doc();
-                let setAdanotf_admin = docRefnotf_admin.set(notfadmin).then(
+                let setAdanotf_admin = docRefnotf_admin.set(notf).then(
                     function () {
                         response.send("notif admin added Successfully");
                     });
-            } else {
-                // saving Liv notification on update order        
-                let notf = {
-                    title: "Order " + newValue.status,
-                    body: newValue.name + " is " + newValue.status,
-                    status: newValue.status,
-                    ordername: newValue.name,
-                    time: admin.firestore.FieldValue.serverTimestamp(),
-                };
+            } else {       
                 // adding notif to livreur notification
                 let docRefnotf_Liv = db.collection('Notifications').doc(newValue.Assigned_to)
                     .collection('LivNotif').doc();
@@ -289,14 +279,6 @@ exports.onOrderStatusUpdated = functions.firestore
                     });
             }
         } else {
-            // saving Liv notification on update order        
-            let notf = {
-                title: "Order " + newValue.status,
-                body: newValue.name + " is " + newValue.status,
-                status: newValue.status,
-                ordername: newValue.name,
-                time: admin.firestore.FieldValue.serverTimestamp(),
-            };
             // adding notif to livreur notification
             let docRefnotf_Liv = db.collection('Notifications').doc(newValue.Assigned_to)
                 .collection('LivNotif').doc();
