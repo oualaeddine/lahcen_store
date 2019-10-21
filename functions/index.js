@@ -286,7 +286,6 @@ exports.onOrderStatusUpdated = functions.firestore
                 function () {
                     response.send("notif liv added Successfully");
                 });
-
         }
 
         // adding logs on update order
