@@ -77,7 +77,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                             mOrder.client,
                             mOrder.address,
                             mOrder.phone,
-                            mOrder.total_price,
+                            mOrder.subtotal_price,
                             mOrder.shipping_price,
                             mOrder.fee,
                             mOrder.total_price,
@@ -184,17 +184,19 @@ exports.getProducts = functions.https.onRequest((request, response) => {
 exports.totalPriceOrder = functions.firestore
     .document('orders/{orderId}')
     .onWrite((change,context)=> {
+    const docId = change.after.id;
     const newValue = change.after.data();
      fee = newValue.fee;
      delivery_price = newValue.shipping_price;
      subTotal = newValue.subtotal_price;
     total =0;
-   
-   
-    total += subTotal + fee + delivery_price;
-db.collection('orders').doc(""+newValue).update({
+    total += parseFloat(subTotal) + parseFloat(fee) + parseFloat(delivery_price);
+db.collection('orders').doc(""+docId).update({
     total_price: total
-});
+}).then(
+    function () {
+        response.send("total is Successfully updated");
+    });
 });
 /*______ start Section Djamila Work ___________________________________________________________________________ */
 exports.newOrder = functions.https.onRequest((request, response) => {
