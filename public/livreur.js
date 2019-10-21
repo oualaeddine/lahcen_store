@@ -2,7 +2,7 @@ var db = firebase.firestore();
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
     if(user) {
-        $('#userName').html(user.displayName);
+        $('#userName').html(user.email);
     }
      else window.location = 'login.html'; 
   });

@@ -2,7 +2,7 @@ var db = firebase.firestore();
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
     if(user) {
-        $('#userName').html(user.displayName);
+        $('#userName').html(user.email);
     }
      else window.location = 'login.html'; 
   });
@@ -25,6 +25,33 @@ db.collection("products").get().then((querySnapshot) => {
 
     });
 });
+*/
+/*$('#updatePasswordModal').on('show.bs.modal', function(e) {
+    var user = firebase.auth().currentUser;
+    $('#userEmail').val(user.email);
+});
+function updatePassword() {
+    var user = firebase.auth().currentUser;
+    email = user.email;
+    password =$('#oldPassword').val();
+   
+    var credential=firebase.auth.EmailAuthProvider.credential(
+        email,
+        password
+    );
+
+user.reauthenticateWithCredential(credential).then(function() {
+   var newPassword =  $('#userPassword').val();
+  user.updatePassword(newPassword).catch(function(error) {
+     console.log(error);
+    });
+}).catch(function(error) {
+    console.log(error);
+});
+
+$("updatePasswordModal").modal('hide');  
+          
+}
 */
 function signOut() {
     firebase.auth().signOut();

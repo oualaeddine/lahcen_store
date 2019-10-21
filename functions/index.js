@@ -189,10 +189,13 @@ exports.totalPriceOrder = functions.firestore
      fee = newValue.fee;
      delivery_price = newValue.shipping_price;
      subTotal = newValue.subtotal_price;
-    total =0;
-    total += parseFloat(subTotal) + parseFloat(fee) + parseFloat(delivery_price);
+    total =0.00;
+    if(fee != null)
+        total += parseFloat(subTotal) + parseFloat(fee) + parseFloat(delivery_price);
+    else 
+    total += parseFloat(subTotal) + parseFloat(delivery_price);
 db.collection('orders').doc(""+docId).update({
-    total_price: total
+    total_price: ""+total
 }).then(
     function () {
         response.send("total is Successfully updated");
