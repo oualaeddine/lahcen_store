@@ -91,47 +91,44 @@ function loadOrderPage(idOrder) {
 function uploadStatut(id) {
 
  var new_statut = document.getElementById("statusForm").value;
- if(new_statut == "Ne repond pas 1 fois") {
-     // INSERT NEW VALUES
-    db.collection('orders').doc(""+id).update({
-        status: new_statut,
-        date_NRP1: firebase.firestore.Timestamp.now().toDate()
-
-        });
-    }
-    if(new_statut == "Ne repond pas 2 fois") {
-        // INSERT NEW VALUES
-       db.collection('orders').doc(""+id).update({
-           status: new_statut,
-           date_NRP2: firebase.firestore.Timestamp.now().toDate()
-   
-           });
-       }
-      else if(new_statut == "Ne repond pas 3 fois") {
-        // INSERT NEW VALUES
-       db.collection('orders').doc(""+id).update({
-           status: new_statut,
-           date_NRP3: firebase.firestore.Timestamp.now().toDate()
-   
-           });
-       }
-   else if(new_statut == "No want to buy") {
+ switch(new_statut){
+    case "Ne repond pas 1 fois":
+            db.collection('orders').doc(""+id).update({
+                status: new_statut,
+                date_NRP1: firebase.firestore.Timestamp.now().toDate()
+        
+                });
+            break;
+     case "Ne repond pas 2 fois":
+            db.collection('orders').doc(""+id).update({
+                status: new_statut,
+                date_NRP2: firebase.firestore.Timestamp.now().toDate()
+        
+                });
+        break;
+    case "Ne repond pas 3 fois":
          // INSERT NEW VALUES
-        db.collection('orders').doc(""+id).update({
+       db.collection('orders').doc(""+id).update({
         status: new_statut,
-        date_NoToBuy: firebase.firestore.Timestamp.now().toDate()
+        date_NRP3: firebase.firestore.Timestamp.now().toDate()
 
         });
-    }
- else {
-    // INSERT NEW VALUES
-    db.collection('orders').doc(""+id).update({
-        status: new_statut,
-        ['date_'+new_statut ]: firebase.firestore.Timestamp.now().toDate()
-
-        });
-    }
-
+        break;
+    case "No want to buy":
+            db.collection('orders').doc(""+id).update({
+                status: new_statut,
+                date_NoToBuy: firebase.firestore.Timestamp.now().toDate()
+        
+                });
+    break;
+    default:
+            db.collection('orders').doc(""+id).update({
+                status: new_statut,
+                ['date_'+new_statut ]: firebase.firestore.Timestamp.now().toDate()
+        
+                });
+ }
+ 
  //Close Modal
  $('#statusModal').modal('hide');
 }
