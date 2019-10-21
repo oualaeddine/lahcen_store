@@ -253,11 +253,20 @@
 
 <script>
     
-       var product_table = $('#all_products').on("draw.dt", function () {
-    $(this).find(".dataTables_empty").parents('tbody').empty();
-}).DataTable({
-            
-        })
+       var product_table = $('#all_products').DataTable({
+        "processing": true,
+         "responsive":true,
+         "serverSide": true,
+         "pageLength": 20,
+        "lengthChange": false,
+        "ajax": {
+            "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getProducts",
+            "method": 'POST',
+            "dataSrc": "data"
+        }
+       
+        });
+        
   
  
 </script>

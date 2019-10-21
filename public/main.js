@@ -9,7 +9,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 
 var cpt=0;
-/* Get Commands List
+// Get Commands List
 var first = db.collection("orders")
     .orderBy("date_ordered","desc")
     .limit(10);
@@ -45,7 +45,7 @@ first.get().then((querySnapshot) => {
         cpt++;
     });
 });
-*/
+
 
 function signOut() {
     firebase.auth().signOut();

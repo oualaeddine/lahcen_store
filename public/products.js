@@ -7,7 +7,7 @@ firebase.auth().onAuthStateChanged(user => {
      else window.location = 'login.html'; 
   });
 
-// Get products List
+/* Get products List
 var cpt=0;
 db.collection("products").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
@@ -25,6 +25,7 @@ db.collection("products").get().then((querySnapshot) => {
 
     });
 });
+*/
 function signOut() {
     firebase.auth().signOut();
 } 

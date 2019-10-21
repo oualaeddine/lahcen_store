@@ -6,7 +6,7 @@ firebase.auth().onAuthStateChanged(user => {
     }
      else window.location = 'login.html'; 
   });
-var statut=["date_pending","date_Annuled","date_Delivred","date_Confirmed","date_Assigned","date_NoToBuy","date_NRP1","date_NRP2","date_NRP3"];
+var statut=["date_pending","date_Delivered","date_Confirmed","date_Assigned","date_NoToBuy","date_NRP1","date_NRP2","date_NRP3","date_Canceled"];
 
 var idOrder = localStorage.getItem("orderId");
 getOrderStatu(idOrder);
@@ -65,18 +65,20 @@ function getOrderStatu(idOrder) {
         }
         var rowS =  "<button  class='btn orderStateButton btn-"+statusClass+"'>"+data.status+"</button>";
         if(data.status == "No want to buy"){
-            var row = "No want to buy on : <br> "+data.date_NoToBuy.toDate();
-        }
+            var row = "No want to buy on : <br> "+data.date_NoToBuy.toDate().toLocaleString().split(',')[0]+" at "+data.date_NoToBuy.toDate().toLocaleTimeString('en-US');
+               }
         if(data.status == "Confirmed"  ) {
-            var row = " Confirmed on : <br>"+data.date_Confirmed.toDate();
+            var row = " Confirmed on : <br>"+data.date_Confirmed.toDate().toLocaleString().split(',')[0]+" at "+data.date_Confirmed.toDate().toLocaleTimeString('en-US');
+
         }
         if(data.status == "Canceled"  ) {
-            var row = "Canceled on : <br>"+data.date_Canceled.toDate();
+            var row = "Canceled on : <br>"+data.date_Canceled.toDate().toLocaleString().split(',')[0]+" at "+data.date_Canceled.toDate().toLocaleTimeString('en-US');
+            
         }
         
        if(data.status == "Assigned") {
-           var row = "Assigned on : <br>"+data.date_Assigned.toDate();
-           var manId= data.Assigned_to;
+           var row = "Assigned on : <br>"+data.date_Assigned.toDate().toLocaleString().split(',')[0]+" at "+data.date_Assigned.toDate().toLocaleTimeString('en-US');
+                      var manId= data.Assigned_to;
         db.collection("delivery_men").doc(""+manId).get().then(function(doc) {
             var manData = doc.data();
              name = manData.name;
@@ -87,8 +89,11 @@ function getOrderStatu(idOrder) {
            
        }
        if(data.status == "Delivered") {
-           var row ="Delivered on : <br>"+data.date_Delivered.toDate();
+           var row ="Delivered on : <br>"+data.date_Delivered.toDate().toLocaleString().split(',')[0]+" at "+data.date_Delivered.toDate().toLocaleTimeString('en-US');
+
        }
+    
+
 
         $('.orderStatut').append(rowS);
         $('.orderDate').append(row);
@@ -151,12 +156,53 @@ function assignDeliveryMan(idOrder){
 function getOrderDates(idOrder){
     db.collection("orders").doc(""+idOrder).get().then(function(doc) {
         var data = doc.data();
+        var row=null;
         statut.forEach(function(e){
             if(data[e] != null){
-                
-                var row = "<tr><td>"+e+": </td><td>"+data[e].toDate()+"</td></tr>";
+                switch (e) {
+                    case "date_Delivered":
+                    row = "<li><i class='fa fa-shopping-cart bg-green'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été délivrée </h3>"+                                                         
+                    "</div</li>";
+                    break;
+                    case "date_Confirmed":
+                        row = "<li><i class='fa fa-shopping-cart bg-purple'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été confirmée </h3>"+                                                         
+                        "</div</li>";
+                        break;
+                        case "date_Canceled":
+                            row = "<li><i class='fa fa-shopping-cart bg-yellow'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été annulée</h3>"+                                                         
+                            "</div</li>";
+                            break;
+                            case "date_NRP1":
+                                row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span>  <h3 class='timeline-header'>Le client n\'as pas repondu 1 fois </h3>"+                                                         
+                                "</div</li>";
+                                break;
+                                case "date_NRP2":
+                                    row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>Le client n\'as pas repondu 2 fois </h3>"+                                                         
+                                    "</div</li>";
+                                    break;
+                                    case "date_NRP3":
+                                        row = "<li><i class='fa fa-user bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>Le client n\'as pas repondu 3 fois </h3>"+                                                         
+                                        "</div</li>";
+                                        break;
+                                        case "date_Assigned":
+                                                var manId= data.Assigned_to;
+                                                console.log(manId);
+                                                db.collection("delivery_men").doc(""+manId).get().then(function(doc) {
+                                                    var manData = doc.data();
+                                                     name = manData.name;
+                                                });
+                                            row = "<li><i class='fa fa-shopping-cart bg-blue'></i><div class='timeline-item'> <span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span> <h3 class='timeline-header'>La commande a été assignée à <span style='font-weight:bold;'>"+name+"</span></h3>"+                                                         
+                                            "</div></li>";
+                                               
+                                            break;
+                                            case "date_NoToBuy":
+                                                row =  "<li><i class='fa fa-user bg-red'></i><div class='timeline-item'><span class='time'><i class='fa fa-clock-o'></i> "+data[e].toDate().toLocaleString().split(',')[0]+" "+data[e].toDate().toLocaleTimeString('en-US')+ "</span>  <h3 class='timeline-header'>Le client ne veut plus acheter </h3>"+                                                         
+                                                "</div></li>";
+                                                break;
+                }
+               
                  
-            $('#orderDatesList').append(row);
+            $('#orderTimeLine').append(row);
                 
             }
           

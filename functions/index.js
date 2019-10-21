@@ -108,6 +108,81 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
 });
 
+exports.getProducts = functions.https.onRequest((request, response) => {
+    let mreq = request.body;
+    const cors = require('cors')({origin: true});
+
+    let draw = mreq.draw;
+    let start = mreq.start;//heda la position ta3 last element f la page li 9bel li rana 7abin n'affichiw
+    let length = 20;//hada nkhaliwh tjr 20 elements nesta3mloh f limit()
+    let search = mreq.search;//heda query text li ncherchiw bih f all fields
+    let order = mreq.order;//hedi la colonne li 7ab data ykoun ordered biha
+    let query = null;
+    let query2 = null;
+    if(start != null) {
+
+        if(parseInt(start) == 0)  { 
+        query = db.collection('products').limit(length);
+        console.log("start is ", parseInt(start));
+        }
+       else {
+       query = db.collection('products').limit(parseInt(start));
+       console.log("start is ", parseInt(start));
+       }
+    }
+    // noinspection EqualityComparisonWithCoercionJS
+    if (query != null) {
+            query.get().then(function (documentSnapshots) {
+                // Get the last visible document
+                var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+                console.log("last", lastVisible);
+                
+                query2 = db.collection("products")
+                    .startAfter(lastVisible)
+                    .limit(length);
+                 query2.get().then((querySnapshot) => {
+
+                    let resp = {
+                        draw: draw,
+                        recordsTotal: 173,// ordersCount,
+                        recordsFiltered: 80,// tailleDeQuerySnapshot,
+                        data: []
+                    };
+                    querySnapshot.forEach((doc) => {
+                        let mOrder = doc.data();
+                        resp.data.push(
+                            [
+                                mOrder.name,
+                                mOrder.price,
+                                mOrder.buyPrice,
+                                mOrder.quantity,
+                                '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'></i></button>'+
+                                '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'></i></button>' 
+                            ]
+                        );
+        
+                    });
+                    return cors(request, response, () => {
+                        response.status(200).send(resp);
+                    });
+                     });
+                   
+        })
+    
+       .catch(err => {
+            console.log('Error getting documents', err);
+            return cors(request, response, () => {
+                response.status(500).send(err);
+            });
+        });
+     } else {
+        return cors(request, response, () => {
+            response.status(500).send();
+        });
+    }
+
+});
+
 /*______ start Section Djamila Work ___________________________________________________________________________ */
 exports.newOrder = functions.https.onRequest((request, response) => {
     let data = request.body;
