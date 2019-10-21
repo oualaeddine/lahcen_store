@@ -69,10 +69,11 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                 };
                 querySnapshot.forEach((doc) => {
                     let mOrder = doc.data();
+                    
                     resp.data.push(
                         [
                             mOrder.name,
-                            mOrder.status,
+                            mOrder.status ,
                             mOrder.client,
                             mOrder.address,
                             mOrder.phone,
@@ -113,10 +114,8 @@ exports.getProducts = functions.https.onRequest((request, response) => {
     const cors = require('cors')({origin: true});
 
     let draw = mreq.draw;
-    let start = mreq.start;//heda la position ta3 last element f la page li 9bel li rana 7abin n'affichiw
-    let length = 20;//hada nkhaliwh tjr 20 elements nesta3mloh f limit()
-    let search = mreq.search;//heda query text li ncherchiw bih f all fields
-    let order = mreq.order;//hedi la colonne li 7ab data ykoun ordered biha
+    let start = mreq.start;
+    let length = 20;
     let query = null;
     let query2 = null;
     if(start != null) {
@@ -156,7 +155,7 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                                 mOrder.price,
                                 mOrder.buyPrice,
                                 mOrder.quantity,
-                                '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'></i></button>'+
+                                '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'></i></button> '+
                                 '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'></i></button>' 
                             ]
                         );
@@ -182,7 +181,21 @@ exports.getProducts = functions.https.onRequest((request, response) => {
     }
 
 });
-
+exports.totalPriceOrder = functions.firestore
+    .document('orders/{orderId}')
+    .onWrite((change,context)=> {
+    const newValue = change.after.data();
+     fee = newValue.fee;
+     delivery_price = newValue.shipping_price;
+     subTotal = newValue.subtotal_price;
+    total =0;
+   
+   
+    total += subTotal + fee + delivery_price;
+db.collection('orders').doc(""+newValue).update({
+    total_price: total
+});
+});
 /*______ start Section Djamila Work ___________________________________________________________________________ */
 exports.newOrder = functions.https.onRequest((request, response) => {
     let data = request.body;
@@ -282,6 +295,7 @@ exports.onNewOrder = functions.firestore
                 response.send("notif admin added Successfully");
             });
     });
+
 
 
 exports.onOrderStatusUpdated = functions.firestore
