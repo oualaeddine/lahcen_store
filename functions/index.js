@@ -155,8 +155,8 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                                 mOrder.price,
                                 mOrder.buyPrice,
                                 mOrder.quantity,
-                                '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'></i></button> '+
-                                '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'></i></button>' 
+                                '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'> </i> Edit</button> '+
+                                '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'> </i> Delete</button>' 
                             ]
                         );
         

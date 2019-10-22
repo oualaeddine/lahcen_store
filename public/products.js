@@ -7,26 +7,8 @@ firebase.auth().onAuthStateChanged(user => {
      else window.location = 'login.html'; 
   });
 
-/* Get products List
-var cpt=0;
-db.collection("products").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-       
-        var data = doc.data();
-        var mrow = "<tr class='rowNumber"+cpt+"'><td >" + data.name + "</td><td>" + data.price + "</td><td class='buyPrice"+cpt+"'>" + data.buyPrice + "</td><td class='quantity"+cpt+"'>" +
-            data.quantity +
-            "</td><td> <button class='btn-info btn btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+data.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button>"+
-            " <button data-book-id="+data.id+" data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' class='btn-danger btn btn-sm'><i class='fa fa-trash'></i></button>" 
- 
-            "</td></tr>";
 
-        $("#all_prod").append(mrow);
-        cpt++;
-
-    });
-});
-*/
-/*$('#updatePasswordModal').on('show.bs.modal', function(e) {
+$('#updatePasswordModal').on('show.bs.modal', function(e) {
     var user = firebase.auth().currentUser;
     $('#userEmail').val(user.email);
 });
@@ -49,10 +31,12 @@ user.reauthenticateWithCredential(credential).then(function() {
     console.log(error);
 });
 
-$("updatePasswordModal").modal('hide');  
-          
+$('#updatePasswordModal').modal('hide');  
+$('#oldPassword').val("");
+$('#userPassword').val("");
+
 }
-*/
+
 function signOut() {
     firebase.auth().signOut();
 } 

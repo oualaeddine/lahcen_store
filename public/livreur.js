@@ -132,6 +132,34 @@ function delete_livreur(id,rowId) {
       });
 }
 
+$('#updatePasswordModal').on('show.bs.modal', function(e) {
+    var user = firebase.auth().currentUser;
+    $('#userEmail').val(user.email);
+});
+function updatePassword() {
+    var user = firebase.auth().currentUser;
+    email = user.email;
+    password =$('#oldPassword').val();
+   
+    var credential=firebase.auth.EmailAuthProvider.credential(
+        email,
+        password
+    );
+
+user.reauthenticateWithCredential(credential).then(function() {
+   var newPassword =  $('#userPassword').val();
+  user.updatePassword(newPassword).catch(function(error) {
+     console.log(error);
+    });
+}).catch(function(error) {
+    console.log(error);
+});
+
+$('#updatePasswordModal').modal('hide');  
+$('#oldPassword').val("");
+$('#userPassword').val("");
+
+}
 /********* ADD DELIVERY MAN  ********/
 function addLivreur(){
 

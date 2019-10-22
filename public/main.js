@@ -9,48 +9,39 @@ firebase.auth().onAuthStateChanged(user => {
 
 
 var cpt=0;
-/* Get Commands List
-var first = db.collection("orders")
-    .orderBy("date_ordered","desc")
-    .limit(10);
-first.get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        var lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
-    
-       
-        var data = doc.data();
-
-        //Test status classes
-        var statusClass = data.status;
-        if(statusClass == "No want to buy") {
-            statusClass = "NoToBuy";
-        }
-        if( (statusClass == "Ne repond pas 1 fois") || (statusClass == "Ne repond pas 2 fois") || (statusClass == "Ne repond pas 3 fois")) {
-            statusClass = "Npr";
-        }
-        var feeValue=data.fee;
-        if (feeValue == null) {
-            feeValue=0;
-        }
-        var mrow = "<tr><td>" + data.name + "</td><td > <button  class='btn  statut"+cpt+" btn-"+statusClass+"'>" + data.status + "</button></td><td>" + data.client + "</td><td>" +
-        data.address + "</td><td>" + data.phone + "</td><td>" + data.total_price  + "</td><td class='delPrice"+cpt+"'>" + data.shipping_price +
-        "</td><td class='fee"+cpt+"'>" + feeValue + "</td><td>" + data.total_price +
-        "</td><td> <button class='btn-primary btn btn-sm' data-toggle='modal' data-target='#updateCommandModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button>"
-        +" <button class='btn btn-primary btn-sm' data-toggle='modal' data-book-id="+doc.id+" data-cell-id="+cpt+" data-target='#statusModal'><i class='fa fa-shopping-cart'></i></button>"+
-        " <button onclick='loadOrderPage("+doc.id+")'  id='orderLink"+cpt+"' class=' btn btn-primary btn-sm orderLink'  data-rowid="+cpt+" data-id="+doc.id+"><i class='fa fa-info'></i></button></td></tr>";
-      
-    
-       
-        $("#all_tb").append(mrow)
-        cpt++;
-    });
-});
-*/
 
 function signOut() {
     firebase.auth().signOut();
 } 
  
+$('#updatePasswordModal').on('show.bs.modal', function(e) {
+    var user = firebase.auth().currentUser;
+    $('#userEmail').val(user.email);
+});
+function updatePassword() {
+    var user = firebase.auth().currentUser;
+    email = user.email;
+    password =$('#oldPassword').val();
+   
+    var credential=firebase.auth.EmailAuthProvider.credential(
+        email,
+        password
+    );
+
+user.reauthenticateWithCredential(credential).then(function() {
+   var newPassword =  $('#userPassword').val();
+  user.updatePassword(newPassword).catch(function(error) {
+     console.log(error);
+    });
+}).catch(function(error) {
+    console.log(error);
+});
+
+$('#updatePasswordModal').modal('hide');  
+$('#oldPassword').val("");
+$('#userPassword').val("");
+
+}
 // Update Modal
 $('#updateCommandModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
