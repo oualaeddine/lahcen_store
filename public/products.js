@@ -1,4 +1,18 @@
 var db = firebase.firestore();
+const product_table = $('#all_products').DataTable({
+    "processing": true,
+     "responsive":true,
+     "serverSide": true,
+     searching: false,
+     "pageLength": 20,
+    "lengthChange": false,
+    "ajax": {
+        "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getProducts",
+        "method": 'POST',
+        "dataSrc": "data"
+    }
+   
+    });
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
     if(user) {
@@ -43,14 +57,14 @@ function signOut() {
 // Confirmation delete Modal
 $('#confirmationModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
-    var rowId = $(e.relatedTarget).data('row-id');
-    $('#deleteButton').attr('onClick', 'delete_product("'+id+'","'+rowId+'");');
+    
+    $('#deleteButton').attr('onClick', 'delete_product("'+id+'");');
   });
 
 // Update Modal
 $('#exampleModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('book-id');
-    var cellId = $(e.relatedTarget).data('cell-id');
+
 
     var docRef = db.collection("products").doc(""+id+"");
     docRef.get().then(function(doc) {
@@ -60,10 +74,10 @@ $('#exampleModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('input[name="buy_price"]').val(data.buyPrice);
            $(e.currentTarget).find('input[name="quantity"]').val(data.quantity);
 
-           $('#saveButtonProduct').attr('onClick', 'upload("'+id+'","'+cellId+'");');
+           $('#saveButtonProduct').attr('onClick', 'upload("'+id+'");');
 });
 });
-function upload(id, cellId) {
+function upload(id) {
    
     // GET INPUT VALUES
     var new_quantity = $('#quantity').val();
@@ -75,19 +89,14 @@ function upload(id, cellId) {
         buyPrice: new_buyPrice
     });
 
-    //Update data table Cell
-    $(".buyPrice"+cellId).html(""+new_buyPrice);
-    $(".quantity"+cellId).html(""+new_quantity);
-
+    product_table.ajax.reload();
     Annuler('exampleModal');
 
 }
-function delete_product (id, rowId) {
+function delete_product (id) {
     db.collection('products').doc(""+id).delete();  
 
-     //Delete row 
-     $(".rowNumber"+rowId).remove();
-
+  product_table.ajax.reload();
     Annuler('confirmationModal');
 }
 

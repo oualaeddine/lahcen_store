@@ -1,4 +1,58 @@
 var db = firebase.firestore();
+const all_commands_table = $('#all_table').DataTable({
+    "processing": true,
+      "responsive":true,
+    "serverSide": true,
+    searching: false,
+    "pageLength": 20,
+    "lengthChange": false,
+    "ajax": {
+            "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getOrders",
+            "method": 'POST',
+            "dataSrc": "data"
+        },
+    'columnDefs': [
+        {    
+            "targets": 1,                  
+            "render": function ( data, type) {
+                switch(data){
+                    case "No want to buy":
+                    return  '<button class="btn btn-NoToBuy">'+data+'</button>';
+                    break;
+                    case "pending":
+                    return  '<button class="btn btn-pending">'+data+'</button>';
+                    break; 
+                    case "Delivered": 
+                    return  '<button class="btn btn-Delivered">'+data+'</button>';
+                    break;
+                    case "Assigned": 
+                    return  '<button class="btn btn-Assigned">'+data+'</button>';
+                    break;
+                    case "Canceled": 
+                    return  '<button class="btn btn-Canceled">'+data+'</button>';
+                    break;
+                    case "Confirmed": 
+                    return  '<button class="btn btn-Confirmed">'+data+'</button>';
+                    break;
+                    case "Ne repond pas 1 fois": 
+                    return  '<button class="btn btn-Npr">'+data+'</button>';
+                    break;
+                    case "Ne repond pas 2 fois": 
+                    return  '<button class="btn btn-Npr">'+data+'</button>';
+                    break;
+                    case "Ne repond pas 3 fois": 
+                    return  '<button class="btn btn-Npr">'+data+'</button>';
+                    break;
+                }
+                   
+                
+                
+            }
+        }
+   ]
+       
+        });
+        
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
     if(user) {
@@ -119,7 +173,7 @@ function uploadStatut(id) {
         
                 });
  }
- 
+ all_commands_table.ajax.reload();
  //Close Modal
  $('#statusModal').modal('hide');
 }
@@ -137,7 +191,8 @@ function upload(id) {
         fee: new_fee
     });
 
-
+    all_commands_table.ajax.reload();
     //Close Modal
     $('#updateCommandModal').modal('hide');
+   
 }
