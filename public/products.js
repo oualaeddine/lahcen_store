@@ -1,5 +1,5 @@
 var db = firebase.firestore();
-const product_table = $('#all_products').DataTable({
+product_table = $('#all_products').DataTable({
     "processing": true,
      "responsive":true,
      "serverSide": true,

@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const FieldValue = require('firebase-admin').firestore.FieldValue;
 admin.initializeApp(functions.config().firebase);
 let db = admin.firestore();
 
@@ -10,34 +11,93 @@ exports.deleteDeliveryMan = functions.https.onRequest((request) => {
     admin.auth().deleteUser(data.id)
         .then(function () {
             //console.log('Successfully deleted user');
-            //todo add field to delivery man   ismo isDeleted la valeur ta3o 1
+            
         })
         .catch(function (error) {
             //console.log('Error deleting user:', error);
         });
 
 });
-
+exports.updateDeliveryManEmail = functions.https.onRequest((request) => {
+    let data = request.body;
+    admin.auth().updateUser(data.id, {
+        email: data.email,
+    });      
+});
+exports.incrementOrderCount = functions.firestore
+    .document('orders/{orderId}')
+    .onCreate((snap, context) => {
+        var chainCounterRef = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        chainCounterRef.update({ ordersCount: FieldValue.increment(1) });
+        return true;
+     
+    });
+    exports.decrementOrderCount = functions.firestore
+    .document('orders/{orderId}')
+    .onDelete((snap, context) => {
+        var chainCounterRef = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        chainCounterRef.get().then(function (doc){
+        var data = doc.data();
+        var currentValue = data.ordersCount;
+        chainCounterRef.update({ ordersCount: currentValue - 1 });
+    });
+        return true;
+     
+    }); 
+     //
+     exports.incrementProductCount = functions.firestore
+    .document('products/{productId}')
+    .onCreate((snap, context) => {
+        var chainCounterRef = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        chainCounterRef.update({ productsCount: FieldValue.increment(1) });
+        return true;
+     
+    });
+    exports.decrementProductCount = functions.firestore
+    .document('products/{productId}')
+    .onDelete((snap, context) => {
+        var chainCounterRef = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        chainCounterRef.get().then(function (doc){
+        var data = doc.data();
+        var currentValue = data.productsCount;
+        chainCounterRef.update({ productsCount: currentValue - 1 });
+    });
+        return true;
+     
+    }); 
+     //
+    function getOrdersCount(){
+        const query = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        query.get().then(function (doc){
+        var data = doc.data();
+        var totalOrders = data.ordersCount;
+        return totalOrders;
+        });
+    }
+    function getProductsCount(){
+        const query = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        query.get().then(function (doc){
+        var data = doc.data();
+        var totalProducts = data.productsCount;
+        return totalProducts;
+        });
+    }
 const cors = require('cors')({
     origin: true,
 });
+
 exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
     const cors = require('cors')({ origin: true });
-
+    var totalOrders = getOrdersCount();
     let draw = mreq.draw;
-    let start = mreq.start;//heda la position ta3 last element f la page li 9bel li rana 7abin n'affichiw
-    let length = 20;//hada nkhaliwh tjr 20 elements nesta3mloh f limit()
-    let search = mreq.search;//heda query text li ncherchiw bih f all fields
-    let order = mreq.order;//hedi la colonne li 7ab data ykoun ordered biha
+    let start = mreq.start;
+    let length = 20;
+    let search = mreq.search;
+    let order = mreq.order;
     let query = null;
     let query2 = null;
-    /* if (order != null) {
-         query = db.collection("orders").orderBy("date_ordered", "desc").limit(length);
-     } else {
-         query = db.collection("orders").orderBy("date_ordered", "desc");
-     }
-     */
+   console.log(totalOrders);
     if (start != null) {
 
         if (parseInt(start) == 0) {
@@ -63,7 +123,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
                 let resp = {
                     draw: draw,
-                    recordsTotal: 173,// ordersCount,
+                    recordsTotal: 173,//totalOrders,
                     recordsFiltered: 80,// tailleDeQuerySnapshot,
                     data: []
                 };
@@ -112,7 +172,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 exports.getProducts = functions.https.onRequest((request, response) => {
     let mreq = request.body;
     const cors = require('cors')({origin: true});
-
+    var totalProducts = getProductsCount();
     let draw = mreq.draw;
     let start = mreq.start;
     let length = 20;
@@ -143,7 +203,7 @@ exports.getProducts = functions.https.onRequest((request, response) => {
 
                     let resp = {
                         draw: draw,
-                        recordsTotal: 173,// ordersCount,
+                        recordsTotal: 172,// totalProducts,
                         recordsFiltered: 80,// tailleDeQuerySnapshot,
                         data: []
                     };
