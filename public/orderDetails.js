@@ -242,11 +242,12 @@ function getOrderDates(idOrder){
                                                 break;
                 }
               
-                 
+            "<li><i class='fa fa-clock-o bg-gray'></i></li>";     
             $('#orderTimeLine').append(row);
+          
             });     
         
-   
+            $('#orderTimeLine').append("<li><i class='fa fa-clock-o bg-gray'></i></li>"); 
     });
 
 }
