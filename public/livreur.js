@@ -1,3 +1,4 @@
+
 var db = firebase.firestore();
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
@@ -8,14 +9,19 @@ firebase.auth().onAuthStateChanged(user => {
   });
 // Get Commands List
 var cpt=0;
+
 db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         
         var data = doc.data();
+        var unpaid = data.totalUnpaid;
+        if(unpaid == undefined)
+            unpaid = 0;
+            
         if(data.isDeleted != 1){
-        var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='address"+cpt+"'>" +
-            data.address + "</td><td class='city"+cpt+"'>" + data.city +
-            "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
+           
+        var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='city"+cpt+"'>" + data.city +
+            "</td><td>"+unpaid+"</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
             " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
             "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
             "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button></td></tr>";
@@ -24,6 +30,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
         $("#all_livreur").append(mrow)
         cpt++;
         }
+    
     });
     
 });
@@ -46,7 +53,6 @@ $('#exampleModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('#livreur_name').val(data.name);
            $(e.currentTarget).find('#livreur_phone').val(data.phone);
            $(e.currentTarget).find('#livreur_email').val(data.email);
-           $(e.currentTarget).find('#livreur_address').val(data.address);
            $(e.currentTarget).find('#livreur_city').val(data.city);
           $('#saveButton').attr('onClick', 'upload("'+id+'","'+cellId+'");');
          
@@ -71,7 +77,6 @@ function upload(id, cellId) {
     var new_name= $('#livreur_name').val();
     var new_phone= $('#livreur_phone').val();
     var new_email= $('#livreur_email').val();
-    var new_address= $('#livreur_address').val();
     var new_city= $('#livreur_city').val();
 
     // INSERT UPDATED VALUES
@@ -79,7 +84,6 @@ function upload(id, cellId) {
        name: new_name,
        phone: new_phone,
        email : new_email,
-       address : new_address,
        city : new_city
     });
 
@@ -87,7 +91,6 @@ function upload(id, cellId) {
     $(".name"+cellId).html(""+new_name);
     $(".phone"+cellId).html(""+new_phone);
     $(".email"+cellId).html(""+new_email);
-    $(".address"+cellId).html(""+new_address);
     $(".city"+cellId).html(""+new_city);
 
     //Update delivery man details
@@ -167,7 +170,6 @@ function addLivreur(){
     var new_name= $('#livreurName').val();
     var new_phone= $('#livreurPhone').val();
     var new_email= $('#livreurEmail').val();
-    var new_address= $('#livreurAddress').val();
     var new_city= document.getElementById("livreurCity").value;
     var new_password= $('#livreurPassword').val();
     
@@ -181,7 +183,6 @@ function addLivreur(){
         name: new_name,
         phone: new_phone,
         email : new_email,
-        address : new_address,
         city : new_city
      });
    
@@ -191,12 +192,10 @@ function addLivreur(){
     $('#livreurPhone').val("");
     $('#livreurPassword').val("");
     $('#livreurEmail').val("");
-    $('#livreurAddress').val("");
     $('#livreurCity').val("");
 
     // Append the new row
-    var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" +
-    new_address + "</td><td>" + new_city +
+    var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" + new_city +
     "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
     " <button class='btn btn-danger btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
     "<button class='btn btn-success btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+

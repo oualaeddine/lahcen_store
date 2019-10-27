@@ -105,7 +105,7 @@ function uploadStatut(id) {
 function getTotalPrice(idOrder){
     db.collection("orders").doc(""+idOrder).get().then(function(doc) {
         var data = doc.data();
-        $('.total').append(data.total_price);
+        $('.total').append(data.total_price+" DZD");
     });
 }
 function signOut() {

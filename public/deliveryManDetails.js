@@ -47,7 +47,11 @@ function getManInfo(manId){
             var buttons = "<button class='btn btn-primary  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+manId+" ><i class='fa fa-edit'></i> Edit</button>"+
             " <button class='btn btn-success btn-sm' data-book-id='"+manId+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i> Add payment</button>";
             $('.manActions').append(buttons);
-            $('#totalDiff').html(parseFloat(data.totalOrders)-parseFloat(data.totalPaiement)+" DZD");
+            var unpaid = parseFloat(data.totalOrders)-parseFloat(data.totalPaiement);
+            $('#totalDiff').html(unpaid+" DZD");
+            db.collection("delivery_men").doc(""+manId).update({
+                totalUnpaid: unpaid
+            }); 
         }); 
 }
 function signOut() {
@@ -83,7 +87,7 @@ docRef.get().then(function(doc) {
                 
                 
                     var date = new Date(Date.parse(orderData.date_ordered.toDate()));
-                   var row = "<tr><td>"+element+"</td><td>"+orderData.total_price+"</td><td>"+date.toUTCString()+"</td></tr>";
+                   var row = "<tr><td>"+element+"</td><td>"+orderData.total_price+"</td><td>"+date.toLocaleString()+"</td></tr>";
                   somme += parseFloat(orderData.total_price);
                    $('#orderList').append(row);
                    
