@@ -154,6 +154,34 @@
           </div>
         </div>
       </div>
+      <!-- Change status Modal -->
+  <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+            
+                <h4 class="modal-title" style="color:#00a65a;">Status</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+            <div class="modal-body">
+                <select class="form-control" id="statusForm">
+                    <option value="pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Canceled">Canceled</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="No want to buy">No want to buy</option>
+                    <option value="Ne repond pas 1 fois">Ne repond pas 1 fois</option>
+                    <option value="Ne repond pas 2 fois"> Ne repond pas 2 fois</option>
+                    <option value="Ne repond pas 3 fois">Ne repond pas 3 fois</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button id="changeStatus" type="button" class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper ">
         <!-- Content Header (Page header) -->
@@ -167,8 +195,9 @@
                   <div class="row">
                             <div class="col-md-8">
                                     <div class="box info-box">
-                                        <div class="box-header with-border">
+                                        <div class="box-header with-border" id="boxInfo">
                                             <h3 class="box-title">Order information </h3>
+
                                          </div>
                                         <div class="box-body">
                                                 <div class="info-box-icon orderStatut"></div>

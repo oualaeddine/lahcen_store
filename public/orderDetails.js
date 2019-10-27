@@ -16,7 +16,7 @@ $('#productList').attr('class', "productList"+idOrder);
 getProductList(idOrder);
 getTotalPrice(idOrder);
 getOrderDates(idOrder);
-
+$('#boxInfo').append("<button style='float:right;' class='btn btn-primary btn-sm' data-toggle='modal' data-book-id='" + idOrder + "' data-target='#statusModal'><i class='fa fa-shopping-cart'></i> Edit statut</button>");
 
 $('#updatePasswordModal').on('show.bs.modal', function(e) {
     var user = firebase.auth().currentUser;
@@ -47,7 +47,61 @@ $('#userPassword').val("");
 
 }
 
+// Change status Modal
+$('#statusModal').on('show.bs.modal', function(e) {
+    var id = $(e.relatedTarget).data('book-id');
+    var docRef = db.collection("orders").doc(""+id);
+    docRef.get().then(function(doc) {
+           var data = doc.data();
+           $(e.currentTarget).find("#statusForm").val(data.status);
+    $('#changeStatus').attr('onClick', 'uploadStatut("'+id+'");');
+});
+});
+function uploadStatut(id) {
 
+    var new_statut = document.getElementById("statusForm").value;
+    switch(new_statut){
+       case "Ne repond pas 1 fois":
+               db.collection('orders').doc(""+id).update({
+                   status: new_statut,
+                   date_NRP1: firebase.firestore.Timestamp.now().toDate()
+           
+                   });
+               break;
+        case "Ne repond pas 2 fois":
+               db.collection('orders').doc(""+id).update({
+                   status: new_statut,
+                   date_NRP2: firebase.firestore.Timestamp.now().toDate()
+           
+                   });
+           break;
+       case "Ne repond pas 3 fois":
+            // INSERT NEW VALUES
+          db.collection('orders').doc(""+id).update({
+           status: new_statut,
+           date_NRP3: firebase.firestore.Timestamp.now().toDate()
+   
+           });
+           break;
+       case "No want to buy":
+               db.collection('orders').doc(""+id).update({
+                   status: new_statut,
+                   date_NoToBuy: firebase.firestore.Timestamp.now().toDate()
+           
+                   });
+       break;
+       default:
+               db.collection('orders').doc(""+id).update({
+                   status: new_statut,
+                   ['date_'+new_statut ]: firebase.firestore.Timestamp.now().toDate()
+           
+                   });
+    }
+   
+    //Close Modal
+    $('#statusModal').modal('hide');
+
+   }
 function getTotalPrice(idOrder){
     db.collection("orders").doc(""+idOrder).get().then(function(doc) {
         var data = doc.data();
@@ -77,9 +131,7 @@ function getProductList(idOrder) {
          });
     });
 }
-function enableBox() {
-    $('#assignementBox').attr("disabled",false);
-}
+
 function getOrderStatu(idOrder) {
     db.collection("orders").doc(""+idOrder).get().then(function(doc) {
         var data = doc.data();
@@ -104,17 +156,17 @@ function getOrderStatu(idOrder) {
             
         }
         
-       if(data.status == "Assigned") {
+       if(data.status == "Assigned" || data.Assigned_to != null) {
            var row = "Assigned on : <br>"+data.date_Assigned.toDate().toLocaleString().split(',')[0]+" at "+data.date_Assigned.toDate().toLocaleTimeString('en-US');
                       var manId= data.Assigned_to;
         db.collection("delivery_men").doc(""+manId).get().then(function(doc) {
             var manData = doc.data();
              name = manData.name;
              city = manData.city;
-             var rowText = "Assigned to : "+manData.name+" | "+manData.city;
+             var rowText = "Assigned to : <a  style='cursor:pointer;' onclick=loadDetailsPage('"+manId+"') >"+manData.name+" | "+manData.city+"</a>";
              $('.orderMan').append(rowText);
         });
-           
+
        }
        if(data.status == "Delivered") {
            var row ="Delivered on : <br>"+data.date_Delivered.toDate().toLocaleString().split(',')[0]+" at "+data.date_Delivered.toDate().toLocaleTimeString('en-US');
@@ -250,4 +302,9 @@ function getOrderDates(idOrder){
             $('#orderTimeLine').append("<li><i class='fa fa-clock-o bg-gray'></i></li>"); 
     });
 
+}
+// Send Data to orderDetails page
+function loadDetailsPage(manId) {
+    localStorage.setItem("manId",manId);
+    window.location.href = 'deliveryManDetails.html';
 }
