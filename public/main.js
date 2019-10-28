@@ -173,7 +173,7 @@ function uploadStatut(id) {
         
                 });
  }
- all_commands_table.ajax.reload();
+ $('#all_table').DataTable().ajax.reload(null,false);
  //Close Modal
  $('#statusModal').modal('hide');
 }
@@ -191,7 +191,7 @@ function upload(id) {
         fee: new_fee
     });
 
-    all_commands_table.ajax.reload();
+    $('#all_table').DataTable().ajax.reload(null,false);
     //Close Modal
     $('#updateCommandModal').modal('hide');
    

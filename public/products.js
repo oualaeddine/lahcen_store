@@ -88,7 +88,7 @@ function upload(id) {
         buyPrice: new_buyPrice
     });
 
-    product_table.ajax.reload();
+    $('#all_products').DataTable().ajax.reload(null,false);
     Annuler('exampleModal');
 
 }
@@ -96,8 +96,8 @@ function delete_product (id) {
 db.collection('products').doc(""+id).update({
     isDeleted:1
 });
-  product_table.ajax.reload();
-    Annuler('confirmationModal');
+$('#all_products').DataTable().ajax.reload(null,false);
+Annuler('confirmationModal');
 }
 
 function Annuler(modalId) {
