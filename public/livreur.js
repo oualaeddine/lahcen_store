@@ -12,7 +12,7 @@ var cpt=0;
 
 db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-        
+        var mrow = null;
         var data = doc.data();
         var unpaid = data.totalUnpaid;
         if(unpaid == undefined)
@@ -20,17 +20,23 @@ db.collection("delivery_men").get().then((querySnapshot) => {
             
         if(data.isDeleted != 1){
            
-        var mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='city"+cpt+"'>" + data.city +
-            "</td><td>"+unpaid+"</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
+         mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='city"+cpt+"'>" + data.city +
+            "</td><td>"+unpaid+"</td><td class='action"+cpt+"'> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
             " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
             "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
             "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button></td></tr>";
        
-
-        $("#all_livreur").append(mrow)
-        cpt++;
+            $("#all_livreur").append(mrow);
         }
-    
+        else {
+            mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='city"+cpt+"'>" + data.city +
+            "</td><td>"+unpaid+"</td><td></td>";
+            $("#all_livreur").append(mrow);
+            $('.row'+cpt).css('background-color', '#ff000080');
+        }
+
+       
+        cpt++;
     });
     
 });
@@ -77,6 +83,7 @@ function upload(id, cellId) {
     var new_name= $('#livreur_name').val();
     var new_phone= $('#livreur_phone').val();
     var new_email= $('#livreur_email').val();
+    var new_password= $('#livreur_password').val();
     var new_city= $('#livreur_city').val();
 
     // INSERT UPDATED VALUES
@@ -109,6 +116,21 @@ function upload(id, cellId) {
         }
       });
 
+      if(new_password != null){
+
+    $.ajax({
+        url: 'https://us-central1-lahcen-gestion.cloudfunctions.net/updateDeliveryManPassword',
+        method: 'POST',
+        data: {
+            id: id,
+            password: new_password
+        },
+        success: function(data){
+          console.log('succes: '+data);
+        }
+      });
+      }
+
 }
 
 
@@ -118,9 +140,10 @@ function delete_livreur(id,rowId) {
     db.collection('delivery_men').doc(""+id).update({
         isDeleted:1
     });
-
+  
     //Delete row 
-    $(".row"+rowId).remove();
+    $(".row"+rowId).css('background-color', '#ff000080');
+    $(".action"+rowId).html('');
     Annuler('confirmationModal');
 
     $.ajax({
@@ -173,18 +196,22 @@ function addLivreur(){
     var new_city= document.getElementById("livreurCity").value;
     var new_password= $('#livreurPassword').val();
     
-    // Insert new Firebase User
-    firebase.auth().createUserWithEmailAndPassword(new_email, new_password).then(function(data){
-    var userId = data.user.uid;
-  
-    // Insert new data in database
-    let livreurRef = db.collection('delivery_men');
-    livreurRef.doc(""+userId).set({
-        name: new_name,
-        phone: new_phone,
-        email : new_email,
-        city : new_city
-     });
+    // Create new user and delivery man 
+    $.ajax({
+        url: 'https://us-central1-lahcen-gestion.cloudfunctions.net/createDeliveryMan',
+        method: 'POST',
+        data: {
+            name: new_name,
+            email: new_email,
+            password : new_password,
+            city : new_city,
+            phone : new_phone
+        },
+        success: function(){
+          console.log('succes' );
+        }
+      });
+    
    
   // Close Modal and reset the inputs
     Annuler('addModal'); 
@@ -194,16 +221,16 @@ function addLivreur(){
     $('#livreurEmail').val("");
     $('#livreurCity').val("");
 
-    // Append the new row
+    /* Append the new row
     var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" + new_city +
-    "</td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
+    "</td><td></td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
     " <button class='btn btn-danger btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
     "<button class='btn btn-success btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
     "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+userId+"') ><i class='fa fa-info'></i></button></td></tr>";
 
     $("#all_livreur").append(mrow)
-   
-});
+    */
+   livreur_table.ajax.reload();
 }
 function Annuler(modalId) {
     $('#'+modalId).modal('hide');

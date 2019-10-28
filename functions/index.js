@@ -5,7 +5,25 @@ admin.initializeApp(functions.config().firebase);
 let db = admin.firestore();
 
 /*______ start Section Hiba Work ____________________________________________________________________________ */
-
+exports.createDeliveryMan = functions.https.onRequest((request) => {
+    let data = request.body;
+    admin.auth().createUser({
+        email: data.email,
+        password: data.password,
+      
+      })
+        .then(function(userRecord) {
+          var userId = userRecord.uid;
+          let livreurRef = db.collection('delivery_men');
+            livreurRef.doc(""+userId).set({
+            name: data.name,
+            phone: data.phone,
+            email : data.email,
+            city : data.city
+     });
+        })
+      
+})
 exports.deleteDeliveryMan = functions.https.onRequest((request) => {
     let data = request.body;
     admin.auth().deleteUser(data.id)
@@ -21,7 +39,13 @@ exports.deleteDeliveryMan = functions.https.onRequest((request) => {
 exports.updateDeliveryManEmail = functions.https.onRequest((request) => {
     let data = request.body;
     admin.auth().updateUser(data.id, {
-        email: data.email,
+        email: data.email
+    });      
+});
+exports.updateDeliveryManPassword = functions.https.onRequest((request) => {
+    let data = request.body;
+    admin.auth().updateUser(data.id, {
+        password: data.password
     });      
 });
 exports.incrementOrderCount = functions.firestore

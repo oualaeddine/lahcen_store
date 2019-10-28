@@ -11,7 +11,6 @@ product_table = $('#all_products').DataTable({
         "method": 'POST',
         "dataSrc": "data"
     }
-   
     });
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
@@ -94,8 +93,9 @@ function upload(id) {
 
 }
 function delete_product (id) {
-    db.collection('products').doc(""+id).delete();  
-
+db.collection('products').doc(""+id).update({
+    isDeleted:1
+});
   product_table.ajax.reload();
     Annuler('confirmationModal');
 }
