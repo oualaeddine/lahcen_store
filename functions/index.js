@@ -123,15 +123,13 @@ exports.getOrders = functions.https.onRequest((request, response) => {
     let query2 = null;
    console.log(totalOrders);
     if (start != null) {
-
+        
+        query = db.collection('orders').limit(parseInt(start));
         if (parseInt(start) == 0) {
             query = db.collection('orders').limit(length);
             console.log("start is ", parseInt(start));
         }
-        else {
-            query = db.collection('orders').limit(parseInt(start));
-            console.log("start is ", parseInt(start));
-        }
+        
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null) {
@@ -143,12 +141,47 @@ exports.getOrders = functions.https.onRequest((request, response) => {
             query2 = db.collection("orders")
                 .startAfter(lastVisible)
                 .limit(length);
+                if (parseInt(start) == 0) {
+                    query.get().then((querySnapshot) => {
+
+                        let resp = {
+                            draw: draw,
+                            recordsTotal: 173,//totalOrders,
+                            recordsFiltered: 173,// tailleDeQuerySnapshot,
+                            data: []
+                        };
+                        querySnapshot.forEach((doc) => {
+                            let mOrder = doc.data();
+                            
+                            resp.data.push(
+                                [
+                                    mOrder.name,
+                                    mOrder.status ,
+                                    mOrder.client,
+                                    mOrder.address,
+                                    mOrder.phone,
+                                    mOrder.subtotal_price,
+                                    mOrder.shipping_price,
+                                    mOrder.fee,
+                                    mOrder.total_price,
+                                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
+                                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
+                                    '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
+                                ]
+                            );
+        
+                        });
+                        return cors(request, response, () => {
+                            response.status(200).send(resp);
+                        });
+                    });
+                }
             query2.get().then((querySnapshot) => {
 
                 let resp = {
                     draw: draw,
                     recordsTotal: 173,//totalOrders,
-                    recordsFiltered: 80,// tailleDeQuerySnapshot,
+                    recordsFiltered: 173,// tailleDeQuerySnapshot,
                     data: []
                 };
                 querySnapshot.forEach((doc) => {
