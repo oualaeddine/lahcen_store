@@ -132,6 +132,38 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null) {
+        if (parseInt(start) == 0) {
+            query.get().then((querySnapshot) => {
+
+                let resp = {
+                    draw: draw,
+                    recordsTotal: 8,//totalOrders,
+                    recordsFiltered: 8,// tailleDeQuerySnapshot,
+                    data: []
+                };
+                querySnapshot.forEach((doc) => {
+                    let mOrder = doc.data();
+                    
+                    resp.data.push(
+                        [
+                            mOrder.name,
+                            mOrder.phone ,
+                            mOrder.email,
+                            mOrder.city,
+                            mOrder.totalUnpaid,
+                            "<button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" ><i class='fa fa-edit'></i></button> "+
+                            " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"'  data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
+                            "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
+                            "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button>"
+                        ]
+                    );
+
+                });
+                return cors(request, response, () => {
+                    response.status(200).send(resp);
+                });
+            });
+        }
         query.get().then(function (documentSnapshots) {
             // Get the last visible document
             var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
@@ -140,38 +172,7 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
             query2 = db.collection("delivery_men")
                 .startAfter(lastVisible)
                 .limit(length);
-                if (parseInt(start) == 0) {
-                    query.get().then((querySnapshot) => {
-
-                        let resp = {
-                            draw: draw,
-                            recordsTotal: 8,//totalOrders,
-                            recordsFiltered: 8,// tailleDeQuerySnapshot,
-                            data: []
-                        };
-                        querySnapshot.forEach((doc) => {
-                            let mOrder = doc.data();
-                            
-                            resp.data.push(
-                                [
-                                    mOrder.name,
-                                    mOrder.phone ,
-                                    mOrder.email,
-                                    mOrder.city,
-                                    mOrder.totalUnpaid,
-                                    "<button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" ><i class='fa fa-edit'></i></button> "+
-                                    " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"'  data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
-                                    "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
-                                    "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button>"
-                                ]
-                            );
-        
-                        });
-                        return cors(request, response, () => {
-                            response.status(200).send(resp);
-                        });
-                    });
-                }
+               
             query2.get().then((querySnapshot) => {
 
                 let resp = {
@@ -242,6 +243,41 @@ exports.getOrders = functions.https.onRequest((request, response) => {
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null) {
+        if (parseInt(start) == 0) {
+            query.get().then((querySnapshot) => {
+
+                let resp = {
+                    draw: draw,
+                    recordsTotal: 173,//totalOrders,
+                    recordsFiltered: 173,// tailleDeQuerySnapshot,
+                    data: []
+                };
+                querySnapshot.forEach((doc) => {
+                    let mOrder = doc.data();
+                    
+                    resp.data.push(
+                        [
+                            mOrder.name,
+                            mOrder.status ,
+                            mOrder.client,
+                            mOrder.address,
+                            mOrder.phone,
+                            mOrder.subtotal_price,
+                            mOrder.shipping_price,
+                            mOrder.fee,
+                            mOrder.total_price,
+                            '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
+                            '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
+                            '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
+                        ]
+                    );
+
+                });
+                return cors(request, response, () => {
+                    response.status(200).send(resp);
+                });
+            });
+        }
         query.get().then(function (documentSnapshots) {
             // Get the last visible document
             var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
@@ -250,41 +286,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
             query2 = db.collection("orders")
                 .startAfter(lastVisible)
                 .limit(length);
-                if (parseInt(start) == 0) {
-                    query.get().then((querySnapshot) => {
-
-                        let resp = {
-                            draw: draw,
-                            recordsTotal: 173,//totalOrders,
-                            recordsFiltered: 173,// tailleDeQuerySnapshot,
-                            data: []
-                        };
-                        querySnapshot.forEach((doc) => {
-                            let mOrder = doc.data();
-                            
-                            resp.data.push(
-                                [
-                                    mOrder.name,
-                                    mOrder.status ,
-                                    mOrder.client,
-                                    mOrder.address,
-                                    mOrder.phone,
-                                    mOrder.subtotal_price,
-                                    mOrder.shipping_price,
-                                    mOrder.fee,
-                                    mOrder.total_price,
-                                    '<button class=\'btn-primary btn btn-sm\' data-toggle=\'modal\' data-target=\'#updateCommandModal\' data-book-id=' + doc.id + ' ><i class=\'fa fa-edit\'></i></button> ' +
-                                    '<button class=\'btn btn-primary btn-sm\' data-toggle=\'modal\' data-book-id=' + doc.id + ' data-target=\'#statusModal\'><i class=\'fa fa-shopping-cart\'></i></button> ' +
-                                    '<button onclick=\'loadOrderPage(' + doc.id + ')\'  class=\' btn btn-primary btn-sm orderLink\' data-id=' + doc.id + '><i class=\'fa fa-info\'></i></button>'
-                                ]
-                            );
-        
-                        });
-                        return cors(request, response, () => {
-                            response.status(200).send(resp);
-                        });
-                    });
-                }
+               
             query2.get().then((querySnapshot) => {
 
                 let resp = {
@@ -354,6 +356,35 @@ exports.getProducts = functions.https.onRequest((request, response) => {
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null) {
+        if( parseInt(start) == 0){
+            query.get().then((querySnapshot) => {
+
+                let resp = {
+                    draw: draw,
+                    recordsTotal: 172,// totalProducts,
+                    recordsFiltered: 172,// tailleDeQuerySnapshot,
+                    data: []
+                };
+                querySnapshot.forEach((doc) => {
+                    let mOrder = doc.data();
+                    resp.data.push(
+                        [
+                            mOrder.name,
+                            mOrder.price,
+                            mOrder.buyPrice,
+                            mOrder.quantity,
+                            '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'> </i> Edit</button> '+
+                            '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'> </i> Delete</button>' 
+                        ]
+                    );
+    
+                });
+                return cors(request, response, () => {
+                    response.status(200).send(resp);
+                });
+                 });
+        }
+       
             query.get().then(function (documentSnapshots) {
                 // Get the last visible document
                 var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
@@ -363,34 +394,6 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                     .startAfter(lastVisible)
                     .limit(length);
 
-                if( parseInt(start) == 0){
-                    query.get().then((querySnapshot) => {
-
-                        let resp = {
-                            draw: draw,
-                            recordsTotal: 172,// totalProducts,
-                            recordsFiltered: 172,// tailleDeQuerySnapshot,
-                            data: []
-                        };
-                        querySnapshot.forEach((doc) => {
-                            let mOrder = doc.data();
-                            resp.data.push(
-                                [
-                                    mOrder.name,
-                                    mOrder.price,
-                                    mOrder.buyPrice,
-                                    mOrder.quantity,
-                                    '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'> </i> Edit</button> '+
-                                    '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'> </i> Delete</button>' 
-                                ]
-                            );
-            
-                        });
-                        return cors(request, response, () => {
-                            response.status(200).send(resp);
-                        });
-                         });
-                }
                  query2.get().then((querySnapshot) => {
 
                     let resp = {
