@@ -151,6 +151,7 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
                             mOrder.email,
                             mOrder.city,
                             mOrder.totalUnpaid,
+                            mOrder.isDeleted,
                             "<button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" ><i class='fa fa-edit'></i></button> "+
                             " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"'  data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
                             "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
@@ -161,6 +162,11 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
                 });
                 return cors(request, response, () => {
                     response.status(200).send(resp);
+                });
+            }) .catch(err => {
+                console.log('Error getting documents', err);
+                return cors(request, response, () => {
+                    response.status(500).send(err);
                 });
             });
         }
@@ -191,6 +197,7 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
                             mOrder.email,
                             mOrder.city,
                             mOrder.totalUnpaid,
+                            mOrder.isDeleted,
                             "<button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" ><i class='fa fa-edit'></i></button> "+
                             " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"'  data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
                             "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
@@ -276,6 +283,11 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                 return cors(request, response, () => {
                     response.status(200).send(resp);
                 });
+            }) .catch(err => {
+                console.log('Error getting documents', err);
+                return cors(request, response, () => {
+                    response.status(500).send(err);
+                });
             });
         }
         query.get().then(function (documentSnapshots) {
@@ -318,6 +330,11 @@ exports.getOrders = functions.https.onRequest((request, response) => {
                 });
                 return cors(request, response, () => {
                     response.status(200).send(resp);
+                });
+            }) .catch(err => {
+                console.log('Error getting documents', err);
+                return cors(request, response, () => {
+                    response.status(500).send(err);
                 });
             });
 
@@ -373,6 +390,7 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                             mOrder.price,
                             mOrder.buyPrice,
                             mOrder.quantity,
+                            mOrder.isDeleted,
                             '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'> </i> Edit</button> '+
                             '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'> </i> Delete</button>' 
                         ]
@@ -382,8 +400,13 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                 return cors(request, response, () => {
                     response.status(200).send(resp);
                 });
-                 });
-        }
+                 }).catch(err => {
+                    console.log('Error getting documents', err);
+                    return cors(request, response, () => {
+                        response.status(500).send(err);
+                    });
+                });
+            }
        
             query.get().then(function (documentSnapshots) {
                 // Get the last visible document
@@ -410,6 +433,7 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                                 mOrder.price,
                                 mOrder.buyPrice,
                                 mOrder.quantity,
+                                mOrder.isDeleted,
                                 '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'> </i> Edit</button> '+
                                 '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'> </i> Delete</button>' 
                             ]

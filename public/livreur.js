@@ -9,38 +9,7 @@ firebase.auth().onAuthStateChanged(user => {
   });
 // Get Commands List
 var cpt=0;
-/*
-db.collection("delivery_men").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        var mrow = null;
-        var data = doc.data();
-        var unpaid = data.totalUnpaid;
-        if(unpaid == undefined)
-            unpaid = 0;
-            
-        if(data.isDeleted != 1){
-           
-         mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='city"+cpt+"'>" + data.city +
-            "</td><td>"+unpaid+"</td><td class='action"+cpt+"'> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
-            " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"' data-row-id='"+cpt+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
-            "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
-            "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button></td></tr>";
-       
-            $("#all_livreur").append(mrow);
-        }
-        else {
-            mrow = "<tr class='row"+cpt+"'><td class='name"+cpt+"'>" + data.name + "</td><td class='phone"+cpt+"'>" + data.phone + "</td><td class='email"+cpt+"'>" + data.email + "</td><td class='city"+cpt+"'>" + data.city +
-            "</td><td>"+unpaid+"</td><td></td>";
-            $("#all_livreur").append(mrow);
-            $('.row'+cpt).css('background-color', '#ff000080');
-        }
 
-       
-        cpt++;
-    });
-    
-});
-*/
 function signOut() {
     firebase.auth().signOut();
 } 
@@ -222,16 +191,7 @@ function addLivreur(){
     $('#livreurEmail').val("");
     $('#livreurCity').val("");
 
-    /* Append the new row
-    var mrow = "<tr><td>" + new_name + "</td><td>" + new_phone + "</td><td>" + new_email + "</td><td>" + new_city +
-    "</td><td></td><td> <button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+userId+" data-cell-id="+cpt+"><i class='fa fa-edit'></i></button> "+
-    " <button class='btn btn-danger btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
-    "<button class='btn btn-success btn-sm' data-book-id='"+userId+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
-    "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+userId+"') ><i class='fa fa-info'></i></button></td></tr>";
-
-    $("#all_livreur").append(mrow)
-    */
-   livreur_table.ajax.reload();
+    $('#all_livreur').DataTable().ajax.reload(null,false);
 }
 function Annuler(modalId) {
     $('#'+modalId).modal('hide');
@@ -243,7 +203,13 @@ function addPayment(livreurId) {
     // Get inputs Values
     var montant =  $('#montant').val();
     var date = $('#datePayment').val();
-
+    db.collection("delivery_men").doc(""+livreurId).get().then(function(doc){
+        var data = doc.data();
+        if(parseFloat(montant)+ parseFloat(data.totalPaiement) > parseFloat(data.totalOrders)){
+            $('#paymentAlertModal').modal('show');
+            return;
+        }
+    else {   
     // Insert new data in database
     let livreurRef = db.collection('paiements');
     livreurRef.doc(""+livreurId).collection('paiementId').add({
@@ -255,8 +221,9 @@ function addPayment(livreurId) {
     //Add row in payment table
     $('#paiementList').append("<tr><td>"+montant+"</td><td>"+date+"</td></tr>");
    var oldMontant = $('#totalPayment').html();
-   console.log(oldMontant);
     $('#totalPayment').html(parseFloat(montant)+parseFloat(oldMontant)+" DZD");
+}
+});
     // Close Modal and reset the inputs
      Annuler('addPaymentModal'); 
      $('#montant').val("");

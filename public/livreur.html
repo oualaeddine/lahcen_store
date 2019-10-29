@@ -237,6 +237,20 @@
           </div>
         </div>
       </div>
+       <!-- payment alert Modal -->
+ <div id="paymentAlertModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">The amount of payment is bigger than total orders!</h4>	
+            </div>
+            <div class="modal-footer">
+             <button class="btn btn-default" data-dismiss="modal">Ok</button>
+             </div>
+        </div>
+    </div>
+</div>     
+<!---->
 <!-- Update Livreur Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -441,6 +455,7 @@
                                         <th>Email</th>
                                         <th>City</th>
                                         <th>Unpaid</th>
+                                        <th>Available</th>
                                         <th>Actions</th>
                                         
                                     </tr>
@@ -502,8 +517,34 @@
             "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getDeliveryMan ",
             "method": 'POST',
             "dataSrc": "data"
+        },
+        "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+                    if ( aData[5] == 1 )
+                    {
+                        $('td', nRow).css('background-color', '#ff000080');
+                      
+                    }
+                    
+                },
+        'columnDefs': [
+        {    
+            "targets": 5,                  
+            "render": function ( data, type) {
+               if(data == null)
+                return  '<button class="btn btn-Delivered">True</button>';
+            else return '<span></span>';
+            },
+        },
+        {      
+            "targets": 4,                  
+            "render": function ( data, type) {
+               if(data == null)
+                    return  '<span>0</span>';
+                else 
+                return '<span>'+data+'</span>'
+            }
         }
-       
+    ]
     });
     
 </script>

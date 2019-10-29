@@ -56,6 +56,7 @@ function getManInfo(manId){
             }
         }); 
 }
+
 function signOut() {
     firebase.auth().signOut();
 } 

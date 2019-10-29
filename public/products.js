@@ -10,7 +10,25 @@ product_table = $('#all_products').DataTable({
         "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getProducts",
         "method": 'POST',
         "dataSrc": "data"
-    }
+    },
+    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+        if ( aData[4] == 1 )
+        {
+            $('td', nRow).css('background-color', '#ff000080');
+          
+        }
+    
+    },
+'columnDefs': [
+{    
+"targets": 4,                  
+"render": function ( data, type) {
+   if(data == null)
+    return  '<button class="btn btn-Delivered">True</button>';
+else return '<span></span>';
+},
+}
+]
     });
 //Handle Account Status
 firebase.auth().onAuthStateChanged(user => {
