@@ -109,6 +109,115 @@ exports.incrementOrderCount = functions.firestore
 const cors = require('cors')({
     origin: true,
 });
+exports.getDeliveryMan = functions.https.onRequest((request, response) => {
+    let mreq = request.body;
+    const cors = require('cors')({ origin: true });
+    var totalOrders = getOrdersCount();
+    let draw = mreq.draw;
+    let start = mreq.start;
+    let length = 4;
+    let search = mreq.search;
+    let order = mreq.order;
+    let query = null;
+    let query2 = null;
+  
+    if (start != null) {
+        
+        query = db.collection('delivery_men').limit(parseInt(start));
+        if (parseInt(start) == 0) {
+            query = db.collection('delivery_men').limit(length);
+            console.log("start is ", parseInt(start));
+        }
+        
+    }
+    // noinspection EqualityComparisonWithCoercionJS
+    if (query != null) {
+        query.get().then(function (documentSnapshots) {
+            // Get the last visible document
+            var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+            console.log("last", lastVisible);
+
+            query2 = db.collection("delivery_men")
+                .startAfter(lastVisible)
+                .limit(length);
+                if (parseInt(start) == 0) {
+                    query.get().then((querySnapshot) => {
+
+                        let resp = {
+                            draw: draw,
+                            recordsTotal: 8,//totalOrders,
+                            recordsFiltered: 8,// tailleDeQuerySnapshot,
+                            data: []
+                        };
+                        querySnapshot.forEach((doc) => {
+                            let mOrder = doc.data();
+                            
+                            resp.data.push(
+                                [
+                                    mOrder.name,
+                                    mOrder.phone ,
+                                    mOrder.email,
+                                    mOrder.city,
+                                    mOrder.totalUnpaid,
+                                    "<button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" ><i class='fa fa-edit'></i></button> "+
+                                    " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"'  data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
+                                    "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
+                                    "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button>"
+                                ]
+                            );
+        
+                        });
+                        return cors(request, response, () => {
+                            response.status(200).send(resp);
+                        });
+                    });
+                }
+            query2.get().then((querySnapshot) => {
+
+                let resp = {
+                    draw: draw,
+                    recordsTotal: 8,//totalOrders,
+                    recordsFiltered: 8,// tailleDeQuerySnapshot,
+                    data: []
+                };
+                querySnapshot.forEach((doc) => {
+                    let mOrder = doc.data();
+                    
+                    resp.data.push(
+                        [
+                            mOrder.name,
+                            mOrder.phone ,
+                            mOrder.email,
+                            mOrder.city,
+                            mOrder.totalUnpaid,
+                            "<button class='btn btn-info  btn-sm' data-toggle='modal' data-target='#exampleModal' data-book-id="+doc.id+" ><i class='fa fa-edit'></i></button> "+
+                            " <button class='btn btn-danger btn-sm' data-book-id='"+doc.id+"'  data-toggle='modal' data-target='#confirmationModal' ><i class='fa fa-trash'></i></button> "+
+                            "<button class='btn btn-success btn-sm' data-book-id='"+doc.id+"' data-toggle='modal' data-target='#addPaymentModal' ><i class='fa fa-usd'></i></button> "+
+                            "<button class='btn btn-primary btn-sm' onclick=loadDetailsPage('"+doc.id+"') ><i class='fa fa-info'></i></button>"
+                        ]
+                    );
+
+                });
+                return cors(request, response, () => {
+                    response.status(200).send(resp);
+                });
+            });
+
+        })
+
+            .catch(err => {
+                console.log('Error getting documents', err);
+                return cors(request, response, () => {
+                    response.status(500).send(err);
+                });
+            });
+    } else {
+        return cors(request, response, () => {
+            response.status(500).send();
+        });
+    }
+
+});
 
 exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
@@ -237,14 +346,11 @@ exports.getProducts = functions.https.onRequest((request, response) => {
     let query2 = null;
     if(start != null) {
 
-        if(parseInt(start) == 0)  { 
-        query = db.collection('products').limit(length);
-        console.log("start is ", parseInt(start));
+        query = db.collection('products').limit(parseInt(start));
+        if (parseInt(start) == 0) {
+            query = db.collection('products').limit(length);
+            console.log("start is ", parseInt(start));
         }
-       else {
-       query = db.collection('products').limit(parseInt(start));
-       console.log("start is ", parseInt(start));
-       }
     }
     // noinspection EqualityComparisonWithCoercionJS
     if (query != null) {
@@ -256,12 +362,41 @@ exports.getProducts = functions.https.onRequest((request, response) => {
                 query2 = db.collection("products")
                     .startAfter(lastVisible)
                     .limit(length);
+
+                if( parseInt(start) == 0){
+                    query.get().then((querySnapshot) => {
+
+                        let resp = {
+                            draw: draw,
+                            recordsTotal: 172,// totalProducts,
+                            recordsFiltered: 172,// tailleDeQuerySnapshot,
+                            data: []
+                        };
+                        querySnapshot.forEach((doc) => {
+                            let mOrder = doc.data();
+                            resp.data.push(
+                                [
+                                    mOrder.name,
+                                    mOrder.price,
+                                    mOrder.buyPrice,
+                                    mOrder.quantity,
+                                    '<button class=\'btn-info btn btn-sm\' data-toggle=\'modal\' data-target=\'#exampleModal\' data-book-id='+doc.id+'><i class=\'fa fa-edit\'> </i> Edit</button> '+
+                                    '<button data-book-id='+doc.id+' data-toggle=\'modal\' data-target=\'#confirmationModal\' class=\'btn-danger btn btn-sm\'><i class=\'fa fa-trash\'> </i> Delete</button>' 
+                                ]
+                            );
+            
+                        });
+                        return cors(request, response, () => {
+                            response.status(200).send(resp);
+                        });
+                         });
+                }
                  query2.get().then((querySnapshot) => {
 
                     let resp = {
                         draw: draw,
                         recordsTotal: 172,// totalProducts,
-                        recordsFiltered: 80,// tailleDeQuerySnapshot,
+                        recordsFiltered: 172,// tailleDeQuerySnapshot,
                         data: []
                     };
                     querySnapshot.forEach((doc) => {

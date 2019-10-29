@@ -9,7 +9,7 @@ firebase.auth().onAuthStateChanged(user => {
   });
 // Get Commands List
 var cpt=0;
-
+/*
 db.collection("delivery_men").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
         var mrow = null;
@@ -40,6 +40,7 @@ db.collection("delivery_men").get().then((querySnapshot) => {
     });
     
 });
+*/
 function signOut() {
     firebase.auth().signOut();
 } 

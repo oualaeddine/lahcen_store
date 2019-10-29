@@ -492,11 +492,19 @@
 
 <script>
    let livreur_table = $("#all_livreur").DataTable({
-           responsive:true,
-            searching: false,
-          lengthChange: false,
+    "processing": true,
+      "responsive":true,
+    "serverSide": true,
+    searching: false,
+    "pageLength": 4,
+    "lengthChange": false,
+    "ajax": {
+            "url": "https://us-central1-lahcen-gestion.cloudfunctions.net/getDeliveryMan ",
+            "method": 'POST',
+            "dataSrc": "data"
+        }
        
-    })
+    });
     
 </script>
 </body>
