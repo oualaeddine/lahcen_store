@@ -99,7 +99,7 @@ function upload(id) {
     // GET INPUT VALUES
     var new_quantity = $('#quantity').val();
     var new_buyPrice = $('#buyPrice').val();
-
+ 
     // INSERT NEW VALUES
     let setDoc = db.collection('products').doc(""+id).update({
         quantity: new_quantity,

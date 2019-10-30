@@ -106,7 +106,7 @@ $('#updateCommandModal').on('show.bs.modal', function(e) {
            $(e.currentTarget).find('input[name="client_name"]').val(data.client);
            $(e.currentTarget).find('input[name="client_telephone"]').val(data.phone);
            $(e.currentTarget).find('input[name="client_address"]').val(data.address);
-           $(e.currentTarget).find('input[name="subTotal"]').val(data.total_price);
+           $(e.currentTarget).find('input[name="subTotal"]').val(data.subtotal_price);
            $(e.currentTarget).find('input[name="livraison"]').val(data.shipping_price);
            $(e.currentTarget).find('input[name="total"]').val(data.total_price);
            $(e.currentTarget).find('input[name="fee"]').val(data.fee);
@@ -186,11 +186,16 @@ function upload(id) {
     var new_fee = $('#fee').val();
 
     // INSERT NEW VALUES
+    if(new_fee != null && new_fee != "") {
     let setDoc = db.collection('orders').doc(""+id).update({
-        shipping_price: new_delPrice,
         fee: new_fee
     });
-
+    }
+    if(new_delPrice != null && new_delPrice != "") {
+    let setDoc = db.collection('orders').doc(""+id).update({
+        shipping_price: new_delPrice
+    });
+}
     $('#all_table').DataTable().ajax.reload(null,false);
     //Close Modal
     $('#updateCommandModal').modal('hide');

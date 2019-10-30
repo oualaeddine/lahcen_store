@@ -277,7 +277,7 @@ exports.getOrders = functions.https.onRequest((request, response) => {
    getOrdersCount().then(function(count){
     totalOrders = count;
     }); 
-    
+
     if (start != null) {
         
         query = db.collection('orders').limit(parseInt(start));
@@ -515,6 +515,7 @@ exports.totalPriceOrder = functions.firestore
         total += parseFloat(subTotal) + parseFloat(fee) + parseFloat(delivery_price);
     else 
     total += parseFloat(subTotal) + parseFloat(delivery_price);
+
 db.collection('orders').doc(""+docId).update({
     total_price: ""+total
 }).then(

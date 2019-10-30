@@ -141,7 +141,6 @@
                 </div>
             </div>
             
-            
         </section>
         <!-- ADD Livreur Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -154,14 +153,14 @@
               </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="addLivreur">
                     <div class="form-group">
                       <label  class="col-form-label">Name</label>
-                      <input placeholder="Full Name" type="text" id="livreurName"  class="form-control"required>
+                      <input placeholder="Full Name" type="text" pattern="[a-zA-Z0-9]*" id="livreurName"  class="form-control" required></input>
                     </div>
                     <div class="form-group">
                       <label  class="col-form-label">Phone</label>
-                      <input type="text" placeholder="Phone"  id="livreurPhone" class="form-control" required></input>
+                      <input type="tel"  pattern="[0-9]*" placeholder="Phone"  id="livreurPhone" class="form-control" required></input>
                     </div>
                     <div class="form-group">
                         <label  class="col-form-label">Email</label>
@@ -230,7 +229,7 @@
                   </form>
             </div>
             <div class="modal-footer">
-                    <button class='btn btn-primary' onclick="addLivreur()">Save</button>
+                    <button type="submit" class='btn btn-primary' onclick="addLivreur()">Save</button>
                     <button class='btn btn-default' onclick="Annuler('addModal')">Annuler</button>
 
             </div>
@@ -265,18 +264,18 @@
                     <div class="box-body">
         
                     <div class="modal-body">
-                        <form>
+                        <form id="editLivreur">
                             <div class="form-group">
                             <label  class="col-form-label">Name</label>
                             <input type="text" id="livreur_name"  class="form-control">
                             </div>
                             <div class="form-group">
                             <label  class="col-form-label">Phone</label>
-                            <input   id="livreur_phone" class="form-control" ></input>
+                            <input  type="tel" pattern="[0-9]*" id="livreur_phone" class="form-control" ></input>
                             </div>
                             <div class="form-group">
                                 <label  class="col-form-label">Email</label>
-                                <input id="livreur_email"  class="form-control" ></input>
+                                <input type="email" id="livreur_email"  class="form-control" ></input>
                             </div>
                             <div class="form-group">
                                 <label  class="col-form-label">New Password</label>
@@ -381,14 +380,14 @@
                      </div>
                     <div class="box-body">
                         <div class="modal-body">
-                            <form>
+                            <form id="paymentForm">
                                 <div class="form-group">
                                 <label  class="col-form-label">Name</label>
                                 <input type="text" name ="livreurName"  class="form-control" disabled>
                                 </div>
                                 <div class="form-group">
                                 <label  class="col-form-label">Montant</label>
-                                <input   id="montant" class="form-control" required></input>
+                                <input  type="number" id="montant" class="form-control" required></input>
                                 </div>
                                 <div class="form-group">
                                     <label  class="col-form-label">Date</label>
@@ -504,7 +503,12 @@
 
 <!-- page script -->
 <script src="./livreur.js"></script>
-
+<script src="./res/js/jquery.validate.js"></script>
+<script>
+    $("#editLivreur").validate();
+    $("#paymentForm").validate();
+    $("#addLivreur").validate();
+</script>
 <script>
    let livreur_table = $("#all_livreur").DataTable({
     "processing": true,

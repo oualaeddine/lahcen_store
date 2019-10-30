@@ -165,7 +165,7 @@
               </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="editOrder">
                     <div class="form-group">
                       <label  class="col-form-label">Client</label>
                       <input type="text"  name="client_name" class="form-control" disabled="true">
@@ -184,11 +184,11 @@
                       </div>
                       <div class="form-group">
                         <label  class="col-form-label">Livraison</label>
-                        <input id="delPrice" name="livraison" class="form-control" ></input>
+                        <input type="number" id="delPrice" name="livraison" class="form-control" ></input>
                       </div>
                       <div class="form-group">
                         <label  class="col-form-label">Fee</label>
-                        <input id="fee" name="fee" class="form-control" ></input>
+                        <input type="number" id="fee" name="fee" class="form-control" ></input>
                       </div>
                       <div class="form-group">
                         <label  class="col-form-label">Total</label>
@@ -308,6 +308,10 @@
 <script src="./res/js/demo.js"></script>
 <!-- page script -->
 <script src="./main.js"></script>
+<script src="./res/js/jquery.validate.js"></script>
+<script>
+    $("#editOrder").validate();
+</script>
 
 
 </body>
