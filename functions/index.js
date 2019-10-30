@@ -48,6 +48,26 @@ exports.updateDeliveryManPassword = functions.https.onRequest((request) => {
         password: data.password
     });      
 });
+exports.incrementManCount = functions.firestore
+    .document('delivery_men/{delivery_manId}')
+    .onCreate((snap, context) => {
+        var chainCounterRef = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        chainCounterRef.update({ manCount: FieldValue.increment(1) });
+        return true;
+     
+    });
+    exports.decrementManCount = functions.firestore
+    .document('delivery_men/{delivery_manId}')
+    .onDelete((snap, context) => {
+        var chainCounterRef = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+        chainCounterRef.get().then(function (doc){
+        var data = doc.data();
+        var currentValue = data.manCount;
+        chainCounterRef.update({ manCount: currentValue - 1 });
+    });
+        return true;
+     
+    }); 
 exports.incrementOrderCount = functions.firestore
     .document('orders/{orderId}')
     .onCreate((snap, context) => {
@@ -92,20 +112,31 @@ exports.incrementOrderCount = functions.firestore
      //
     function getOrdersCount(){
         const query = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
-        query.get().then(function (doc){
+       return query.get().then(function (doc){
         var data = doc.data();
         var totalOrders = data.ordersCount;
         return totalOrders;
         });
     }
-    function getProductsCount(){
+    function getManCount(){
         const query = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
-        query.get().then(function (doc){
+       return query.get().then(function (doc){
         var data = doc.data();
-        var totalProducts = data.productsCount;
-        return totalProducts;
+        var totalMan = data.manCount;
+        return totalMan;
         });
     }
+
+    function getProductsCount(){
+        const query = db.collection('admin').doc('MhuEB9k1CsTRSFkJHFO8ign4QIw2');
+      return  query.get().then(function (doc){
+        var data = doc.data();
+        var count = data.productsCount;
+        return count;
+        });
+       
+    }
+
 const cors = require('cors')({
     origin: true,
 });
@@ -120,7 +151,10 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
     let order = mreq.order;
     let query = null;
     let query2 = null;
-  
+    let totalMan = 0;
+    getManCount().then(function(count){
+     totalMan = count;
+     }); 
     if (start != null) {
         
         query = db.collection('delivery_men').limit(parseInt(start));
@@ -137,8 +171,8 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
 
                 let resp = {
                     draw: draw,
-                    recordsTotal: 8,//totalOrders,
-                    recordsFiltered: 8,// tailleDeQuerySnapshot,
+                    recordsTotal: totalMan,//totalOrders,
+                    recordsFiltered: totalMan,// tailleDeQuerySnapshot,
                     data: []
                 };
                 querySnapshot.forEach((doc) => {
@@ -183,8 +217,8 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
 
                 let resp = {
                     draw: draw,
-                    recordsTotal: 8,//totalOrders,
-                    recordsFiltered: 8,// tailleDeQuerySnapshot,
+                    recordsTotal: totalMan,//totalOrders,
+                    recordsFiltered: totalMan,// tailleDeQuerySnapshot,
                     data: []
                 };
                 querySnapshot.forEach((doc) => {
@@ -230,7 +264,7 @@ exports.getDeliveryMan = functions.https.onRequest((request, response) => {
 exports.getOrders = functions.https.onRequest((request, response) => {
     let mreq = request.body;
     const cors = require('cors')({ origin: true });
-    var totalOrders = getOrdersCount();
+    
     let draw = mreq.draw;
     let start = mreq.start;
     let length = 20;
@@ -238,7 +272,12 @@ exports.getOrders = functions.https.onRequest((request, response) => {
     let order = mreq.order;
     let query = null;
     let query2 = null;
-   console.log(totalOrders);
+
+   let totalOrders = 0;
+   getOrdersCount().then(function(count){
+    totalOrders = count;
+    }); 
+    
     if (start != null) {
         
         query = db.collection('orders').limit(parseInt(start));
@@ -255,8 +294,8 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
                 let resp = {
                     draw: draw,
-                    recordsTotal: 173,//totalOrders,
-                    recordsFiltered: 173,// tailleDeQuerySnapshot,
+                    recordsTotal: totalOrders,//totalOrders,
+                    recordsFiltered: totalOrders,// tailleDeQuerySnapshot,
                     data: []
                 };
                 querySnapshot.forEach((doc) => {
@@ -303,8 +342,8 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 
                 let resp = {
                     draw: draw,
-                    recordsTotal: 173,//totalOrders,
-                    recordsFiltered: 173,// tailleDeQuerySnapshot,
+                    recordsTotal: totalOrders,//totalOrders,
+                    recordsFiltered: totalOrders,// tailleDeQuerySnapshot,
                     data: []
                 };
                 querySnapshot.forEach((doc) => {
@@ -357,7 +396,10 @@ exports.getOrders = functions.https.onRequest((request, response) => {
 exports.getProducts = functions.https.onRequest((request, response) => {
     let mreq = request.body;
     const cors = require('cors')({origin: true});
-    var totalProducts = getProductsCount();
+    var totalProducts = 0;
+    getProductsCount().then(function(count){
+        totalProducts = count;
+    });
     let draw = mreq.draw;
     let start = mreq.start;
     let length = 20;
@@ -375,11 +417,11 @@ exports.getProducts = functions.https.onRequest((request, response) => {
     if (query != null) {
         if( parseInt(start) == 0){
             query.get().then((querySnapshot) => {
-
+               
                 let resp = {
                     draw: draw,
-                    recordsTotal: 172,// totalProducts,
-                    recordsFiltered: 172,// tailleDeQuerySnapshot,
+                    recordsTotal: totalProducts,// totalProducts,
+                    recordsFiltered: totalProducts,// tailleDeQuerySnapshot,
                     data: []
                 };
                 querySnapshot.forEach((doc) => {
@@ -421,8 +463,8 @@ exports.getProducts = functions.https.onRequest((request, response) => {
 
                     let resp = {
                         draw: draw,
-                        recordsTotal: 172,// totalProducts,
-                        recordsFiltered: 172,// tailleDeQuerySnapshot,
+                        recordsTotal: totalProducts,// totalProducts,
+                        recordsFiltered: totalProducts,// tailleDeQuerySnapshot,
                         data: []
                     };
                     querySnapshot.forEach((doc) => {
